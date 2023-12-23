@@ -261,7 +261,7 @@ The planned schedule below lists the topics we will cover in this course and the
 
 **Additional topics (time permitting)**
 
-9. Mixed complementarity problems, function approximation and functional equations *(week 16)*
+9. Mixed complementarity problems, function approximation, and functional equations *(week 16)*
 
 --------------------
 

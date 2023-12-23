@@ -176,6 +176,8 @@ D     | 64.0 - 66.9
 D-    | 60.0 - 63.9
 F     | 0 - 59.9
 
+The lower boundaries for grade determination may be lowered at the time of final grade assignment at the instructor’s discretion (e.g. grades at 78 and above may be awarded a B- ). Any adjustment in the grade scale will be applied uniformly to the aggregate grade (not to individual exams or other graded materials).
+
 **Score revisions**
 
 If you wish to appeal your grade on an assignment, you must bring it to my attention in writing within 7 days of when the problem set, exam, mini-project, or quiz was submitted. Grades brought to my attention after this will not be eligible for a grade appeal. I reserve the right to regrade the entire assignment and the new grade will be final.

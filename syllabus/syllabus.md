@@ -1,6 +1,6 @@
 # Syllabus AGEC 652 – Spring 2024 <!-- omit in toc -->
 
-*This syllabus is subject to revisions. You will be notified of any changes as far in advance as possible. Please monitor your Purdue email and Brightspace for updates. This version was created on Jan. X, 2024. .*
+*This syllabus is subject to revisions. You will be notified of any changes. Please monitor your Purdue email and Brightspace for updates. This version was created on Jan. 8, 2024.*
 
 
 
@@ -31,9 +31,9 @@ In addition, some familiarity with computer programming is desirable but not req
 
 **Instructor:** Diego S. Cardoso 
 
-**Office hours:** Thursdays 2 PM to 3 PM.
+**Office hours:** Thursdays, 2 PM to 3 PM.
 
-**Email:** [cardosod@purdue.edu](mailto:cardosod@purdue.edu). Please include "AGEC652" in the subject for all emails. I will read and respond to course-related emails in a timely fashion during weekdays between 9 AM and 5 PM.
+**Email:** [cardosod@purdue.edu](mailto:cardosod@purdue.edu). Please include "AGEC652" in the subject for all emails. I will read and respond to course-related emails in timely fashion during weekdays between 9 AM and 5 PM.
 
 **Office:** Krannert 636
 
@@ -75,11 +75,11 @@ This course can be conceptually divided into three parts. In the first part, we 
 ## Learning outcomes
 
 By the end of this course, you should be able to:
-1. Set up and manage a small scientific computing project
-2. Calculate numerical derivatives and integrals
+1. Set up and manage a scientific computing project
+2. Numerically solve derivatives and integrals
 3. Find numerical solutions for linear and nonlinear systems of equations
 4. Find numerical solutions for constrained and unconstrained optimization problems
-5. Program estimators for structural economic modeling
+5. Program estimators typically used for structural economic modeling
 
 ## Learning resources and technology
 
@@ -97,8 +97,8 @@ Purdue Library offers online access to [MF02] and [NW06] and physical copies of 
 
 The third part will review econometric methods typically used in structural estimation: maximum likelihood, generalized method of moments, and simulation-based methods. These are the recommended references for in-depth exposition of these topics (although most graduate-level econometric textbooks include at least one of these methods).
 
+- [CT05] Cameron, A. Colin, and Trivedi, Pravin K.. Microeconometrics: Methods and Applications. United Kingdom: Cambridge University Press, 2005.
 - [G18] Greene, William H. Econometric Analysis. 8th Edition. United Kingdom: Pearson, 2018.
-- [W10] Wooldridge, Jeffrey M. Econometric Analysis of Cross Section and Panel Data. 2nd Edition. United Kingdom, MIT Press, 2010.
 
 
 ### Software
@@ -108,30 +108,33 @@ Coding examples in this course will use [Julia language](https://julialang.org).
 - Learning Julia [(https://julialang.org/learning)](https://julialang.org/learning)
 - QuantEcon Julia lectures 1 to 5 [(https://julia.quantecon.org/intro.html)](https://julia.quantecon.org/intro.html).
 
+For econometric applications, the following lecture notes and examples are particularly useful:
+- Econometrics by Michael Creel: [(https://github.com/mcreel/Econometrics)](https://github.com/mcreel/Econometrics)
+
 While Julia is the recommended language for the course, students with prior programming experience may choose to submit their work using a suitable alternative language. Three suitable options are R, Python, and Matlab. If you plan to use an alternative language, please notify me as soon as possible, so I can include references to examples of the methods covered in the course in the language of your choice (when available).
 
 
 ### Use of artificial intelligence (AI) or Large Language Models (LLM)
 
-When used properly, AI tools to assist programming (such as OpenAI's ChatGPT and Google Bard) can greatly help you understand programming languages and write better code. However, that these tools frequently suggest incorrect or incomplete code and, therefore, require close human supervision. A competent human supervisor must have enough mastery of the subject knowledge to identify the mistakes AI tools make. As a learner of new concepts and ways of thinking, students are generally unable to distinguish correct and incorrect responses at first. Therefore, over-relying on these tools can severely hinder your learning, or worse, teach you incorrect things.
+When used properly, AI tools (such as OpenAI's ChatGPT) can greatly help you understand programming languages and write better code. However, that these tools frequently suggest incorrect or incomplete code and, therefore, require close human supervision. A competent human supervisor must have enough mastery of the subject knowledge to identify the mistakes AI tools make. As a learner of new concepts and ways of thinking, students are generally unable to distinguish correct and incorrect responses at first. Hence, over-relying on these tools can severely hinder your learning, or worse, teach you incorrect things.
 
 With the points above in mind, this course has three specific rules regarding the use of AI tools. Failure to follow these rules will be considered an academic integrity issue (more details below).
 
 1. **Disclose the use of AI tools**. If you use any AI tools on any submitted assignments, include a statement summarizing which tools you used and how you used them.
 2. **Do not submit code or work that was generated by an AI tool**. You may use AI tools to ask you to explain code, generate examples, and critique code you wrote. However, any solution you submit for assessment in this course must fully represent your thought process and must not include---in part or total---a reproduction of a solution generated by AI.
-3. **Never submit code or results generated from code you do not fully understand**. Again, AI coding tools often generate incorrect code as examples, misguided suggestions, and wrong diagnostics of errors. It is your responsibility to ensure the code is correct and that you are able to explain what it does. **The instructor reserves the right to ask you to orally explain your code and solution, and your explanation will be used to determine your final assignment score. Failure to demonstrate understanding of the solution submitted might result in a zero score for that assignment.**
+3. **Never submit code or results generated from code you do not fully understand**. Again, AI tools often generate incorrect or incomplete code as examples, misguided suggestions, and wrong diagnostics of errors. It is your responsibility to ensure the code you submit is correct and that you are able to explain what it does. **The instructor reserves the right to ask you to orally explain your code and solution, and your explanation will be used to determine your final assignment score. Failure to demonstrate understanding of the solution submitted might result in a zero score for that assignment.**
 
 I encourage you to use AI tools to enhance your learning, as long as you follow the rules listed above. In particular, there are two use cases for AI tools that could be valuable for your learning and align with the rules of this course. As outlined by [Mollick and Mollick](https://hbsp.harvard.edu/inspiring-minds/student-use-cases-for-ai), the use cases are:
 
-1. [AI as Feedback Generator](https://hbsp.harvard.edu/inspiring-minds/ai-as-feedback-generator). You can ask AI tools to critique your solutions and suggest ways to improve. For instance, you could ask an AI tool to help you interpret an error message you find when you run your code. Another example is to ask to tool to identify parts of your code that are hard to read and could be rewritten for clarity.
+1. [AI as Feedback Generator](https://hbsp.harvard.edu/inspiring-minds/ai-as-feedback-generator). You can ask AI tools to critique your solutions and suggest ways to improve them. For instance, you could ask an AI tool to help you interpret an error message you find when you run your code. Another example is to ask to tool to identify parts of your code that are hard to read and could be rewritten for clarity.
 2. [AI as a Personal Tutor](https://hbsp.harvard.edu/inspiring-minds/ai-as-personal-tutor). You can ask AI tools to act as a tutor and guide you through the steps of learning a new concept or technique. You can instruct the AI to outline key ideas, generate additional examples, ask you related questions, and evaluate your explanations.
 
 
 ### Hardware
 
-This course is designed to offer several opportunities for your to code and experiment with the methods we study. For this reason, you will need to bring a laptop to class. Please let me know if you do not have access to a laptop for that purpose.
+This course is designed to offer several opportunities for your to code and experiment with the methods we study. For this reason, I recommend you bring a laptop to class. Please let me know if you do not have access to a laptop for that purpose. Moreover, to complete assignments, you will need access to a computer where you can install numerical packages in your programming language of choice.
 
-*A note on class conduct and etiquette*: You are encouraged to bring a laptop to class. However, please limit your use of the laptop to either working on programming examples or taking notes. You are not allowed to use other mobile devices (phones or tablets) as they are distracting to you and others around you. *If you have an emergency or other reason that requires you to monitor these devices, please let me know in advance*. If a student’s use of an electronic device is disruptive to teaching and/or learning, I will ask that the student to discontinue the use of that device or leave the classroom. Please be considerate of those around you.
+*A note on class conduct and etiquette*: Although you are encouraged to bring a laptop to class, **please limit your use of the laptop to either working on programming examples or taking notes. You are not allowed to use other mobile devices (phones or tablets) as they are distracting to you and others around you.** *If you have an emergency or other reason that requires you to monitor these devices, please let me know in advance*. If a student’s use of an electronic device is disruptive to teaching and/or learning, I will ask that the student to discontinue the use of that device or leave the classroom. Please be considerate of those around you.
 
 
 ## Assignments and grading
@@ -218,12 +221,12 @@ The planned schedule below lists the topics we will cover in this course and the
 
 **Part I - Introduction to Scientific Computing**
 
-1. Computing for applied research projects and best practices *(weeks 1-3)*
+1. Scientific computing for applied research projects *(weeks 1-3)*
    1. Motivation for computational methods in economics
    2. Project organization, reproducibility, version control
    3. Introduction to programming
 
-**Part II - Core numerical methods**
+**Part II - Core Numerical Methods**
 
 2. Fundamentals of numerical operations *(weeks 3-4)*
    1. Numerical arithmetic
@@ -241,7 +244,7 @@ The planned schedule below lists the topics we will cover in this course and the
    3. Constrained optimization: KKT, penalty methods
    4. Constrained optimization: computational modeling
 
-**Part III - Structural estimation**
+**Part III - Structural Estimation**
 
 5. Introduction and overview of methods *(week 9)*
 
@@ -257,11 +260,10 @@ The planned schedule below lists the topics we will cover in this course and the
    1. Theory and properties
    2. Applications: estimating games
 
-8. Simulated method of moments *(week 15)*
+8. Simulation-based estimation *(weeks 15-16)*
+   1. Theory and properties
+   2. Applications
 
-**Additional topics (time permitting)**
-
-9. Mixed complementarity problems, function approximation, and functional equations *(week 16)*
 
 --------------------
 
@@ -289,7 +291,7 @@ Any student who faces challenges securing their food or housing and believes thi
 
 ## Emergency preparation
 
-In the event of a major campus emergency, course requirements, deadlines and grading percentages are subject to changes that may be necessitated by a revised semester calendar or other circumstances beyond the instructor’s control. Relevant changes to this course will be posted onto the course website or can be obtained by contacting the instructors or TAs via email or phone. You are expected to read your @purdue.edu email on a frequent basis.
+In the event of a major campus emergency, course requirements, deadlines and grading percentages are subject to changes that may be necessitated by a revised semester calendar or other circumstances beyond the instructor’s control. Relevant changes to this course will be posted onto the course website or can be obtained by contacting the instructors via email or phone. You are expected to read your @purdue.edu email on a frequent basis.
 
 
 

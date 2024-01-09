@@ -82,10 +82,10 @@ using Plots
 
 ## What we will cover: Part II
 
-*Week 3 until 9*
+*Weeks 3 to 8*
 
 - Fundamentals of numerical methods
-  - Computer architecture and arithmetic
+  - Numerical arithmetic
   - Numerical differentiation and integration
 - Systems of equations
   - Methods for linear and nonlinear systems
@@ -460,7 +460,7 @@ $a^* = 1$
 
 ## Example 3
 
-Now suppose the government implements a price floor such that $p > 1$. 
+Now suppose the government implements a price floor such that $p \geq 1$. 
 
 We now have that 
 
@@ -490,7 +490,7 @@ $E[\max(1,3-2a\hat{y})] \neq \max(1,E[3-2a\hat{y}])$
 
 ## Function iteration
 
-We can solve this using a technique called **function iteration**
+We can solve this using **Monte Carlo integration** and **function iteration**
 
 ```{julia}
 #| echo: TRUE
@@ -537,5 +537,5 @@ println("The optimal number of acres to plant is $(round(acreage, digits = 3)).\
 1. Read Gentzkow and Shapiro (2014) *Code and Data for the Social Sciences*
 2. Watch the 5-minute video *What is version control?*
   - [Links for both are on Brightspace > Content > Materials]{.small_text}
-3. Create a GitHub account with your Purdue email (or add it to your existing account)
+3. Create a GitHub account with your Purdue email (or add it to your existing account) **and send me an email with your username**
 4. Install [GitHub Desktop](https://desktop.github.com/)

@@ -1034,62 +1034,6 @@ If you click on the commit, it takes you to the `git diff` which shows you any c
 
 
 
-
-
-
-# Appendix
-
-## Submitting your work with GitHub Classroom
-
-- To help you get familiarized with GitHub workflow, all your submitted work will be done on a repository
-- After you accept an invitation from GitHub Classroom, it will create a new private repository
-  - Only your team members and Diego will be able to see the repository's content
-
-. . .
-
-- GitHub will automatically create a *pull request* called **Feedback**
-  - This is where I'll write any feedback I might have for your files
-  - **Please do not close or merge this pull request. Leave it open for the rest of the semester**
-
-
-
-## Submitting your work with GitHub Classroom
-
-Let's try it
-
-- Type or click on the link below. It's an invitation for a tutorial repository
-
-[https://classroom.github.com/a/IECLK9zM](https://classroom.github.com/a/IECLK9zM)
-
-
-
-
-## Submitting your work with GitHub Classroom
-
-I will send you an invitation to create a *Code portfolio* on GitHub
-
-::: {.columns}
-::: {.column}
-- Please create separate folders for each problem set and mini-project
-- Use clear naming conventions
-:::
-::: {.column}
-![](figures/portfolio_structure.png)
-:::
-:::
-
-
-
-
-
-## Submitting your work with GitHub Classroom
-
-This is what the **Feedback** pull request page will look like after your first commit
-
-![](figures/test_ps_3.png){fig-align="center"}
-
-
-
 ## Next class{background-color="gold"}
 
 We'll start programming in Julia language

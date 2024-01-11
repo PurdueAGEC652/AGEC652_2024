@@ -24,11 +24,10 @@ editor:
     1.  [Motivation]{.gray}
     2.  **Best practices**
     3.  Intro to programming
-2.  Select ML methods for Applied Economics
-3.  Fundamentals of numerical methods
-4.  Systems of equations
-5.  Optimization
-6.  Introduction to structural estimation
+2.  Fundamentals of numerical methods
+3.  Systems of equations
+4.  Optimization
+5.  Structural estimation
 
 ## Agenda {background-color="gold"}
 
@@ -213,8 +212,8 @@ An extra rule: **Keep track of your dependencies**
 . . .
 
 - There are many tools to help you with that
-  - Some are simpler and just track that info for you .small[(e.g.: Dr. Watson for Julia)]
-  - Others create a stand-alone environment with everything you need to run .small[(e.g.: Docker)]
+  - Some are simpler and just track that info for you (e.g.: Dr. Watson for Julia)
+  - Others create a stand-alone environment with everything you need to run (e.g.: Docker)
 
 
 
@@ -310,11 +309,10 @@ But there are many packages to care of that for you (e.g., package `here` for R)
 By now you hopefully have
 
 1. GitHub Desktop installed on your laptop
-2. A GitHub account
+2. A GitHub account (and sent me your username)
 
 After class, please:
 
-- Send me an e-mail with your GitHub username
 - Watch out for an invitation for our GitHub Classroom repository
 - Accept the invitation
 
@@ -336,7 +334,7 @@ After class, please:
 . . .
 
 - In fact, it's even better than that because Git is optimized for the things that economists spend a lot of time working on (e.g. code)
-- It gives you an easy way to test out experimental changes (e.g. new specifications, additional model states) and not have them mess with your main code
+- It gives you an easy way to test experimental changes (e.g. new specifications, additional model states) and not have them mess with your main code
 
 
 
@@ -485,6 +483,7 @@ To get the repository on your local machine you need to **clone** the repo
 . . .
 
 Key thing: this will **link** your local repository to the remote
+
   - You'll be able to update your local when the remote is changed
 
 
@@ -494,9 +493,11 @@ Key thing: this will **link** your local repository to the remote
 ::: {.columns}
 ::: {.column}
 Click on
+
 - `Code` > `Open with GitHub Desktop`
 
 You can also use git command line for that (we won't cover it here)
+
 :::
 ::: {.column}
 1[](figures/clone.png)
@@ -505,7 +506,7 @@ You can also use git command line for that (we won't cover it here)
 
 
 
-## Your turn!
+## Your turn! {background-color="gold"}
 
 Create and clone your own repository on GitHub and initialize it with a `README.md` file
 
@@ -557,7 +558,7 @@ There are only a few basic Git operations you need to know for versioning solo e
 
 
 
-## Your turn!
+## Your turn! {background-color="gold"}
 
 In your own repository do the following:
 
@@ -610,7 +611,7 @@ And also to switch and merge your branch into the `main`
 
 
 
-## Your turn!
+## Your turn! {background-color="gold"}
 
 In your own repository do the following:
 
@@ -680,7 +681,7 @@ And you're done!
 
 
 
-## Your turn!
+## Your turn! {background-color="gold"}
 
 In your own repository do the following:
 
@@ -828,7 +829,7 @@ Merge conflicts can be fixed by directly editing the file. Then `Continue merge`
 **E-mail is not a task management system**
 
 - You can do that in GitHub!
-  - With the added benefit that you can easily link changes to tasks (we'll that in a bit) 
+  - With the added benefit that you can easily link changes to tasks (we'll see that in a bit) 
 - But there are many other tools
   - Some examples: Asana, Trello, Notion, and even Outlook tasks 
 
@@ -1044,8 +1045,8 @@ If you plan to use a different programming language (Python, R, or Matlab), **th
 
 . . .
 
-- We won't cover it, but you might also be interested in learning more about *Jupyter* and programming using code notebooks
+- We won't cover it, but you might also be interested in learning more about *Quarto* and *Jupyter* for programming using code notebooks
   - They allow you to write formatted text along with code blocks and render graphics in the same document
+  - You can learn more about *Quarto* [here](https://quarto.org/)
   - You can learn more about *Jupyter* [here](https://julia.quantecon.org/getting_started_julia/getting_started.html)
-  - And check out the video "IDE showcase: VS Code and Jupyter" I posted Brightspace materials for this unit
 

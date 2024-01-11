@@ -1,0 +1,658 @@
+---
+title: "AGEC 652 - Lecture 1.3"
+subtitle: "An introduction to programming with Julia"
+author: "Diego S. Cardoso"
+institute: "Purdue University"
+execute:
+  echo: true
+format:
+  revealjs: 
+    theme: [white, ./../agec_652_style.css]
+    slide-number: c
+    show-slide-number: all
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    code-copy: hover
+    fig-width: 8
+    fig-height: 4
+    chalkboard:
+      theme: whiteboard
+      chalk-effect: 0.1
+editor:
+  render-on-save: false
+---
+
+
+```{julia}
+#| echo: false
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+Pkg.add("BenchmarkTools")
+```
+
+
+
+## Course Roadmap {background-color="gold"}
+
+1.  Introduction to Scientific Computing
+    1.  [Motivation]{.gray}
+    2.  [Best practices]{.gray}
+    3.  **Intro to programming**
+2.  Select ML methods for Applied Economics
+3.  Fundamentals of numerical methods
+4.  Systems of equations
+5.  Optimization
+6.  Introduction to structural estimation
+
+## Agenda {background-color="gold"}
+
+- Today we start a crash course on programming using Julia
+- We will cover the main features to get you started...
+- Of course, we'll be just scratching the surface. You'll learn a lot more as we go
+
+. . .
+
+- Unless you told me you are using a different language, by now you hopefully have installed
+  - Julia
+  - Visual Studio Code with Julia extension
+
+
+## Main references for today {background-color="gold"}
+
+-   Software Carpentry
+-   QuantEcon
+-   Lecture notes for Grant McDermott's *Data Science for Economists* (Oregon) and Ivan Rudik's *Dynamic Optimization* (Cornell) 
+-   Julia documentation
+
+
+## Why learn Julia?
+
+**Reason 1: It is easy to learn and use**
+
+Julia is a *high-level* language
+
+- Low-level = you write instructions are closer to what the hardware understands (Assembly, C++, Fortran)
+  - These are usually the fastest because there is little to translate (what a compiler does) and you can optimize your code depending on your hardware
+- High-level means you write in closer to human language (Julia, R, Python)
+  - The compiler has to do a lot more work to translate your instructions
+
+
+## Why learn Julia?
+
+**Reason 2: Julia delivers C++ and Fortran speed**
+
+Sounds like magic, but it's just a clever combination of design choices targeting numerical methods
+
+![](figures/julia_speed_2.png){fig-align="center"}
+
+[*In this graph, time to execute in C++ is 1*]{.small_text}
+
+
+
+## Why learn Julia?
+
+**Reason 3: Julia is free, open-source, and popular**
+
+- You don't need expensive licenses to use (unlike Matlab)
+- The people who want to use or verify what you did also don't have to pay
+- There is a large and active community of users and developers
+  - So it's easy to get help and new packages
+
+
+
+
+## Tools for programming in Julia
+
+There are 2 *Integrated Development Environments (IDEs)* I generally recommend
+
+1. Visual Studio (VS) code
+2. Jupyter Lab notebooks
+
+*Please watch the "IDE showcase" video on Brightspace for an intro*
+
+. . .
+
+In this course, we will only program plain `.jl` files, so I highly recommend you get familiarized with VS code
+
+. . .
+
+- At the end of this unit, we will talk about using AI tools to help you learn to code and become a more productive programmer
+
+
+
+## Intro to programming
+
+**Programming** $\equiv$ **writing a set of instructions**
+
+- There are hard rules you can't break if you want your code to work
+
+. . .
+
+- There are elements of style (e.g. Strunk and White) that make your code easier to read, modify, and maintain
+
+. . .
+
+- There are elements that make your code more efficient
+  - Using less time or space (memory)
+
+
+
+## Intro to programming
+
+If you will be doing computational work, there are:
+
+1. Language-independent coding basics you should know
+    - Arrays are stored in memory in particular ways
+    
+2. Language-independent best practices you should use
+    - Indent to convey program structure, naming conventions
+    
+3. Language-dependent idiosyncracies that matter for function, speed, etc
+    - Vectorizing, memory management
+
+
+
+## Intro to programming
+
+Learning these early will:
+
+1. Make coding a lot easier
+
+. . .
+
+2. Reduce total programmer time
+
+. . .
+
+3. Reduce total computer time
+
+. . .
+
+4. Make your code understandable by someone else or your future self
+
+. . .
+
+5. Make your code flexible
+
+
+
+## A broad view of programming
+
+Your goal is to make a **program**
+
+A program is made of different components and sub-components
+
+. . .
+
+The most basic component is a **statement**, more commonly called a **line of code**
+
+
+## A broad view of programming
+
+Here is an example of a pseudoprogram:
+
+```{julia}
+#| eval: false
+#| code-line-numbers: "|1"
+deck = ["4 of hearts", "King of clubs", "Ace of spades"]
+shuffled_deck = shuffle(deck)
+first_card = shuffled_deck[1]
+println("The first drawn card was " * shuffled_deck ".")
+```
+
+This program is very simple:
+
+. . .
+
+1. Create a deck of cards
+
+
+## A broad view of programming
+
+Here is an example of a pseudoprogram:
+
+```{julia}
+#| eval: false
+#| code-line-numbers: "2"
+deck = ["4 of hearts", "King of clubs", "Ace of spades"]
+shuffled_deck = shuffle(deck)
+first_card = shuffled_deck[1]
+println("The first drawn card was " * shuffled_deck ".")
+```
+
+This program is very simple:
+
+1. Create a deck of cards
+
+2. Shuffle the deck
+
+
+## A broad view of programming
+
+Here is an example of a pseudoprogram:
+
+```{julia}
+#| eval: false
+#| code-line-numbers: "3"
+deck = ["4 of hearts", "King of clubs", "Ace of spades"]
+shuffled_deck = shuffle(deck)
+first_card = shuffled_deck[1]
+println("The first drawn card was " * shuffled_deck ".")
+```
+
+This program is very simple:
+
+1. Create a deck of cards
+
+2. Shuffle the deck
+
+3. Draw the top card
+
+
+## A broad view of programming
+
+Here is an example of a pseudoprogram:
+
+```{julia}
+#| eval: false
+#| code-line-numbers: "4"
+deck = ["4 of hearts", "King of clubs", "Ace of spades"]
+shuffled_deck = shuffle(deck)
+first_card = shuffled_deck[1]
+println("The first drawn card was " * shuffled_deck ".")
+```
+
+This program is very simple:
+
+1. Create a deck of cards
+
+2. Shuffle the deck
+
+3. Draw the top card
+
+4. Print it
+
+
+
+
+## A broad view of programming
+
+```julia
+deck = ["4 of hearts", "King of clubs", "Ace of spades"]
+shuffled_deck = shuffle(deck)
+first_card = shuffled_deck[1]
+println("The first drawn card was " * shuffled_deck ".")
+```
+
+What are the parentheses and why are they different from square brackets?
+
+How does shuffle work?
+
+What’s `println`?
+
+It’s important to know that a **good program has understandable code**
+
+
+
+## Julia specifics
+
+We will discuss coding in the context of Julia but a lot of this ports to Python, MATLAB, etc^[See [https://cheatsheets.quantecon.org](https://cheatsheets.quantecon.org)]
+
+We will review
+
+1. Types
+2. Iterating
+3. Broadcasting/vectorization
+
+. . .
+
+And some slightly more advanced aspects to help you debug
+
+4. Scope
+5. Multiple dispatch
+
+
+
+# 1. Types
+
+
+
+## Types: boolean
+
+All languages have some kind of **variable types** like *integers* or *arrays*
+
+. . .
+
+The first type you will often use is a boolean (`Bool`) variable that takes on a value of `true` or `false`:
+```{julia}
+x = true
+```
+```{julia}
+typeof(x)
+```
+
+
+
+## Types: boolean
+
+We can save the boolean value of actual statements in variables this way:
+
+```{julia}
+@show y = 1 > 2
+```
+
+- `@show` is a Julia macro for showing the operation. 
+- You can think of a macro as a shortcut name that calls a bunch of other things to run
+
+
+
+## Quick detour: logical operators
+
+Logical operators work like you'd think
+
+`==` (equal equal) tests for equality
+
+```{julia}
+1 == 1
+```
+
+. . .
+
+`!=` (exclaimation point equal) tests for inequality
+
+```{julia}
+2 != 2
+```
+
+
+
+## Quick detour: logical operators
+
+
+You can also test for approximate equality with $\approx$ (type `\approx<TAB>`)
+
+
+```{julia}
+1.00000001 ≈ 1
+```
+
+- We will see why this can be super useful in the next unit
+
+. . .
+
+Now back to types
+
+
+
+## Types: numbers
+
+Two other data types you will use frequently are integers
+```{julia}
+typeof(1)
+```
+
+. . .
+
+and floating point numbers
+```{julia}
+typeof(1.0)
+```
+
+- 64 means 64 bits of storage for the number, which is probably the default on your machine
+
+
+
+## Types: numbers
+
+You can always instantiate alternative floating point number types
+
+```{julia}
+converted_int = convert(Float32, 1.0);
+typeof(converted_int)
+```
+
+
+
+## Types: numbers
+
+**Math works like you would expect:**
+
+```{julia}
+a = 2
+```
+```{julia}
+b = 1.0
+```
+```{julia}
+a * b
+```
+
+. . .
+
+```{julia}
+a^2
+```
+
+
+
+## Types: numbers
+
+```{julia}
+2a - 4b
+```
+
+. . .
+
+```{julia}
+@show 4a + 3b^2
+```
+
+. . .
+
+**In Julia, you dont need `*` in between numeric literals (numbers) and variables**
+
+- But I advise you use the explicit notation anyway to avoid bugs
+
+
+## Types: strings
+
+Strings store sequences of characters
+
+You implement them with double quotations:
+
+```{julia}
+x = "Hello World!";
+typeof(x)
+```
+
+. . .
+
+- Note that `;` is used to suppress output for that line of code
+- Unlike some other languages, in Julia you don't need to add `;` after every command
+
+
+
+## Types: strings
+
+It's easy to work with strings. Use `$` to interpolate a variable/expression
+
+```{julia}
+x = 10; y = 20; println("x + y =  $(x+y).")
+```
+
+. . .
+
+Use `*` to concatenate strings
+
+```{julia}
+a = "Aww"; b = "Yeah!!!"; println(a * " " * b)
+```
+
+. . .
+
+You probably won't use strings too often unless you're working with text data or printing output. 
+
+. . .
+
+- Note that `;` can also be used to type multiple commands in the same line. I'm doing it make all fit in one slide, but you should avoid it
+
+
+
+
+## Types: containers
+
+Containers are types that store collections of data
+
+. . .
+
+The most basic container is the `Array` which is denoted by square brackets
+
+. . .
+
+
+```{julia}
+a1 = [1 2; 3 4]; typeof(a1)
+```
+
+. . .
+
+Arrays are **mutable**, which means you can change their values
+
+. . .
+
+```{julia}
+a1[1,1] = 5; a1
+```
+
+You reference elements in a container with square brackets
+
+
+
+## Types: containers
+
+An alternative to the `Array` is the `Tuple`, which is denoted by parentheses
+
+. . .
+
+```{julia}
+a2 = (1, 2, 3, 4); typeof(a2)
+```
+
+`a2` is a `Tuple` of 4 `Int64`s. Tuples have no dimension
+
+
+
+## Types: containers
+
+Tuples are **immutable** which means you **can't** change their values
+```{julia}
+try
+  a2[1] = 5;
+catch
+  println("Error, can't change value of a tuple.")
+end
+```
+
+
+
+## Types: containers
+
+Tuples don't need parentheses (but it's probably best practice for clarity)
+```{julia}
+a3 = 5, 6; typeof(a3)
+```
+
+
+
+## Types: containers
+
+Tuples can be **unpacked** 
+
+. . .
+
+```{julia}
+a3_x, a3_y = a3;
+a3_x
+```
+```{julia}
+a3_y
+```
+
+. . .
+
+**This is basically how functions return multiple outputs when you call them!**
+
+
+
+## Types: containers
+
+But an alternative and more efficient container is the  [`NamedTuple`](https://docs.julialang.org/en/v1/manual/types/#Named-Tuple-Types-1) 
+
+```{julia}
+nt = (x = 10, y = 11); typeof(nt)
+```
+```{julia}
+nt.x
+```
+```{julia}
+nt.y
+```
+
+Another way of accessing `x` and `y` inside the NamedTuple is
+
+```{julia}
+nt[:x]
+```
+```{julia}
+nt[:y];
+```
+
+
+
+
+## Types: containers
+
+A `Dictionary` is the last main container type
+
+- They are like arrays but are indexed by keys (names) instead of numbers
+
+. . .
+
+```{julia}
+d1 = Dict("class" => "AGEC652", "grade" => 97);
+typeof(d1)
+```
+
+. . .
+
+`d1` is a dictionary where the key are strings and the values are any kind of type
+
+
+
+## Types: containers
+
+Reference specific values you want in the dictionary by referencing the key
+
+. . .
+
+```{julia}
+d1["class"]
+```
+```{julia}
+d1["grade"]
+```
+
+
+
+## Types: containers
+
+If you just want all the keys or all the values, you can use these base functions
+
+```{julia}
+keys_d1 = keys(d1)
+```
+```{julia}
+values_d1 = values(d1)
+```
+

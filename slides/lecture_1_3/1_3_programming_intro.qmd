@@ -18,6 +18,10 @@ format:
     chalkboard:
       theme: whiteboard
       chalk-effect: 0.1
+  html:
+    toc: true
+    toc-depth: 1
+    html-math-method: katex
 editor:
   render-on-save: false
 ---
@@ -39,11 +43,10 @@ Pkg.add("BenchmarkTools")
     1.  [Motivation]{.gray}
     2.  [Best practices]{.gray}
     3.  **Intro to programming**
-2.  Select ML methods for Applied Economics
-3.  Fundamentals of numerical methods
-4.  Systems of equations
-5.  Optimization
-6.  Introduction to structural estimation
+2.  Fundamentals of numerical methods
+3.  Systems of equations
+4.  Optimization
+5.  Structural estimation
 
 ## Agenda {background-color="gold"}
 
@@ -302,15 +305,16 @@ We will discuss coding in the context of Julia but a lot of this ports to Python
 We will review
 
 1. Types
-2. Iterating
-3. Broadcasting/vectorization
+2. Functions
+3. Iterating
+4. Broadcasting/vectorization
 
 . . .
 
 And some slightly more advanced aspects to help you debug
 
-4. Scope
-5. Multiple dispatch
+5. Scope
+6. Multiple dispatch
 
 
 
@@ -655,4 +659,952 @@ keys_d1 = keys(d1)
 ```{julia}
 values_d1 = values(d1)
 ```
+
+
+## Creating new types
+
+We can actually create new composite types using `struct`
+
+. . .
+
+```{julia}
+struct FoobarNoType # This will be immutable by default
+  a
+  b
+  c
+end
+```
+
+This creates a new type called `FoobarNoType`
+
+
+
+## Creating new types
+
+We can generate a variable of type `FoobarNoType` using its **constructor** which will have the same name
+
+. . .
+
+```{julia}
+newfoo = FoobarNoType(1.3, 2, "plzzz");
+typeof(newfoo)
+```
+```{julia}
+newfoo.a
+```
+
+
+
+## Creating new types
+
+Custom types are a *handy and elegant way of organizing your program*
+
+- You can define a type `ModelParameters` to contain all your model parameters
+
+- Each variable you instantiate represents a single scenario
+
+- Then, instead of having a function call
+
+```julia
+RunMyModel(param1, param2, param3, param4, param5);
+```
+
+- You call
+
+```julia
+RunMyModel(modelParameters);
+```
+
+
+
+
+## Creating new types
+
+**You should always declare types for the fields of a new composite type**
+
+. . .
+
+You can declare types with the double colon
+
+
+```{julia}
+struct FoobarType # This will be immutable by default
+  a::Float64
+  b::Int
+  c::String
+end
+```
+
+
+
+## Creating new types
+
+```{julia}
+newfoo_typed = FoobarType(1.3, 2, "plzzz");
+typeof(newfoo_typed)
+```
+```{julia}
+newfoo.a
+```
+
+This lets the compiler generate efficient code because it knows the types of the fields when you construct a `FoobarType`
+
+
+
+# 2. Functions
+
+## Functions: why?
+
+
+Functions are an essential part of programming. But why use functions?
+
+1. To avoid duplicating code
+   - If you have the same set of instructions repeated in multiple parts of your code, whenever you need to change something, you have to search through the code and change in many places. This is prone to bugs!
+   - Rule of thumb: if you are using same (or a very similar) block of the instructions more than twice, turn that block into a function
+
+## Functions: why?
+
+2. To make our program more efficient
+   - Julia optimizes functions on the background, but not code outside functions (more on that soon)
+
+. . .
+
+3. To make our code easier to read
+  - Functions can give meaninful names to a block of code that does a specific tasks
+  - Also, it can generalize the operation, letting that block take in different values
+
+
+## Functions: defining them
+
+Creating functions in Julia is easy
+
+```{julia}
+function my_function(argument_1, argument_2)
+  # Do something here
+end;
+typeof(my_function)
+```
+
+. . .
+
+You can also define functions with no arguments. This can be, for example, for some calculation that will print results or save them in a file or manipulate objects somewhere in memory
+
+```{julia}
+function my_other_function()
+  # Add something here
+end;
+```
+
+
+## Functions: defining them
+
+If you have a simple mathematical function, like $F(x) = \sin(x^2)$,  you can use shorthand notation like this
+
+```{julia}
+F(x) = sin(x^2)
+```
+
+. . .
+
+This is the same as
+
+```{julia}
+function F(x)
+  sin(x^2)
+end
+```
+
+
+## Functions: return values
+
+```julia
+function F(x)
+  sin(x^2)
+end
+```
+
+By default, a function will return the last value it evaluated
+```{julia}
+F(1)
+```
+
+## Functions: return values
+
+But it's a good practice to make the return value explicit
+
+```{julia}
+function F(x)
+  result = sin(x^2)
+  return result
+end;
+F(1)
+```
+
+## Functions: return values
+
+Specifying a return is a must if you want to return multiple values. You can do that with tuples!
+
+```{julia}
+function flip_coordinates(lat, long)
+  flipped_lat = -lat
+  flipped_long = -long
+  return flipped_lat, flipped_long
+end;
+x1, x2 = flip_coordinates(45, -60)
+```
+
+
+
+
+# 3. Iteration
+
+
+
+## Iterating
+
+As in other languages we have loops at our disposal:
+
+`for` loops iterate over containers
+```{julia}
+for count in 1:10
+  random_number = rand()
+  if random_number > 0.2
+    println("We drew a $random_number.")
+  end
+end
+```
+
+
+
+## Iterating
+
+`while` loops iterate until a logical expression is false
+```{julia}
+x = 1;
+while x < 50
+  x = x * 2
+  println("After doubling, x is now equal to $x.")
+end
+```
+
+
+
+## Iterating
+
+An `Iterable` is something you can loop over, like arrays
+
+. . .
+
+```{julia}
+actions = ["codes well", "skips class"];
+for action in actions
+    println("Charlie $action")
+end
+```
+
+
+
+## Iterating
+
+The type `Iterator` is a particularly convenient subset of Iterables
+
+. . .
+
+These include things like the dictionary keys:
+```{julia}
+for key in keys(d1)
+  println(d1[key])
+end
+```
+
+
+
+## Iterating
+
+Iterating on `Iterator`s is more *memory efficient* than iterating on arrays
+
+. . .
+
+Here's a **very** simple example. The top function iterates on an `Array`, the bottom function iterates on an `Iterator`:
+
+. . .
+
+```{julia}
+function show_array_speed()
+  m = 1
+  for i = [1, 2, 3, 4, 5, 6]
+    m = m*i
+  end
+end;
+
+function show_iterator_speed()
+  m = 1
+  for i = 1:6
+    m = m*i
+  end
+end;
+```
+
+
+
+## Iterating
+
+
+```{julia}
+using BenchmarkTools
+@btime show_array_speed()
+@btime show_iterator_speed()
+```
+
+The `Iterator` approach is faster and allocates no memory
+
+- `@btime` is a macro from package `BenchmarkTools` that shows you the elasped time and memory allocation
+
+
+
+## Neat looping
+
+A nice thing about Julia: your loops can be much neater because you don't need to index when you just want the container elements
+
+. . .
+
+```{julia}
+f(x) = x^2;
+x_values = 0:20:100;
+for x in x_values
+  println(f(x))
+end
+```
+
+
+
+## Neat looping
+
+This loop directly assigns the elements of `x_values` to `x` instead of having to do something clumsy like `x_values[i]`
+
+. . .
+
+`0:20:100` creates something called a `StepRange` (a type of `Iterator`) which starts at `0`, steps up by `20` and ends at `100`
+
+
+
+
+## Neat looping
+
+You can also pull out an index and the element value by enumerating
+
+```{julia}
+f(x) = x^2;
+x_values = 0:20:100;
+for (index, x) in enumerate(x_values)
+  println("f(x) at value $index is $(f(x)).")
+end
+```
+
+`enumerate` basically assigns an index vector
+
+
+
+
+## Neat looping
+
+Nested loops can also be made very neatly
+
+. . .
+
+```{julia}
+for x in 1:3, y in 3:-1:1
+  println("$x minus $y is $(x-y)")
+end
+```
+
+
+The first loop is the *outer* loop, the second loop is the *inner* loop
+
+## Neat looping
+
+But the "traditional" way of nesting loops also works
+
+- Just remember to include an `end` for each `for` nest
+
+```{julia}
+for x in 1:3
+  for y in 3:-1:1
+    println("$x minus $y is $(x-y)")
+  end
+end
+```
+
+
+
+## Comprehensions: the neatest looping
+
+Comprehensions are an elegant way to use iterables that makes your code cleaner and more compact
+
+. . .
+
+```{julia}
+squared = [y^2 for y in 1:2:11]
+```
+
+This created a 1-dimension `Array` using one line
+
+
+
+## Comprehensions: the neatest looping
+
+We can also use nested loops for comprehensions
+
+. . .
+
+```{julia}
+squared_2 = [(y+z)^2 for y in 1:2:11, z in 1:6]
+```
+
+This created a 2-dimensional `Array`
+
+. . .
+
+- Use this (and the compact nested loop) sparingly since it's hard to read and understand
+
+
+# 4. Broadcating/Vectorization
+
+## Vectorization
+
+Iterated operations element by element is usually an inefficient approach
+
+Another way is to do operations over an entire array. This is called **vectorization**
+
+![](figures/vectorization.png){fig-align="center"}
+
+- It's faster because your processor can do some operations over multiple values with one instruction
+
+
+
+## Dot syntax: broadcasting/vectorization
+
+Vectorizing operations is easy in Julia: just use *dot syntax* (like in MATLAB)
+
+. . .
+
+```{julia}
+g(x) = x^2;
+squared_2 = g.(1:2:11)
+```
+
+. . .
+
+This is actually called **broadcasting** in Julia
+
+
+## Dot syntax: math intuition
+
+There is a mathematical intuition to make a distinction
+
+- $g(x) = x^2$ is a function $\mathbb{R} \rightarrow \mathbb{R}$, i.e., mapping a scalar to a scalar
+
+. . .
+
+- But if $z$ is, say, a $6 \times 1$  vector: $z \in \mathbb{R}^6$, it's unclear what $g(z)$ is
+  - What does the square of a $6 \times 1$ vector even mean? Is it the square of each element? Is it a dot product with the vector itself? Something else?
+
+. . .
+
+- When you use the dot syntax `g.(1:2:11)`, you are telling Julia: **apply function** `g` **to each element in vector** `[1, 3, 5, 7, 9, 11]`
+  - If we needed a function to do something else with the whole vector, we need to write a different function for that
+
+## Dot syntax: we must pay attention to definitions!
+
+- Julia will generally be picky about this: if you call a function that is defined for a scalar and give it a vector, you will get an error message
+  - This strictness (called "strong typed language") is actually one of the reasons it gets so fast: it doesn't need to spend time figuring out what kind of variable you give to it
+
+```{julia}
+try
+  g(1:2:11)
+catch e
+  println(e)
+end
+```
+
+. . .
+
+- The `try`/`catch` block let's you handle error messages within your program
+  - If anything fails, you can program ways to handle errors
+  - We won't be using it in the course; it's here just because I have to handle it this way to generate slides. If you run this code, Julia REPL will give you a more informative error message
+
+## Dot syntax: it's actually faster
+
+Let's see the difference between a an operation on a large vector
+
+- We program separate functions: one using the dot syntax and another that does a simple loop
+- The idea to wrap this operation in a function is so that we can measure the time spent more easily
+
+```{julia}
+function non_vectorized_squares(x)
+  z = similar(x) # This creates a vector with the same dimensions
+                 # as x where we can store z
+  for i in 1:length(x) # This iterates from 1 until the last element of x
+    z[i] = 3x[i]^2 + 7x[i]^3
+  end
+  return z
+end
+```
+
+## *Tangent: Random seeds and JIT*
+
+First, *precompile* the functions by running it on a small example
+
+```{julia}
+using Random # This line imports package Random
+Random.seed!(652) # This sets a p random seed to generate a sequence of numbers 
+x = rand(10); # This generates a vector with 10 random values in (0,1)
+non_vectorized_squares(x); # Run our function once
+```
+
+. . .
+
+A few things to note:
+
+- Setting a random seed guarantees that every time we run this code, we get exactly the same random numbers
+  - This is great for reproducibility!
+- *Just-in-time compilation* (JIT) is one of the tricks Julia does to make things run faster
+  - It translates your code to processor language the first time you run it and uses the translated version every time you call it again
+  - Here, we run the functions once so that compiling doesn't add to our measure of running time in the next slide
+
+
+## Dot syntax: non-vectorized performance check 
+
+Now we generate a much bigger vector and time the execution
+```{julia}
+x = rand(10^6);
+@btime non_vectorized_squares(x)
+```
+
+## Dot syntax: vectorized performance check 
+
+Now, the vectorized version
+```{julia}
+@btime  3 .* x.^2 .+ 7 .* x.^3
+```
+
+## Dot syntax: important details
+
+```julia
+3 .* x.^2 .+ 7 .* x.^3
+```
+A few things to note from this line
+
+- `*`, `+`, and `^` are functions themselves, but of a special type we can call in a different way
+
+. . . 
+
+- But this also works (I just wouldn't recommend; it looks weird!)
+
+```{julia}
++(3, 3)
+```
+
+or 
+
+```{julia}
+^(2, 2)
+```
+
+
+
+## Dot syntax: important details
+
+```julia
+3 .* x.^2 .+ 7 .* x.^3
+```
+So, when we type something like
+
+```
+3 .* x.^2
+```
+
+this means we are
+
+- Squaring every element of x (`x.^2`)
+- Then, multiplying each element of this vector by 3
+  - (Exponentiation takes precedence over multiplication, like in "standard" math)
+
+
+## Dot syntax: a bit further into the rabbit hole
+
+```julia
+3 .* x.^2 .+ 7 .* x.^3
+```
+
+- Ok, so `3 .* x.^2` squared and multiplies by 3 each element. The result is a vector with the same dimension of `x`
+
+. . .
+
+- On the other ide of the summation, `7 .* x.^3` will do a similar thing and result in a vector of dimension `x`, too
+
+- So why add a dot (`.+`) to the summation of these two vectors?
+  - Isn't the sum of two $N\times 1$ vectors the same as adding their respective elements cell by cell?
+
+. . .
+
+- Mathematically, yes! Computationally? No.
+  - Can you guess why?
+
+
+## Dot syntax: a bit further into the rabbit hole
+
+Let's time it:
+
+```{julia}
+@btime  3 .* x.^2 + 7 .* x.^3
+```
+
+
+## Dot syntax: a bit further into the rabbit hole
+
+`3 .* x.^2 .+ 7 .* x.^3` vs `3 .* x.^2 + 7 .* x.^3`
+
+**Isn't the sum of two $N\times 1$ vectors the same as adding their respective elements cell by cell?**
+
+- Mathematically, yes! Computationally? No.
+  - `+` alone is much slower than `.+`. Why?
+
+. . .
+
+- Because the non-vectorized sum `+` requires assembling two separate vectors in memory
+  - So you go over every element of `x` twice, then another pass on the whole vector to calculate the sum
+- If you use `.+`, you solve eveything in one pass!
+
+
+
+
+# 5. Scope
+
+## Scope
+
+The **scope** of a variable name determines when it is valid to refer to that variable
+
+- E.g.: if you create a variable inside a function, can you reference that variable outside the function?
+- You can think of scope as different contexts within your program
+
+. . .
+  
+The two basic scopes are **local** and **global**
+
+. . .
+
+Scope can be a frustrating concept to grasp at first. But understanding how scopes work can save you a lot of debugging time
+
+. . .
+
+Let's walk through some simple examples to see how it works
+
+
+
+## Scope
+
+First, functions have their own **local scope**
+
+. . .
+
+```{julia}
+ff(xx) = xx^2;
+yy = 5;
+ff(yy)
+```
+
+`xx` isn't bound to any values outside the function `ff`
+
+- It is only used inside the function
+
+
+## Scope
+
+Locally scoped functions allow us to do things like:
+
+```{julia}
+xx = 10;
+fff(xx) = xx^2;
+fff(5)
+```
+
+. . .
+
+Although `xx` was declared equal to 10 *outside the function*, the function still evaluated `xx` within its own scope at 5 (the value passed as argument)
+
+
+
+## Scope
+
+But, this type of scoping also has (initially) counterintuitive results like:
+
+```{julia}
+zz = 0;
+function do_some_iteration()
+  for ii = 1:10
+    zz = ii
+  end
+end
+do_some_iteration()
+println("zz = $zz")
+```
+
+. . .
+
+**What happened?**
+
+
+
+## Scope
+
+**What happened?**
+
+The `zz` *outside* the for loop has a different scope: it's in the **global scope**
+
+. . .
+
+The global scope is the outermost scope, outside all functions
+
+. . .
+
+The `zz` *inside* the function has a scope *local* to the loop
+
+. . .
+
+Since the outside `zz` has global scope, the locally scoped variables in the loop can't change it
+
+
+
+## Scope
+
+But hold on. If try the same loop outside a function, it will actually return 10, not 0. $^{*}$ 
+
+![](figures/scope_vscode.png"){fig-align="center"}
+
+```{julia}
+zz = 0;
+for ii = 1:10
+  zz = ii
+end
+println("zz = $zz")
+```
+
+. . .
+
+That's because this `for` loop sits in *global scope* 
+
+  - It can get more complicated than that because there are soft and hard local scopes... but we don't need to dwell on that
+  - The documentation has the details about the [scope of variables](https://docs.julialang.org/en/v1/manual/variables-and-scoping/)
+
+
+
+
+## Scope
+
+Generally, you want to avoid global scope because it can cause conflicts, slowness, etc. But you can use `global` to force it if you want something to have global scope 
+
+- This is almost always a bad practice, though!
+
+
+
+```{julia}
+zz = 0;
+function do_some_iteration()
+  for ii = 1:10
+    global zz = ii
+  end
+end
+do_some_iteration()
+println("zz = $zz")
+```
+
+
+
+## Scope
+
+Local scope kicks in whenever you are defining variables inside a function
+
+Global variables inside a local scope are inherited for **reading**, not writing
+
+```{julia}
+x, y = 1, 2;
+function foo()
+  x = 2        # assignment introduces a new local
+  return x + y # y refers to the global
+end;
+foo()
+x
+```
+
+
+
+## Scope
+
+We can fix looping issues with global scope by using a *wrapper function* that doesn't do anything but change the parent scope so it is not global
+
+- This is exactly what we did with the `do_something` function a few slides back
+
+```{julia}
+zzz = 1;
+function wrapper()
+  zzz = 0;
+  for iii = 1:10
+    zzz = iii
+  end
+  println("zzz = $zzz")
+end
+wrapper()
+```
+
+
+# 6. Multiple dispatch
+
+## Multiple dispatch
+
+Julia lets you define multiple functions with the same name but different types of input variables
+
+This is useful because some operations have different steps depending on the context. For example
+
+- Multiplication (`*`) can work on scalars, vectors, matrices, and more complex types
+  - By allowing different instructions depending on what type of variable is given, Julia makes it easier for user to use functions consistently
+
+. . .
+
+- But if you try to call a function with types of input variables it doesn't know how to handle, it will throw an error
+  - This is usually the most common error you will encounter while learning Julia
+
+
+## Multiple dispatch
+
+
+`/` has MANY different methods for division depending on the input types! Each of these is a function specialized function that treats the inputs differently
+
+```{julia}
+length(methods(/))
+```
+
+```{julia}
+methods(/)[1:4]
+```
+
+
+# General programming advice
+
+
+
+## Some concluding words on programming
+
+There is really only one way to effectively get better at programming: **PRACTICE**
+
+. . .
+
+Yes, reading *can help*, especially by making you aware of tools and resources. But it's no substitute for actually solving problems with the computer
+
+
+
+
+## Some concluding words on programming
+
+**How to get started with your practice?**
+
+My suggestion of an intuitive way: **practice writing programs to solve problems you would know how to solve by hand**
+
+. . .
+
+- The computer follows a strict logic that very often is different from yours
+- Learning how to tell the computer to follow instructions and get to a destination you already know is a great way of learning
+
+. . .
+
+My personal favorite: [Project Euler](https://projecteuler.net) 
+
+
+
+## Some concluding words on programming
+
+> *Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.*
+
+. . .
+
+Example of problems
+1. If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23. *Find the sum of all the multiples of 3 or 5 below 1000.*
+. . .
+
+2. The prime factors of 13195 are 5, 7, 13 and 29. *What is the largest prime factor of the number 600851475143 ?*
+
+. . .
+
+You can type in your answer and it will tell you if it's correct
+
+
+
+## Some concluding words on programming
+
+More on coding practices and efficiency:
+
+- See [JuliaPraxis](https://github.com/JuliaPraxis) for best practices for naming, spacing, comments, etc
+
+- See more [Performance tips](https://docs.julialang.org/en/v1/manual/performance-tips) from Julia Documentation
+
+
+
+## What about ChatGPT?
+
+- You are lucky! You're among the first cohorts learning to program with an available AI language model that is advanced enough to **understand, explain, and generate** code
+
+. . .
+
+- There's actually a version exclusively for coding: CODEX
+
+- Currently, one of the best available services for that is called GitHub Copilot. It's paid, but you can get it for free with an `.edu` email
+
+**But hold on. Don't use this powerful resource without careful consideration**
+
+
+
+## What about ChatGPT?
+
+*But hold on. Don't use this powerful resource without careful consideration*
+
+- **This must be a complement, not a substitute for your programming skills**
+
+Why? 
+
+. . .
+
+- Professional software developers report GH Copilot produces buggy, incomplete, or outright incorrect code more often than not
+  - Before you use it accurately, you need to be familiar enough with programming logic and the language you are using to know when things are wrong
+- These tools will improve, but they will always be imperfect
+  - There is an inherent limitation in translating ambiguous (natural) languages to non-ambiguous (formal) languages
+
+
+
+## Advice on AI coding assistants
+
+*Here is my personal advice to you focusing on your the medium/long-term career as a researcher*
+
+1) **Do not use AI assistants to generate code you still cannot write and understand**
+
+- There's too big of a risk of producing incorrect code
+- It will place a low cap on your logical thinking for computational methods
+- Once you advance and become familiar with programming structures, you can start relying in AI to speed up your coding
+  - Most likely, this will not happen much during this course
+
+
+
+## Advice on AI coding assistants
+
+*Here is my personal advice to you focusing on your the medium/long-term career as a researcher*
+
+2) **Do use AI assistants to explain code to you**
+- Throughout the semester, you will see many examples of algorithms
+- AI can offer *tremendous* help explaining the inner workings of algorithms
+  - [It can even do that as a 1940's gangster](https://twitter.com/HexenkingTV/status/1598278033336852483)
+
+. . .
+
+3) If you are a good programmer in one language, **AI tools can also help you translate code**
+- Even in that case, I'd still recommend you start using it to explain code in the "new" language rather than simply generate code for you
+
 

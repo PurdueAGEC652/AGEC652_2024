@@ -386,6 +386,9 @@
       margin-right: 0; 
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -416,11 +419,10 @@ Diego S. Cardoso
 <li><span class="gray">Best practices</span></li>
 <li><strong>Intro to programming</strong></li>
 </ol></li>
-<li>Select ML methods for Applied Economics</li>
 <li>Fundamentals of numerical methods</li>
 <li>Systems of equations</li>
 <li>Optimization</li>
-<li>Introduction to structural estimation</li>
+<li>Structural estimation</li>
 </ol>
 </section>
 <section id="agenda" class="slide level2" data-background-color="gold">
@@ -654,12 +656,13 @@ Diego S. Cardoso
 <p>We will review</p>
 <ol type="1">
 <li>Types</li>
+<li>Functions</li>
 <li>Iterating</li>
 <li>Broadcasting/vectorization</li>
 </ol>
 <div class="fragment">
 <p>And some slightly more advanced aspects to help you debug</p>
-<ol start="4" type="1">
+<ol start="5" type="1">
 <li>Scope</li>
 <li>Multiple dispatch</li>
 </ol>
@@ -677,13 +680,13 @@ Diego S. Cardoso
 <p>The first type you will often use is a boolean (<code>Bool</code>) variable that takes on a value of <code>true</code> or <code>false</code>:</p>
 <div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>x <span class="op">=</span> <span class="cn">true</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="146">
+<div class="cell-output cell-output-display" data-execution_count="165">
 <pre><code>true</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">typeof</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="147">
+<div class="cell-output cell-output-display" data-execution_count="166">
 <pre><code>Bool</code></pre>
 </div>
 </div>
@@ -697,7 +700,7 @@ Diego S. Cardoso
 <div class="cell-output cell-output-stdout">
 <pre><code>y = 1 &gt; 2 = false</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="148">
+<div class="cell-output cell-output-display" data-execution_count="167">
 <pre><code>false</code></pre>
 </div>
 </div>
@@ -712,7 +715,7 @@ Diego S. Cardoso
 <p><code>==</code> (equal equal) tests for equality</p>
 <div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="fl">1</span> <span class="op">==</span> <span class="fl">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="149">
+<div class="cell-output cell-output-display" data-execution_count="168">
 <pre><code>true</code></pre>
 </div>
 </div>
@@ -720,7 +723,7 @@ Diego S. Cardoso
 <p><code>!=</code> (exclaimation point equal) tests for inequality</p>
 <div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="fl">2</span> <span class="op">!=</span> <span class="fl">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="150">
+<div class="cell-output cell-output-display" data-execution_count="169">
 <pre><code>false</code></pre>
 </div>
 </div>
@@ -731,7 +734,7 @@ Diego S. Cardoso
 <p>You can also test for approximate equality with <span class="math inline">\(\approx\)</span> (type <code>\approx&lt;TAB&gt;</code>)</p>
 <div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="fl">1.00000001</span> <span class="op">≈</span> <span class="fl">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="151">
+<div class="cell-output cell-output-display" data-execution_count="170">
 <pre><code>true</code></pre>
 </div>
 </div>
@@ -747,7 +750,7 @@ Diego S. Cardoso
 <p>Two other data types you will use frequently are integers</p>
 <div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">typeof</span>(<span class="fl">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="152">
+<div class="cell-output cell-output-display" data-execution_count="171">
 <pre><code>Int64</code></pre>
 </div>
 </div>
@@ -755,7 +758,7 @@ Diego S. Cardoso
 <p>and floating point numbers</p>
 <div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">typeof</span>(<span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="153">
+<div class="cell-output cell-output-display" data-execution_count="172">
 <pre><code>Float64</code></pre>
 </div>
 </div>
@@ -770,7 +773,7 @@ Diego S. Cardoso
 <div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a>converted_int <span class="op">=</span> <span class="fu">convert</span>(<span class="dt">Float32</span>, <span class="fl">1.0</span>);</span>
 <span id="cb23-2"><a href="#cb23-2"></a><span class="fu">typeof</span>(converted_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="154">
+<div class="cell-output cell-output-display" data-execution_count="173">
 <pre><code>Float32</code></pre>
 </div>
 </div>
@@ -780,26 +783,26 @@ Diego S. Cardoso
 <p><strong>Math works like you would expect:</strong></p>
 <div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a>a <span class="op">=</span> <span class="fl">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="155">
+<div class="cell-output cell-output-display" data-execution_count="174">
 <pre><code>2</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a>b <span class="op">=</span> <span class="fl">1.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="156">
+<div class="cell-output cell-output-display" data-execution_count="175">
 <pre><code>1.0</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a>a <span class="op">*</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="157">
+<div class="cell-output cell-output-display" data-execution_count="176">
 <pre><code>2.0</code></pre>
 </div>
 </div>
 <div class="fragment">
 <div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a>a<span class="op">^</span><span class="fl">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="158">
+<div class="cell-output cell-output-display" data-execution_count="177">
 <pre><code>4</code></pre>
 </div>
 </div>
@@ -809,7 +812,7 @@ Diego S. Cardoso
 <h2>Types: numbers</h2>
 <div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1"></a><span class="fl">2</span>a <span class="op">-</span> <span class="fl">4</span>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="159">
+<div class="cell-output cell-output-display" data-execution_count="178">
 <pre><code>0.0</code></pre>
 </div>
 </div>
@@ -819,7 +822,7 @@ Diego S. Cardoso
 <div class="cell-output cell-output-stdout">
 <pre><code>4a + 3 * b ^ 2 = 11.0</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="160">
+<div class="cell-output cell-output-display" data-execution_count="179">
 <pre><code>11.0</code></pre>
 </div>
 </div>
@@ -838,7 +841,7 @@ Diego S. Cardoso
 <div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a>x <span class="op">=</span> <span class="st">"Hello World!"</span>;</span>
 <span id="cb38-2"><a href="#cb38-2"></a><span class="fu">typeof</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="161">
+<div class="cell-output cell-output-display" data-execution_count="180">
 <pre><code>String</code></pre>
 </div>
 </div>
@@ -885,7 +888,7 @@ Diego S. Cardoso
 <div class="fragment">
 <div class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1"></a>a1 <span class="op">=</span> [<span class="fl">1</span> <span class="fl">2</span>; <span class="fl">3</span> <span class="fl">4</span>]; <span class="fu">typeof</span>(a1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="164">
+<div class="cell-output cell-output-display" data-execution_count="183">
 <div class="ansi-escaped-output">
 <pre>Matrix{Int64}<span class="ansi-bright-black-fg"> (alias for </span><span class="ansi-bright-black-fg">Array{Int64, 2}</span><span class="ansi-bright-black-fg">)</span></pre>
 </div>
@@ -898,7 +901,7 @@ Diego S. Cardoso
 <div class="fragment">
 <div class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1"></a>a1[<span class="fl">1</span>,<span class="fl">1</span>] <span class="op">=</span> <span class="fl">5</span>; a1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="165">
+<div class="cell-output cell-output-display" data-execution_count="184">
 <pre><code>2×2 Matrix{Int64}:
  5  2
  3  4</code></pre>
@@ -913,7 +916,7 @@ Diego S. Cardoso
 <div class="fragment">
 <div class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1"></a>a2 <span class="op">=</span> (<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>); <span class="fu">typeof</span>(a2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="166">
+<div class="cell-output cell-output-display" data-execution_count="185">
 <pre><code>NTuple{4, Int64}</code></pre>
 </div>
 </div>
@@ -939,7 +942,7 @@ Diego S. Cardoso
 <p>Tuples don’t need parentheses (but it’s probably best practice for clarity)</p>
 <div class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb51-1"><a href="#cb51-1"></a>a3 <span class="op">=</span> <span class="fl">5</span>, <span class="fl">6</span>; <span class="fu">typeof</span>(a3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="168">
+<div class="cell-output cell-output-display" data-execution_count="187">
 <pre><code>Tuple{Int64, Int64}</code></pre>
 </div>
 </div>
@@ -951,13 +954,13 @@ Diego S. Cardoso
 <div class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb53-1"><a href="#cb53-1"></a>a3_x, a3_y <span class="op">=</span> a3;</span>
 <span id="cb53-2"><a href="#cb53-2"></a>a3_x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="169">
+<div class="cell-output cell-output-display" data-execution_count="188">
 <pre><code>5</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb55-1"><a href="#cb55-1"></a>a3_y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="170">
+<div class="cell-output cell-output-display" data-execution_count="189">
 <pre><code>6</code></pre>
 </div>
 </div>
@@ -971,26 +974,26 @@ Diego S. Cardoso
 <p>But an alternative and more efficient container is the <a href="https://docs.julialang.org/en/v1/manual/types/#Named-Tuple-Types-1"><code>NamedTuple</code></a></p>
 <div class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb57-1"><a href="#cb57-1"></a>nt <span class="op">=</span> (x <span class="op">=</span> <span class="fl">10</span>, y <span class="op">=</span> <span class="fl">11</span>); <span class="fu">typeof</span>(nt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="171">
+<div class="cell-output cell-output-display" data-execution_count="190">
 <pre><code>NamedTuple{(:x, :y), Tuple{Int64, Int64}}</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb59-1"><a href="#cb59-1"></a>nt.x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="172">
+<div class="cell-output cell-output-display" data-execution_count="191">
 <pre><code>10</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb61-1"><a href="#cb61-1"></a>nt.y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="173">
+<div class="cell-output cell-output-display" data-execution_count="192">
 <pre><code>11</code></pre>
 </div>
 </div>
 <p>Another way of accessing <code>x</code> and <code>y</code> inside the NamedTuple is</p>
 <div class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb63-1"><a href="#cb63-1"></a>nt[<span class="op">:</span>x]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="174">
+<div class="cell-output cell-output-display" data-execution_count="193">
 <pre><code>10</code></pre>
 </div>
 </div>
@@ -1008,7 +1011,7 @@ Diego S. Cardoso
 <div class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1"></a>d1 <span class="op">=</span> <span class="fu">Dict</span>(<span class="st">"class"</span> <span class="op">=&gt;</span> <span class="st">"AGEC652"</span>, <span class="st">"grade"</span> <span class="op">=&gt;</span> <span class="fl">97</span>);</span>
 <span id="cb66-2"><a href="#cb66-2"></a><span class="fu">typeof</span>(d1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="176">
+<div class="cell-output cell-output-display" data-execution_count="195">
 <pre><code>Dict{String, Any}</code></pre>
 </div>
 </div>
@@ -1023,13 +1026,13 @@ Diego S. Cardoso
 <div class="fragment">
 <div class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href="#cb68-1"></a>d1[<span class="st">"class"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="177">
+<div class="cell-output cell-output-display" data-execution_count="196">
 <pre><code>"AGEC652"</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb70-1"><a href="#cb70-1"></a>d1[<span class="st">"grade"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="178">
+<div class="cell-output cell-output-display" data-execution_count="197">
 <pre><code>97</code></pre>
 </div>
 </div>
@@ -1040,7 +1043,7 @@ Diego S. Cardoso
 <p>If you just want all the keys or all the values, you can use these base functions</p>
 <div class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb72-1"><a href="#cb72-1"></a>keys_d1 <span class="op">=</span> <span class="fu">keys</span>(d1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="179">
+<div class="cell-output cell-output-display" data-execution_count="198">
 <pre><code>KeySet for a Dict{String, Any} with 2 entries. Keys:
   "class"
   "grade"</code></pre>
@@ -1048,14 +1051,1128 @@ Diego S. Cardoso
 </div>
 <div class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb74-1"><a href="#cb74-1"></a>values_d1 <span class="op">=</span> <span class="fu">values</span>(d1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="180">
+<div class="cell-output cell-output-display" data-execution_count="199">
 <pre><code>ValueIterator for a Dict{String, Any} with 2 entries. Values:
   "AGEC652"
   97</code></pre>
 </div>
 </div>
+</section>
+<section id="creating-new-types" class="slide level2">
+<h2>Creating new types</h2>
+<p>We can actually create new composite types using <code>struct</code></p>
+<div class="fragment">
+<div class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb76-1"><a href="#cb76-1"></a><span class="kw">struct</span> FoobarNoType <span class="co"># This will be immutable by default</span></span>
+<span id="cb76-2"><a href="#cb76-2"></a>  a</span>
+<span id="cb76-3"><a href="#cb76-3"></a>  b</span>
+<span id="cb76-4"><a href="#cb76-4"></a>  c</span>
+<span id="cb76-5"><a href="#cb76-5"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This creates a new type called <code>FoobarNoType</code></p>
+</div>
+</section>
+<section id="creating-new-types-1" class="slide level2">
+<h2>Creating new types</h2>
+<p>We can generate a variable of type <code>FoobarNoType</code> using its <strong>constructor</strong> which will have the same name</p>
+<div class="fragment">
+<div class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href="#cb77-1"></a>newfoo <span class="op">=</span> <span class="fu">FoobarNoType</span>(<span class="fl">1.3</span>, <span class="fl">2</span>, <span class="st">"plzzz"</span>);</span>
+<span id="cb77-2"><a href="#cb77-2"></a><span class="fu">typeof</span>(newfoo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="201">
+<pre><code>FoobarNoType</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb79-1"><a href="#cb79-1"></a>newfoo.a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="202">
+<pre><code>1.3</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-new-types-2" class="slide level2">
+<h2>Creating new types</h2>
+<p>Custom types are a <em>handy and elegant way of organizing your program</em></p>
+<ul>
+<li><p>You can define a type <code>ModelParameters</code> to contain all your model parameters</p></li>
+<li><p>Each variable you instantiate represents a single scenario</p></li>
+<li><p>Then, instead of having a function call</p></li>
+</ul>
+<div class="sourceCode" id="cb81"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb81-1"><a href="#cb81-1"></a><span class="fu">RunMyModel</span>(param1, param2, param3, param4, param5);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>You call</li>
+</ul>
+<div class="sourceCode" id="cb82"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb82-1"><a href="#cb82-1"></a><span class="fu">RunMyModel</span>(modelParameters);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="creating-new-types-3" class="slide level2">
+<h2>Creating new types</h2>
+<p><strong>You should always declare types for the fields of a new composite type</strong></p>
+<div class="fragment">
+<p>You can declare types with the double colon</p>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb83-1"><a href="#cb83-1"></a><span class="kw">struct</span> FoobarType <span class="co"># This will be immutable by default</span></span>
+<span id="cb83-2"><a href="#cb83-2"></a>  a<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb83-3"><a href="#cb83-3"></a>  b<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb83-4"><a href="#cb83-4"></a>  c<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb83-5"><a href="#cb83-5"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="creating-new-types-4" class="slide level2">
+<h2>Creating new types</h2>
+<div class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb84-1"><a href="#cb84-1"></a>newfoo_typed <span class="op">=</span> <span class="fu">FoobarType</span>(<span class="fl">1.3</span>, <span class="fl">2</span>, <span class="st">"plzzz"</span>);</span>
+<span id="cb84-2"><a href="#cb84-2"></a><span class="fu">typeof</span>(newfoo_typed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="204">
+<pre><code>FoobarType</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb86-1"><a href="#cb86-1"></a>newfoo.a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="205">
+<pre><code>1.3</code></pre>
+</div>
+</div>
+<p>This lets the compiler generate efficient code because it knows the types of the fields when you construct a <code>FoobarType</code></p>
+</section></section>
+<section>
+<section id="functions" class="title-slide slide level1 center">
+<h1>2. Functions</h1>
+
+</section>
+<section id="functions-why" class="slide level2">
+<h2>Functions: why?</h2>
+<p>Functions are an essential part of programming. But why use functions?</p>
+<ol type="1">
+<li>To avoid duplicating code
+<ul>
+<li>If you have the same set of instructions repeated in multiple parts of your code, whenever you need to change something, you have to search through the code and change in many places. This is prone to bugs!</li>
+<li>Rule of thumb: if you are using same (or a very similar) block of the instructions more than twice, turn that block into a function</li>
+</ul></li>
+</ol>
+</section>
+<section id="functions-why-1" class="slide level2">
+<h2>Functions: why?</h2>
+<ol start="2" type="1">
+<li>To make our program more efficient
+<ul>
+<li>Julia optimizes functions on the background, but not code outside functions (more on that soon)</li>
+</ul></li>
+</ol>
+<div class="fragment">
+<ol start="3" type="1">
+<li>To make our code easier to read</li>
+</ol>
+<ul>
+<li>Functions can give meaninful names to a block of code that does a specific tasks</li>
+<li>Also, it can generalize the operation, letting that block take in different values</li>
+</ul>
+</div>
+</section>
+<section id="functions-defining-them" class="slide level2">
+<h2>Functions: defining them</h2>
+<p>Creating functions in Julia is easy</p>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb88-1"><a href="#cb88-1"></a><span class="kw">function</span> <span class="fu">my_function</span>(argument_1, argument_2)</span>
+<span id="cb88-2"><a href="#cb88-2"></a>  <span class="co"># Do something here</span></span>
+<span id="cb88-3"><a href="#cb88-3"></a><span class="kw">end</span>;</span>
+<span id="cb88-4"><a href="#cb88-4"></a><span class="fu">typeof</span>(my_function)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="206">
+<pre><code>typeof(my_function) (singleton type of function my_function, subtype of Function)</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>You can also define functions with no arguments. This can be, for example, for some calculation that will print results or save them in a file or manipulate objects somewhere in memory</p>
+<div class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb90-1"><a href="#cb90-1"></a><span class="kw">function</span> <span class="fu">my_other_function</span>()</span>
+<span id="cb90-2"><a href="#cb90-2"></a>  <span class="co"># Add something here</span></span>
+<span id="cb90-3"><a href="#cb90-3"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="functions-defining-them-1" class="slide level2">
+<h2>Functions: defining them</h2>
+<p>If you have a simple mathematical function, like <span class="math inline">\(F(x) = \sin(x^2)\)</span>, you can use shorthand notation like this</p>
+<div class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb91-1"><a href="#cb91-1"></a><span class="fu">F</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="208">
+<pre><code>F (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>This is the same as</p>
+<div class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb93-1"><a href="#cb93-1"></a><span class="kw">function</span> <span class="fu">F</span>(x)</span>
+<span id="cb93-2"><a href="#cb93-2"></a>  <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb93-3"><a href="#cb93-3"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="209">
+<pre><code>F (generic function with 1 method)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="functions-return-values" class="slide level2">
+<h2>Functions: return values</h2>
+<div class="sourceCode" id="cb95"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb95-1"><a href="#cb95-1"></a><span class="kw">function</span> <span class="fu">F</span>(x)</span>
+<span id="cb95-2"><a href="#cb95-2"></a>  <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb95-3"><a href="#cb95-3"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By default, a function will return the last value it evaluated</p>
+<div class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb96-1"><a href="#cb96-1"></a><span class="fu">F</span>(<span class="fl">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="210">
+<pre><code>0.8414709848078965</code></pre>
+</div>
+</div>
+</section>
+<section id="functions-return-values-1" class="slide level2">
+<h2>Functions: return values</h2>
+<p>But it’s a good practice to make the return value explicit</p>
+<div class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb98-1"><a href="#cb98-1"></a><span class="kw">function</span> <span class="fu">F</span>(x)</span>
+<span id="cb98-2"><a href="#cb98-2"></a>  result <span class="op">=</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb98-3"><a href="#cb98-3"></a>  <span class="cf">return</span> result</span>
+<span id="cb98-4"><a href="#cb98-4"></a><span class="kw">end</span>;</span>
+<span id="cb98-5"><a href="#cb98-5"></a><span class="fu">F</span>(<span class="fl">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="211">
+<pre><code>0.8414709848078965</code></pre>
+</div>
+</div>
+</section>
+<section id="functions-return-values-2" class="slide level2">
+<h2>Functions: return values</h2>
+<p>Specifying a return is a must if you want to return multiple values. You can do that with tuples!</p>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb100-1"><a href="#cb100-1"></a><span class="kw">function</span> <span class="fu">flip_coordinates</span>(lat, long)</span>
+<span id="cb100-2"><a href="#cb100-2"></a>  flipped_lat <span class="op">=</span> <span class="op">-</span>lat</span>
+<span id="cb100-3"><a href="#cb100-3"></a>  flipped_long <span class="op">=</span> <span class="op">-</span>long</span>
+<span id="cb100-4"><a href="#cb100-4"></a>  <span class="cf">return</span> flipped_lat, flipped_long</span>
+<span id="cb100-5"><a href="#cb100-5"></a><span class="kw">end</span>;</span>
+<span id="cb100-6"><a href="#cb100-6"></a>x1, x2 <span class="op">=</span> <span class="fu">flip_coordinates</span>(<span class="fl">45</span>, <span class="op">-</span><span class="fl">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="212">
+<pre><code>(-45, 60)</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="iteration" class="title-slide slide level1 center">
+<h1>3. Iteration</h1>
+
+</section>
+<section id="iterating" class="slide level2">
+<h2>Iterating</h2>
+<p>As in other languages we have loops at our disposal:</p>
+<p><code>for</code> loops iterate over containers</p>
+<div class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb102-1"><a href="#cb102-1"></a><span class="cf">for</span> count <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span id="cb102-2"><a href="#cb102-2"></a>  random_number <span class="op">=</span> <span class="fu">rand</span>()</span>
+<span id="cb102-3"><a href="#cb102-3"></a>  <span class="cf">if</span> random_number <span class="op">&gt;</span> <span class="fl">0.2</span></span>
+<span id="cb102-4"><a href="#cb102-4"></a>    <span class="fu">println</span>(<span class="st">"We drew a </span><span class="sc">$</span>random_number<span class="st">."</span>)</span>
+<span id="cb102-5"><a href="#cb102-5"></a>  <span class="cf">end</span></span>
+<span id="cb102-6"><a href="#cb102-6"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>We drew a 0.6329514656747588.
+We drew a 0.7361535007178637.
+We drew a 0.716989656426159.
+We drew a 0.2956793126098962.
+We drew a 0.2954813187082227.
+We drew a 0.9574299470413001.</code></pre>
+</div>
+</div>
+</section>
+<section id="iterating-1" class="slide level2">
+<h2>Iterating</h2>
+<p><code>while</code> loops iterate until a logical expression is false</p>
+<div class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb104-1"><a href="#cb104-1"></a>x <span class="op">=</span> <span class="fl">1</span>;</span>
+<span id="cb104-2"><a href="#cb104-2"></a><span class="cf">while</span> x <span class="op">&lt;</span> <span class="fl">50</span></span>
+<span id="cb104-3"><a href="#cb104-3"></a>  x <span class="op">=</span> x <span class="op">*</span> <span class="fl">2</span></span>
+<span id="cb104-4"><a href="#cb104-4"></a>  <span class="fu">println</span>(<span class="st">"After doubling, x is now equal to </span><span class="sc">$</span>x<span class="st">."</span>)</span>
+<span id="cb104-5"><a href="#cb104-5"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>After doubling, x is now equal to 2.
+After doubling, x is now equal to 4.
+After doubling, x is now equal to 8.
+After doubling, x is now equal to 16.
+After doubling, x is now equal to 32.
+After doubling, x is now equal to 64.</code></pre>
+</div>
+</div>
+</section>
+<section id="iterating-2" class="slide level2">
+<h2>Iterating</h2>
+<p>An <code>Iterable</code> is something you can loop over, like arrays</p>
+<div class="fragment">
+<div class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb106-1"><a href="#cb106-1"></a>actions <span class="op">=</span> [<span class="st">"codes well"</span>, <span class="st">"skips class"</span>];</span>
+<span id="cb106-2"><a href="#cb106-2"></a><span class="cf">for</span> action <span class="kw">in</span> actions</span>
+<span id="cb106-3"><a href="#cb106-3"></a>    <span class="fu">println</span>(<span class="st">"Charlie </span><span class="sc">$</span>action<span class="st">"</span>)</span>
+<span id="cb106-4"><a href="#cb106-4"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Charlie codes well
+Charlie skips class</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="iterating-3" class="slide level2">
+<h2>Iterating</h2>
+<p>The type <code>Iterator</code> is a particularly convenient subset of Iterables</p>
+<div class="fragment">
+<p>These include things like the dictionary keys:</p>
+<div class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb108-1"><a href="#cb108-1"></a><span class="cf">for</span> key <span class="kw">in</span> <span class="fu">keys</span>(d1)</span>
+<span id="cb108-2"><a href="#cb108-2"></a>  <span class="fu">println</span>(d1[key])</span>
+<span id="cb108-3"><a href="#cb108-3"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AGEC652
+97</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="iterating-4" class="slide level2">
+<h2>Iterating</h2>
+<p>Iterating on <code>Iterator</code>s is more <em>memory efficient</em> than iterating on arrays</p>
+<div class="fragment">
+<p>Here’s a <strong>very</strong> simple example. The top function iterates on an <code>Array</code>, the bottom function iterates on an <code>Iterator</code>:</p>
+</div>
+<div class="fragment">
+<div class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb110-1"><a href="#cb110-1"></a><span class="kw">function</span> <span class="fu">show_array_speed</span>()</span>
+<span id="cb110-2"><a href="#cb110-2"></a>  m <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb110-3"><a href="#cb110-3"></a>  <span class="cf">for</span> i <span class="op">=</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>]</span>
+<span id="cb110-4"><a href="#cb110-4"></a>    m <span class="op">=</span> m<span class="op">*</span>i</span>
+<span id="cb110-5"><a href="#cb110-5"></a>  <span class="cf">end</span></span>
+<span id="cb110-6"><a href="#cb110-6"></a><span class="kw">end</span>;</span>
+<span id="cb110-7"><a href="#cb110-7"></a></span>
+<span id="cb110-8"><a href="#cb110-8"></a><span class="kw">function</span> <span class="fu">show_iterator_speed</span>()</span>
+<span id="cb110-9"><a href="#cb110-9"></a>  m <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb110-10"><a href="#cb110-10"></a>  <span class="cf">for</span> i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span></span>
+<span id="cb110-11"><a href="#cb110-11"></a>    m <span class="op">=</span> m<span class="op">*</span>i</span>
+<span id="cb110-12"><a href="#cb110-12"></a>  <span class="cf">end</span></span>
+<span id="cb110-13"><a href="#cb110-13"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="iterating-5" class="slide level2">
+<h2>Iterating</h2>
+<div class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb111-1"><a href="#cb111-1"></a><span class="im">using</span> <span class="bu">BenchmarkTools</span></span>
+<span id="cb111-2"><a href="#cb111-2"></a><span class="pp">@btime</span> <span class="fu">show_array_speed</span>()</span>
+<span id="cb111-3"><a href="#cb111-3"></a><span class="pp">@btime</span> <span class="fu">show_iterator_speed</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  17.116 ns (1 allocation: 112 bytes)
+  1.893 ns (0 allocations: 0 bytes)</code></pre>
+</div>
+</div>
+<p>The <code>Iterator</code> approach is faster and allocates no memory</p>
+<ul>
+<li><code>@btime</code> is a macro from package <code>BenchmarkTools</code> that shows you the elasped time and memory allocation</li>
+</ul>
+</section>
+<section id="neat-looping" class="slide level2">
+<h2>Neat looping</h2>
+<p>A nice thing about Julia: your loops can be much neater because you don’t need to index when you just want the container elements</p>
+<div class="fragment">
+<div class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb113-1"><a href="#cb113-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span>;</span>
+<span id="cb113-2"><a href="#cb113-2"></a>x_values <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span><span class="op">:</span><span class="fl">100</span>;</span>
+<span id="cb113-3"><a href="#cb113-3"></a><span class="cf">for</span> x <span class="kw">in</span> x_values</span>
+<span id="cb113-4"><a href="#cb113-4"></a>  <span class="fu">println</span>(<span class="fu">f</span>(x))</span>
+<span id="cb113-5"><a href="#cb113-5"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0
+400
+1600
+3600
+6400
+10000</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="neat-looping-1" class="slide level2">
+<h2>Neat looping</h2>
+<p>This loop directly assigns the elements of <code>x_values</code> to <code>x</code> instead of having to do something clumsy like <code>x_values[i]</code></p>
+<div class="fragment">
+<p><code>0:20:100</code> creates something called a <code>StepRange</code> (a type of <code>Iterator</code>) which starts at <code>0</code>, steps up by <code>20</code> and ends at <code>100</code></p>
+</div>
+</section>
+<section id="neat-looping-2" class="slide level2">
+<h2>Neat looping</h2>
+<p>You can also pull out an index and the element value by enumerating</p>
+<div class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb115-1"><a href="#cb115-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span>;</span>
+<span id="cb115-2"><a href="#cb115-2"></a>x_values <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span><span class="op">:</span><span class="fl">100</span>;</span>
+<span id="cb115-3"><a href="#cb115-3"></a><span class="cf">for</span> (index, x) <span class="kw">in</span> <span class="fu">enumerate</span>(x_values)</span>
+<span id="cb115-4"><a href="#cb115-4"></a>  <span class="fu">println</span>(<span class="st">"f(x) at value </span><span class="sc">$</span>index<span class="st"> is </span><span class="sc">$</span>(<span class="fu">f</span>(x))<span class="st">."</span>)</span>
+<span id="cb115-5"><a href="#cb115-5"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>f(x) at value 1 is 0.
+f(x) at value 2 is 400.
+f(x) at value 3 is 1600.
+f(x) at value 4 is 3600.
+f(x) at value 5 is 6400.
+f(x) at value 6 is 10000.</code></pre>
+</div>
+</div>
+<p><code>enumerate</code> basically assigns an index vector</p>
+</section>
+<section id="neat-looping-3" class="slide level2">
+<h2>Neat looping</h2>
+<p>Nested loops can also be made very neatly</p>
+<div class="fragment">
+<div class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb117-1"><a href="#cb117-1"></a><span class="cf">for</span> x <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, y <span class="kw">in</span> <span class="fl">3</span><span class="op">:-</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span></span>
+<span id="cb117-2"><a href="#cb117-2"></a>  <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>x<span class="st"> minus </span><span class="sc">$</span>y<span class="st"> is </span><span class="sc">$</span>(x<span class="op">-</span>y)<span class="st">"</span>)</span>
+<span id="cb117-3"><a href="#cb117-3"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1 minus 3 is -2
+1 minus 2 is -1
+1 minus 1 is 0
+2 minus 3 is -1
+2 minus 2 is 0
+2 minus 1 is 1
+3 minus 3 is 0
+3 minus 2 is 1
+3 minus 1 is 2</code></pre>
+</div>
+</div>
+<p>The first loop is the <em>outer</em> loop, the second loop is the <em>inner</em> loop</p>
+</div>
+</section>
+<section id="neat-looping-4" class="slide level2">
+<h2>Neat looping</h2>
+<p>But the “traditional” way of nesting loops also works</p>
+<ul>
+<li>Just remember to include an <code>end</code> for each <code>for</code> nest</li>
+</ul>
+<div class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb119-1"><a href="#cb119-1"></a><span class="cf">for</span> x <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span></span>
+<span id="cb119-2"><a href="#cb119-2"></a>  <span class="cf">for</span> y <span class="kw">in</span> <span class="fl">3</span><span class="op">:-</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span></span>
+<span id="cb119-3"><a href="#cb119-3"></a>    <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>x<span class="st"> minus </span><span class="sc">$</span>y<span class="st"> is </span><span class="sc">$</span>(x<span class="op">-</span>y)<span class="st">"</span>)</span>
+<span id="cb119-4"><a href="#cb119-4"></a>  <span class="cf">end</span></span>
+<span id="cb119-5"><a href="#cb119-5"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1 minus 3 is -2
+1 minus 2 is -1
+1 minus 1 is 0
+2 minus 3 is -1
+2 minus 2 is 0
+2 minus 1 is 1
+3 minus 3 is 0
+3 minus 2 is 1
+3 minus 1 is 2</code></pre>
+</div>
+</div>
+</section>
+<section id="comprehensions-the-neatest-looping" class="slide level2">
+<h2>Comprehensions: the neatest looping</h2>
+<p>Comprehensions are an elegant way to use iterables that makes your code cleaner and more compact</p>
+<div class="fragment">
+<div class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb121-1"><a href="#cb121-1"></a>squared <span class="op">=</span> [y<span class="op">^</span><span class="fl">2</span> for y <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">:</span><span class="fl">11</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="223">
+<pre><code>6-element Vector{Int64}:
+   1
+   9
+  25
+  49
+  81
+ 121</code></pre>
+</div>
+</div>
+<p>This created a 1-dimension <code>Array</code> using one line</p>
+</div>
+</section>
+<section id="comprehensions-the-neatest-looping-1" class="slide level2">
+<h2>Comprehensions: the neatest looping</h2>
+<p>We can also use nested loops for comprehensions</p>
+<div class="fragment">
+<div class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb123-1"><a href="#cb123-1"></a>squared_2 <span class="op">=</span> [(y<span class="op">+</span>z)<span class="op">^</span><span class="fl">2</span> for y <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">:</span><span class="fl">11</span>, z <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="224">
+<pre><code>6×6 Matrix{Int64}:
+   4    9   16   25   36   49
+  16   25   36   49   64   81
+  36   49   64   81  100  121
+  64   81  100  121  144  169
+ 100  121  144  169  196  225
+ 144  169  196  225  256  289</code></pre>
+</div>
+</div>
+<p>This created a 2-dimensional <code>Array</code></p>
+</div>
+<div class="fragment">
+<ul>
+<li>Use this (and the compact nested loop) sparingly since it’s hard to read and understand</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="broadcatingvectorization" class="title-slide slide level1 center">
+<h1>4. Broadcating/Vectorization</h1>
+
+</section>
+<section id="vectorization" class="slide level2">
+<h2>Vectorization</h2>
+<p>Iterated operations element by element is usually an inefficient approach</p>
+<p>Another way is to do operations over an entire array. This is called <strong>vectorization</strong></p>
+
+<img data-src="figures/vectorization.png" class="r-stretch quarto-figure-center"><ul>
+<li>It’s faster because your processor can do some operations over multiple values with one instruction</li>
+</ul>
+</section>
+<section id="dot-syntax-broadcastingvectorization" class="slide level2">
+<h2>Dot syntax: broadcasting/vectorization</h2>
+<p>Vectorizing operations is easy in Julia: just use <em>dot syntax</em> (like in MATLAB)</p>
+<div class="fragment">
+<div class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb125-1"><a href="#cb125-1"></a><span class="fu">g</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span>;</span>
+<span id="cb125-2"><a href="#cb125-2"></a>squared_2 <span class="op">=</span> <span class="fu">g</span>.(<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">:</span><span class="fl">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="225">
+<pre><code>6-element Vector{Int64}:
+   1
+   9
+  25
+  49
+  81
+ 121</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>This is actually called <strong>broadcasting</strong> in Julia</p>
+</div>
+</section>
+<section id="dot-syntax-math-intuition" class="slide level2">
+<h2>Dot syntax: math intuition</h2>
+<p>There is a mathematical intuition to make a distinction</p>
+<ul>
+<li><span class="math inline">\(g(x) = x^2\)</span> is a function <span class="math inline">\(\mathbb{R} \rightarrow \mathbb{R}\)</span>, i.e., mapping a scalar to a scalar</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>But if <span class="math inline">\(z\)</span> is, say, a <span class="math inline">\(6 \times 1\)</span> vector: <span class="math inline">\(z \in \mathbb{R}^6\)</span>, it’s unclear what <span class="math inline">\(g(z)\)</span> is
+<ul>
+<li>What does the square of a <span class="math inline">\(6 \times 1\)</span> vector even mean? Is it the square of each element? Is it a dot product with the vector itself? Something else?</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>When you use the dot syntax <code>g.(1:2:11)</code>, you are telling Julia: <strong>apply function</strong> <code>g</code> <strong>to each element in vector</strong> <code>[1, 3, 5, 7, 9, 11]</code>
+<ul>
+<li>If we needed a function to do something else with the whole vector, we need to write a different function for that</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="dot-syntax-we-must-pay-attention-to-definitions" class="slide level2">
+<h2>Dot syntax: we must pay attention to definitions!</h2>
+<ul>
+<li>Julia will generally be picky about this: if you call a function that is defined for a scalar and give it a vector, you will get an error message
+<ul>
+<li>This strictness (called “strong typed language”) is actually one of the reasons it gets so fast: it doesn’t need to spend time figuring out what kind of variable you give to it</li>
+</ul></li>
+</ul>
+<div class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb127-1"><a href="#cb127-1"></a>try</span>
+<span id="cb127-2"><a href="#cb127-2"></a>  <span class="fu">g</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">:</span><span class="fl">11</span>)</span>
+<span id="cb127-3"><a href="#cb127-3"></a>catch <span class="cn">e</span></span>
+<span id="cb127-4"><a href="#cb127-4"></a>  <span class="fu">println</span>(<span class="cn">e</span>)</span>
+<span id="cb127-5"><a href="#cb127-5"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MethodError(^, (1:2:11, 2), 0x00000000000083aa)</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>The <code>try</code>/<code>catch</code> block let’s you handle error messages within your program
+<ul>
+<li>If anything fails, you can program ways to handle errors</li>
+<li>We won’t be using it in the course; it’s here just because I have to handle it this way to generate slides. If you run this code, Julia REPL will give you a more informative error message</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="dot-syntax-its-actually-faster" class="slide level2">
+<h2>Dot syntax: it’s actually faster</h2>
+<p>Let’s see the difference between a an operation on a large vector</p>
+<ul>
+<li>We program separate functions: one using the dot syntax and another that does a simple loop</li>
+<li>The idea to wrap this operation in a function is so that we can measure the time spent more easily</li>
+</ul>
+<div class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb129-1"><a href="#cb129-1"></a><span class="kw">function</span> <span class="fu">non_vectorized_squares</span>(x)</span>
+<span id="cb129-2"><a href="#cb129-2"></a>  z <span class="op">=</span> <span class="fu">similar</span>(x) <span class="co"># This creates a vector with the same dimensions</span></span>
+<span id="cb129-3"><a href="#cb129-3"></a>                 <span class="co"># as x where we can store z</span></span>
+<span id="cb129-4"><a href="#cb129-4"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(x) <span class="co"># This iterates from 1 until the last element of x</span></span>
+<span id="cb129-5"><a href="#cb129-5"></a>    z[i] <span class="op">=</span> <span class="fl">3</span>x[i]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">7</span>x[i]<span class="op">^</span><span class="fl">3</span></span>
+<span id="cb129-6"><a href="#cb129-6"></a>  <span class="cf">end</span></span>
+<span id="cb129-7"><a href="#cb129-7"></a>  <span class="cf">return</span> z</span>
+<span id="cb129-8"><a href="#cb129-8"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="227">
+<pre><code>non_vectorized_squares (generic function with 1 method)</code></pre>
+</div>
+</div>
+</section>
+<section id="tangent-random-seeds-and-jit" class="slide level2">
+<h2><em>Tangent: Random seeds and JIT</em></h2>
+<p>First, <em>precompile</em> the functions by running it on a small example</p>
+<div class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb131-1"><a href="#cb131-1"></a><span class="im">using</span> <span class="bu">Random </span><span class="co"># This line imports package Random</span></span>
+<span id="cb131-2"><a href="#cb131-2"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">652</span>) <span class="co"># This sets a p random seed to generate a sequence of numbers </span></span>
+<span id="cb131-3"><a href="#cb131-3"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">10</span>); <span class="co"># This generates a vector with 10 random values in (0,1)</span></span>
+<span id="cb131-4"><a href="#cb131-4"></a><span class="fu">non_vectorized_squares</span>(x); <span class="co"># Run our function once</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>A few things to note:</p>
+<ul>
+<li>Setting a random seed guarantees that every time we run this code, we get exactly the same random numbers
+<ul>
+<li>This is great for reproducibility!</li>
+</ul></li>
+<li><em>Just-in-time compilation</em> (JIT) is one of the tricks Julia does to make things run faster
+<ul>
+<li>It translates your code to processor language the first time you run it and uses the translated version every time you call it again</li>
+<li>Here, we run the functions once so that compiling doesn’t add to our measure of running time in the next slide</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="dot-syntax-non-vectorized-performance-check" class="slide level2">
+<h2>Dot syntax: non-vectorized performance check</h2>
+<p>Now we generate a much bigger vector and time the execution</p>
+<div class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb132-1"><a href="#cb132-1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">10</span><span class="op">^</span><span class="fl">6</span>);</span>
+<span id="cb132-2"><a href="#cb132-2"></a><span class="pp">@btime</span> <span class="fu">non_vectorized_squares</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  669.835 μs (2 allocations: 7.63 MiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="229">
+<pre><code>1000000-element Vector{Float64}:
+ 0.003062804666109313
+ 7.6355219215021926
+ 1.3886402318175164
+ 0.44569864069593523
+ 0.8008466605685062
+ 0.10981976061318986
+ 2.9246961936794174
+ 5.105266950479415
+ 5.9631453112311545
+ 1.0645285011217234
+ 6.9806627591157095
+ 0.1290865196896691
+ 8.855862770044393
+ ⋮
+ 1.4720346666371356
+ 2.785492956127899
+ 0.8832084898878823
+ 4.315625968885847
+ 1.1218067782138368
+ 0.7078301413606349
+ 0.0001395072657266982
+ 0.5723139189420743
+ 0.0019247939474107598
+ 0.09357832589493685
+ 0.15379354442736284
+ 7.8472142997509255</code></pre>
+</div>
+</div>
+</section>
+<section id="dot-syntax-vectorized-performance-check" class="slide level2">
+<h2>Dot syntax: vectorized performance check</h2>
+<p>Now, the vectorized version</p>
+<div class="cell" data-execution_count="71">
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb135-1"><a href="#cb135-1"></a><span class="pp">@btime</span>  <span class="fl">3</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">2</span> <span class="op">.+</span> <span class="fl">7</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  597.188 μs (18 allocations: 7.63 MiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="230">
+<pre><code>1000000-element Vector{Float64}:
+ 0.003062804666109313
+ 7.6355219215021926
+ 1.3886402318175164
+ 0.44569864069593523
+ 0.8008466605685062
+ 0.10981976061318986
+ 2.9246961936794174
+ 5.105266950479415
+ 5.9631453112311545
+ 1.0645285011217234
+ 6.9806627591157095
+ 0.1290865196896691
+ 8.855862770044393
+ ⋮
+ 1.4720346666371356
+ 2.785492956127899
+ 0.8832084898878823
+ 4.315625968885847
+ 1.1218067782138368
+ 0.7078301413606349
+ 0.0001395072657266982
+ 0.5723139189420743
+ 0.0019247939474107598
+ 0.09357832589493685
+ 0.15379354442736284
+ 7.8472142997509255</code></pre>
+</div>
+</div>
+</section>
+<section id="dot-syntax-important-details" class="slide level2">
+<h2>Dot syntax: important details</h2>
+<div class="sourceCode" id="cb138"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb138-1"><a href="#cb138-1"></a><span class="fl">3</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">2</span> <span class="op">.+</span> <span class="fl">7</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A few things to note from this line</p>
+<ul>
+<li><code>*</code>, <code>+</code>, and <code>^</code> are functions themselves, but of a special type we can call in a different way</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>But this also works (I just wouldn’t recommend; it looks weird!)</li>
+</ul>
+<div class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb139-1"><a href="#cb139-1"></a><span class="fu">+</span>(<span class="fl">3</span>, <span class="fl">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="231">
+<pre><code>6</code></pre>
+</div>
+</div>
+<p>or</p>
+<div class="cell" data-execution_count="73">
+<div class="sourceCode cell-code" id="cb141"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb141-1"><a href="#cb141-1"></a><span class="op">^</span>(<span class="fl">2</span>, <span class="fl">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="232">
+<pre><code>4</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="dot-syntax-important-details-1" class="slide level2">
+<h2>Dot syntax: important details</h2>
+<div class="sourceCode" id="cb143"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb143-1"><a href="#cb143-1"></a><span class="fl">3</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">2</span> <span class="op">.+</span> <span class="fl">7</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So, when we type something like</p>
+<pre><code>3 .* x.^2</code></pre>
+<p>this means we are</p>
+<ul>
+<li>Squaring every element of x (<code>x.^2</code>)</li>
+<li>Then, multiplying each element of this vector by 3
+<ul>
+<li>(Exponentiation takes precedence over multiplication, like in “standard” math)</li>
+</ul></li>
+</ul>
+</section>
+<section id="dot-syntax-a-bit-further-into-the-rabbit-hole" class="slide level2">
+<h2>Dot syntax: a bit further into the rabbit hole</h2>
+<div class="sourceCode" id="cb145"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb145-1"><a href="#cb145-1"></a><span class="fl">3</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">2</span> <span class="op">.+</span> <span class="fl">7</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Ok, so <code>3 .* x.^2</code> squared and multiplies by 3 each element. The result is a vector with the same dimension of <code>x</code></li>
+</ul>
+<div class="fragment">
+<ul>
+<li><p>On the other ide of the summation, <code>7 .* x.^3</code> will do a similar thing and result in a vector of dimension <code>x</code>, too</p></li>
+<li><p>So why add a dot (<code>.+</code>) to the summation of these two vectors?</p>
+<ul>
+<li>Isn’t the sum of two <span class="math inline">\(N\times 1\)</span> vectors the same as adding their respective elements cell by cell?</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Mathematically, yes! Computationally? No.
+<ul>
+<li>Can you guess why?</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="dot-syntax-a-bit-further-into-the-rabbit-hole-1" class="slide level2">
+<h2>Dot syntax: a bit further into the rabbit hole</h2>
+<p>Let’s time it:</p>
+<div class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb146-1"><a href="#cb146-1"></a><span class="pp">@btime</span>  <span class="fl">3</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">7</span> <span class="op">.*</span> x<span class="op">.^</span><span class="fl">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  2.109 ms (20 allocations: 22.89 MiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="233">
+<pre><code>1000000-element Vector{Float64}:
+ 0.003062804666109313
+ 7.6355219215021926
+ 1.3886402318175164
+ 0.44569864069593523
+ 0.8008466605685062
+ 0.10981976061318986
+ 2.9246961936794174
+ 5.105266950479415
+ 5.9631453112311545
+ 1.0645285011217234
+ 6.9806627591157095
+ 0.1290865196896691
+ 8.855862770044393
+ ⋮
+ 1.4720346666371356
+ 2.785492956127899
+ 0.8832084898878823
+ 4.315625968885847
+ 1.1218067782138368
+ 0.7078301413606349
+ 0.0001395072657266982
+ 0.5723139189420743
+ 0.0019247939474107598
+ 0.09357832589493685
+ 0.15379354442736284
+ 7.8472142997509255</code></pre>
+</div>
+</div>
+</section>
+<section id="dot-syntax-a-bit-further-into-the-rabbit-hole-2" class="slide level2">
+<h2>Dot syntax: a bit further into the rabbit hole</h2>
+<p><code>3 .* x.^2 .+ 7 .* x.^3</code> vs <code>3 .* x.^2 + 7 .* x.^3</code></p>
+<p><strong>Isn’t the sum of two <span class="math inline">\(N\times 1\)</span> vectors the same as adding their respective elements cell by cell?</strong></p>
+<ul>
+<li>Mathematically, yes! Computationally? No.
+<ul>
+<li><code>+</code> alone is much slower than <code>.+</code>. Why?</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Because the non-vectorized sum <code>+</code> requires assembling two separate vectors in memory
+<ul>
+<li>So you go over every element of <code>x</code> twice, then another pass on the whole vector to calculate the sum</li>
+</ul></li>
+<li>If you use <code>.+</code>, you solve eveything in one pass!</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="scope" class="title-slide slide level1 center">
+<h1>5. Scope</h1>
+
+</section>
+<section id="scope-1" class="slide level2">
+<h2>Scope</h2>
+<p>The <strong>scope</strong> of a variable name determines when it is valid to refer to that variable</p>
+<ul>
+<li>E.g.: if you create a variable inside a function, can you reference that variable outside the function?</li>
+<li>You can think of scope as different contexts within your program</li>
+</ul>
+<div class="fragment">
+<p>The two basic scopes are <strong>local</strong> and <strong>global</strong></p>
+</div>
+<div class="fragment">
+<p>Scope can be a frustrating concept to grasp at first. But understanding how scopes work can save you a lot of debugging time</p>
+</div>
+<div class="fragment">
+<p>Let’s walk through some simple examples to see how it works</p>
+</div>
+</section>
+<section id="scope-2" class="slide level2">
+<h2>Scope</h2>
+<p>First, functions have their own <strong>local scope</strong></p>
+<div class="fragment">
+<div class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb149-1"><a href="#cb149-1"></a><span class="fu">ff</span>(xx) <span class="op">=</span> xx<span class="op">^</span><span class="fl">2</span>;</span>
+<span id="cb149-2"><a href="#cb149-2"></a>yy <span class="op">=</span> <span class="fl">5</span>;</span>
+<span id="cb149-3"><a href="#cb149-3"></a><span class="fu">ff</span>(yy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="234">
+<pre><code>25</code></pre>
+</div>
+</div>
+<p><code>xx</code> isn’t bound to any values outside the function <code>ff</code></p>
+<ul>
+<li>It is only used inside the function</li>
+</ul>
+</div>
+</section>
+<section id="scope-3" class="slide level2">
+<h2>Scope</h2>
+<p>Locally scoped functions allow us to do things like:</p>
+<div class="cell" data-execution_count="76">
+<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb151-1"><a href="#cb151-1"></a>xx <span class="op">=</span> <span class="fl">10</span>;</span>
+<span id="cb151-2"><a href="#cb151-2"></a><span class="fu">fff</span>(xx) <span class="op">=</span> xx<span class="op">^</span><span class="fl">2</span>;</span>
+<span id="cb151-3"><a href="#cb151-3"></a><span class="fu">fff</span>(<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="235">
+<pre><code>25</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Although <code>xx</code> was declared equal to 10 <em>outside the function</em>, the function still evaluated <code>xx</code> within its own scope at 5 (the value passed as argument)</p>
+</div>
+</section>
+<section id="scope-4" class="slide level2">
+<h2>Scope</h2>
+<p>But, this type of scoping also has (initially) counterintuitive results like:</p>
+<div class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb153"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb153-1"><a href="#cb153-1"></a>zz <span class="op">=</span> <span class="fl">0</span>;</span>
+<span id="cb153-2"><a href="#cb153-2"></a><span class="kw">function</span> <span class="fu">do_some_iteration</span>()</span>
+<span id="cb153-3"><a href="#cb153-3"></a>  <span class="cf">for</span> ii <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span id="cb153-4"><a href="#cb153-4"></a>    zz <span class="op">=</span> ii</span>
+<span id="cb153-5"><a href="#cb153-5"></a>  <span class="cf">end</span></span>
+<span id="cb153-6"><a href="#cb153-6"></a><span class="kw">end</span></span>
+<span id="cb153-7"><a href="#cb153-7"></a><span class="fu">do_some_iteration</span>()</span>
+<span id="cb153-8"><a href="#cb153-8"></a><span class="fu">println</span>(<span class="st">"zz = </span><span class="sc">$</span>zz<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>zz = 0</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p><strong>What happened?</strong></p>
+</div>
+</section>
+<section id="scope-5" class="slide level2">
+<h2>Scope</h2>
+<p><strong>What happened?</strong></p>
+<p>The <code>zz</code> <em>outside</em> the for loop has a different scope: it’s in the <strong>global scope</strong></p>
+<div class="fragment">
+<p>The global scope is the outermost scope, outside all functions</p>
+</div>
+<div class="fragment">
+<p>The <code>zz</code> <em>inside</em> the function has a scope <em>local</em> to the loop</p>
+</div>
+<div class="fragment">
+<p>Since the outside <code>zz</code> has global scope, the locally scoped variables in the loop can’t change it</p>
+</div>
+</section>
+<section id="scope-6" class="slide level2">
+<h2>Scope</h2>
+<p>But hold on. If try the same loop outside a function, it will actually return 10, not 0. <span class="math inline">\(^{*}\)</span></p>
+
+<img data-src="figures/scope_vscode.png%22" class="r-stretch quarto-figure-center"><div class="cell" data-execution_count="78">
+<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb155-1"><a href="#cb155-1"></a>zz <span class="op">=</span> <span class="fl">0</span>;</span>
+<span id="cb155-2"><a href="#cb155-2"></a><span class="cf">for</span> ii <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span id="cb155-3"><a href="#cb155-3"></a>  zz <span class="op">=</span> ii</span>
+<span id="cb155-4"><a href="#cb155-4"></a><span class="cf">end</span></span>
+<span id="cb155-5"><a href="#cb155-5"></a><span class="fu">println</span>(<span class="st">"zz = </span><span class="sc">$</span>zz<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>zz = 10</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>That’s because this <code>for</code> loop sits in <em>global scope</em></p>
+<ul>
+<li>It can get more complicated than that because there are soft and hard local scopes… but we don’t need to dwell on that</li>
+<li>The documentation has the details about the <a href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/">scope of variables</a></li>
+</ul>
+</div>
+</section>
+<section id="scope-7" class="slide level2">
+<h2>Scope</h2>
+<p>Generally, you want to avoid global scope because it can cause conflicts, slowness, etc. But you can use <code>global</code> to force it if you want something to have global scope</p>
+<ul>
+<li>This is almost always a bad practice, though!</li>
+</ul>
+<div class="cell" data-execution_count="79">
+<div class="sourceCode cell-code" id="cb157"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb157-1"><a href="#cb157-1"></a>zz <span class="op">=</span> <span class="fl">0</span>;</span>
+<span id="cb157-2"><a href="#cb157-2"></a><span class="kw">function</span> <span class="fu">do_some_iteration</span>()</span>
+<span id="cb157-3"><a href="#cb157-3"></a>  <span class="cf">for</span> ii <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span id="cb157-4"><a href="#cb157-4"></a>    <span class="kw">global</span> zz <span class="op">=</span> ii</span>
+<span id="cb157-5"><a href="#cb157-5"></a>  <span class="cf">end</span></span>
+<span id="cb157-6"><a href="#cb157-6"></a><span class="kw">end</span></span>
+<span id="cb157-7"><a href="#cb157-7"></a><span class="fu">do_some_iteration</span>()</span>
+<span id="cb157-8"><a href="#cb157-8"></a><span class="fu">println</span>(<span class="st">"zz = </span><span class="sc">$</span>zz<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>zz = 10</code></pre>
+</div>
+</div>
+</section>
+<section id="scope-8" class="slide level2">
+<h2>Scope</h2>
+<p>Local scope kicks in whenever you are defining variables inside a function</p>
+<p>Global variables inside a local scope are inherited for <strong>reading</strong>, not writing</p>
+<div class="cell" data-execution_count="80">
+<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb159-1"><a href="#cb159-1"></a>x, y <span class="op">=</span> <span class="fl">1</span>, <span class="fl">2</span>;</span>
+<span id="cb159-2"><a href="#cb159-2"></a><span class="kw">function</span> <span class="fu">foo</span>()</span>
+<span id="cb159-3"><a href="#cb159-3"></a>  x <span class="op">=</span> <span class="fl">2</span>        <span class="co"># assignment introduces a new local</span></span>
+<span id="cb159-4"><a href="#cb159-4"></a>  <span class="cf">return</span> x <span class="op">+</span> y <span class="co"># y refers to the global</span></span>
+<span id="cb159-5"><a href="#cb159-5"></a><span class="kw">end</span>;</span>
+<span id="cb159-6"><a href="#cb159-6"></a><span class="fu">foo</span>()</span>
+<span id="cb159-7"><a href="#cb159-7"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="239">
+<pre><code>1</code></pre>
+</div>
+</div>
+</section>
+<section id="scope-9" class="slide level2">
+<h2>Scope</h2>
+<p>We can fix looping issues with global scope by using a <em>wrapper function</em> that doesn’t do anything but change the parent scope so it is not global</p>
+<ul>
+<li>This is exactly what we did with the <code>do_something</code> function a few slides back</li>
+</ul>
+<div class="cell" data-execution_count="81">
+<div class="sourceCode cell-code" id="cb161"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb161-1"><a href="#cb161-1"></a>zzz <span class="op">=</span> <span class="fl">1</span>;</span>
+<span id="cb161-2"><a href="#cb161-2"></a><span class="kw">function</span> <span class="fu">wrapper</span>()</span>
+<span id="cb161-3"><a href="#cb161-3"></a>  zzz <span class="op">=</span> <span class="fl">0</span>;</span>
+<span id="cb161-4"><a href="#cb161-4"></a>  <span class="cf">for</span> iii <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span id="cb161-5"><a href="#cb161-5"></a>    zzz <span class="op">=</span> iii</span>
+<span id="cb161-6"><a href="#cb161-6"></a>  <span class="cf">end</span></span>
+<span id="cb161-7"><a href="#cb161-7"></a>  <span class="fu">println</span>(<span class="st">"zzz = </span><span class="sc">$</span>zzz<span class="st">"</span>)</span>
+<span id="cb161-8"><a href="#cb161-8"></a><span class="kw">end</span></span>
+<span id="cb161-9"><a href="#cb161-9"></a><span class="fu">wrapper</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>zzz = 10</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="multiple-dispatch" class="title-slide slide level1 center">
+<h1>6. Multiple dispatch</h1>
+
+</section>
+<section id="multiple-dispatch-1" class="slide level2">
+<h2>Multiple dispatch</h2>
+<p>Julia lets you define multiple functions with the same name but different types of input variables</p>
+<p>This is useful because some operations have different steps depending on the context. For example</p>
+<ul>
+<li>Multiplication (<code>*</code>) can work on scalars, vectors, matrices, and more complex types
+<ul>
+<li>By allowing different instructions depending on what type of variable is given, Julia makes it easier for user to use functions consistently</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>But if you try to call a function with types of input variables it doesn’t know how to handle, it will throw an error
+<ul>
+<li>This is usually the most common error you will encounter while learning Julia</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="multiple-dispatch-2" class="slide level2">
+<h2>Multiple dispatch</h2>
+<p><code>/</code> has MANY different methods for division depending on the input types! Each of these is a function specialized function that treats the inputs differently</p>
+<div class="cell" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb163"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb163-1"><a href="#cb163-1"></a><span class="fu">length</span>(<span class="fu">methods</span>(<span class="op">/</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="241">
+<pre><code>150</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb165"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb165-1"><a href="#cb165-1"></a><span class="fu">methods</span>(<span class="op">/</span>)[<span class="fl">1</span><span class="op">:</span><span class="fl">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="242">
+4-element Vector{Method}:<ul><li> /(x::<b>Union{Int128, Int16, Int32, Int64, Int8, UInt128, UInt16, UInt32, UInt64, UInt8}</b>, y::<b>Union{Int128, Int16, Int32, Int64, Int8, UInt128, UInt16, UInt32, UInt64, UInt8}</b>) in Base at <a href="https://github.com/JuliaLang/julia/tree/8e5136fa2979885081cd502d2210633dff1d2a1a/base/int.jl#L97" target="_blank">int.jl:97</a></li><li> /(x::<b>T</b>, y::<b>T</b>)<i> where T&lt;:Union{Float16, Float32, Float64}</i> in Base at <a href="https://github.com/JuliaLang/julia/tree/8e5136fa2979885081cd502d2210633dff1d2a1a/base/float.jl#L411" target="_blank">float.jl:411</a></li><li> /(x::<b>Union{Integer, Complex{&lt;:Union{Integer, Rational}}}</b>, y::<b>Rational</b>) in Base at <a href="https://github.com/JuliaLang/julia/tree/8e5136fa2979885081cd502d2210633dff1d2a1a/base/rational.jl#L361" target="_blank">rational.jl:361</a></li><li> /(x::<b>Union{Int16, Int32, Int64, Int8, UInt16, UInt32, UInt64, UInt8}</b>, y::<b>BigInt</b>) in Base.GMP at <a href="https://github.com/JuliaLang/julia/tree/8e5136fa2979885081cd502d2210633dff1d2a1a/base/gmp.jl#L555" target="_blank">gmp.jl:555</a></li></ul>
+</div>
+</div>
+</section></section>
+<section>
+<section id="general-programming-advice" class="title-slide slide level1 center">
+<h1>General programming advice</h1>
+
+</section>
+<section id="some-concluding-words-on-programming" class="slide level2">
+<h2>Some concluding words on programming</h2>
+<p>There is really only one way to effectively get better at programming: <strong>PRACTICE</strong></p>
+<div class="fragment">
+<p>Yes, reading <em>can help</em>, especially by making you aware of tools and resources. But it’s no substitute for actually solving problems with the computer</p>
+</div>
+</section>
+<section id="some-concluding-words-on-programming-1" class="slide level2">
+<h2>Some concluding words on programming</h2>
+<p><strong>How to get started with your practice?</strong></p>
+<p>My suggestion of an intuitive way: <strong>practice writing programs to solve problems you would know how to solve by hand</strong></p>
+<div class="fragment">
+<ul>
+<li>The computer follows a strict logic that very often is different from yours</li>
+<li>Learning how to tell the computer to follow instructions and get to a destination you already know is a great way of learning</li>
+</ul>
+</div>
+<div class="fragment">
+<p>My personal favorite: <a href="https://projecteuler.net">Project Euler</a></p>
+</div>
+</section>
+<section id="some-concluding-words-on-programming-2" class="slide level2">
+<h2>Some concluding words on programming</h2>
+<blockquote>
+<p><em>Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.</em></p>
+</blockquote>
+<div class="fragment">
+<p>Example of problems 1. If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23. <em>Find the sum of all the multiples of 3 or 5 below 1000.</em> . . .</p>
+<ol start="2" type="1">
+<li>The prime factors of 13195 are 5, 7, 13 and 29. <em>What is the largest prime factor of the number 600851475143 ?</em></li>
+</ol>
+</div>
+<div class="fragment">
+<p>You can type in your answer and it will tell you if it’s correct</p>
+</div>
+</section>
+<section id="some-concluding-words-on-programming-3" class="slide level2">
+<h2>Some concluding words on programming</h2>
+<p>More on coding practices and efficiency:</p>
+<ul>
+<li><p>See <a href="https://github.com/JuliaPraxis">JuliaPraxis</a> for best practices for naming, spacing, comments, etc</p></li>
+<li><p>See more <a href="https://docs.julialang.org/en/v1/manual/performance-tips">Performance tips</a> from Julia Documentation</p></li>
+</ul>
+</section>
+<section id="what-about-chatgpt" class="slide level2">
+<h2>What about ChatGPT?</h2>
+<ul>
+<li>You are lucky! You’re among the first cohorts learning to program with an available AI language model that is advanced enough to <strong>understand, explain, and generate</strong> code</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><p>There’s actually a version exclusively for coding: CODEX</p></li>
+<li><p>Currently, one of the best available services for that is called GitHub Copilot. It’s paid, but you can get it for free with an <code>.edu</code> email</p></li>
+</ul>
+<p><strong>But hold on. Don’t use this powerful resource without careful consideration</strong></p>
+</div>
+</section>
+<section id="what-about-chatgpt-1" class="slide level2">
+<h2>What about ChatGPT?</h2>
+<p><em>But hold on. Don’t use this powerful resource without careful consideration</em></p>
+<ul>
+<li><strong>This must be a complement, not a substitute for your programming skills</strong></li>
+</ul>
+<p>Why?</p>
+<div class="fragment">
+<ul>
+<li>Professional software developers report GH Copilot produces buggy, incomplete, or outright incorrect code more often than not
+<ul>
+<li>Before you use it accurately, you need to be familiar enough with programming logic and the language you are using to know when things are wrong</li>
+</ul></li>
+<li>These tools will improve, but they will always be imperfect
+<ul>
+<li>There is an inherent limitation in translating ambiguous (natural) languages to non-ambiguous (formal) languages</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="advice-on-ai-coding-assistants" class="slide level2">
+<h2>Advice on AI coding assistants</h2>
+<p><em>Here is my personal advice to you focusing on your the medium/long-term career as a researcher</em></p>
+<ol type="1">
+<li><strong>Do not use AI assistants to generate code you still cannot write and understand</strong></li>
+</ol>
+<ul>
+<li>There’s too big of a risk of producing incorrect code</li>
+<li>It will place a low cap on your logical thinking for computational methods</li>
+<li>Once you advance and become familiar with programming structures, you can start relying in AI to speed up your coding
+<ul>
+<li>Most likely, this will not happen much during this course</li>
+</ul></li>
+</ul>
+</section>
+<section id="advice-on-ai-coding-assistants-1" class="slide level2">
+<h2>Advice on AI coding assistants</h2>
+<p><em>Here is my personal advice to you focusing on your the medium/long-term career as a researcher</em></p>
+<ol start="2" type="1">
+<li><strong>Do use AI assistants to explain code to you</strong></li>
+</ol>
+<ul>
+<li>Throughout the semester, you will see many examples of algorithms</li>
+<li>AI can offer <em>tremendous</em> help explaining the inner workings of algorithms
+<ul>
+<li><a href="https://twitter.com/HexenkingTV/status/1598278033336852483">It can even do that as a 1940’s gangster</a></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ol start="3" type="1">
+<li>If you are a good programmer in one language, <strong>AI tools can also help you translate code</strong></li>
+</ol>
+<ul>
+<li>Even in that case, I’d still recommend you start using it to explain code in the “new” language rather than simply generate code for you</li>
+</ul>
 <div class="footer footer-default">
 
+</div>
 </div>
 </section></section>
 

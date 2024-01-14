@@ -28,4 +28,4 @@ convert_to_quarto <- function(input_file, output_file) {
 }
 
 # Example usage
-convert_to_quarto("slides/lecture_1_3/1_3_julia.Rmd", "slides/lecture_1_3/1_3_julia.qmd")
+convert_to_quarto("slides/lecture_2_1/2_1_numerical_arithmetic.Rmd", "slides/lecture_2_1/2_1_numerical_arithmetic.qmd")

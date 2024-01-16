@@ -1035,6 +1035,49 @@ If you click on the commit, it takes you to the `git diff` which shows you any c
 
 
 
+# Appendix
+
+*Submitting your work with GitHub Classroom*
+
+
+## Submitting your work
+
+- To help you get familiarized with GitHub workflow, all your submitted work will be done on a repository
+- After you accept an invitation from GitHub Classroom, it will create a new private repository
+  - Only you and Diego will be able to see its content
+
+. . .
+
+- GitHub will automatically create a *pull request* called **Feedback**
+  - This is where I'll write any feedback I might have for your files
+  - **Please do not close or merge this pull request. Leave it open for the rest of the semester**
+
+
+## Submitting your work
+
+- Follow the link you received in a Brightspace announcement. It's an invitation to create a tutorial repository
+- This repository only has a README file with a summary of how GitHub works
+
+. . .
+
+- Typically, problem sets will include a README file with the instructions to solve the problem
+  - When applicable, it will also include starter scripts to set up the problem environment
+
+. . .
+
+- You can (and probably should) make as many commits as you want in that repository
+- I will grade the lastest comit before the deadline
+  - I will appreciate it if you do not commit changes after the deadline. If you need an extension, please send me an email
+
+
+## Submitting your work
+
+Your **Feedback** pull request page will something like this after your first commit
+
+![](figures/test_ps_3.png){fig-align="center"}
+
+
+
 ## Next class{background-color="gold"}
 
 We'll start programming in Julia language

@@ -1066,7 +1066,7 @@ If you click on the commit, it takes you to the `git diff` which shows you any c
 . . .
 
 - You can (and probably should) make as many commits as you want in that repository
-- I will grade the lastest comit before the deadline
+- I will grade the latest comit before the deadline
   - I will appreciate it if you do not commit changes after the deadline. If you need an extension, please send me an email
 
 

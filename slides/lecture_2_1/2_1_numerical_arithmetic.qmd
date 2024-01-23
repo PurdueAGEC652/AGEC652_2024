@@ -277,9 +277,9 @@ println(typeof(5))
 
 ## Number storage
 
-- `Int64` means it is a .blue[integer] with 64 bits of storage
+- `Int64` means it is an **integer** with 64 bits of storage
 
-- `Float64` means it is a .blue[floating point number] with 64 bits of storage
+- `Float64` means it is a **floating point number** with 64 bits of storage
 
   - Floating point just means $b^{\pm n}$ can move the decimal point around in the significand
 
@@ -550,7 +550,7 @@ So their difference won't necessarily be 0.1
 
 ## Error example 3
 
-There are tools for approximate equality. Remember the `$\approx$` operator we saw last lecture? You can use it
+There are tools for approximate equality. Remember the `\approx` operator we saw last lecture? You can use it
 
 ```{julia}
 (100000.2 - 100000.1) ≈ 0.1 # You type \approx then hit TAB

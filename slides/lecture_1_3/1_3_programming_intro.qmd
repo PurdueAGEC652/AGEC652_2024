@@ -1237,11 +1237,11 @@ this means we are
 3 .* x.^2 .+ 7 .* x.^3
 ```
 
-- Ok, so `3 .* x.^2` squared and multiplies by 3 each element. The result is a vector with the same dimension of `x`
+- Ok, so `3 .* x.^2` squares and multiplies by 3 each element. The result is a vector with the same dimension of `x`
 
 . . .
 
-- On the other ide of the summation, `7 .* x.^3` will do a similar thing and result in a vector of dimension `x`, too
+- On the other side of the summation, `7 .* x.^3` will do a similar thing and result in a vector of dimension `x`, too
 
 - So why add a dot (`.+`) to the summation of these two vectors?
   - Isn't the sum of two $N\times 1$ vectors the same as adding their respective elements cell by cell?

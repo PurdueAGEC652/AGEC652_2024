@@ -18,4 +18,6 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
   - Lecture 1.2 - [Best practices, version control](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_1_2/1_2_reproducibilidy_version_control.html)
   - Lecture 1.3 - [Programming with Julia](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_1_3/1_3_programming_intro.html)
 
+- Unit 2 - Numerical Operations
+  - Lecture 2.1 - [Numerical arithmetic](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_2_1/2_1_numerical_arithmetic.html)
 

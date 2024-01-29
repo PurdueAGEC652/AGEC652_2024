@@ -561,7 +561,7 @@ Diego S. Cardoso
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># fifth and third order Taylor approximations</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="fu">sin_error_5</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x) <span class="op">-</span> (x <span class="op">-</span> x<span class="op">^</span><span class="fl">3</span><span class="op">/</span><span class="fl">6</span> <span class="op">+</span> x<span class="op">^</span><span class="fl">5</span><span class="op">/</span><span class="fl">120</span>)</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="fu">sin_error_3</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x) <span class="op">-</span> (x <span class="op">-</span> x<span class="op">^</span><span class="fl">3</span><span class="op">/</span><span class="fl">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="35">
 <pre><code>sin_error_3 (generic function with 1 method)</code></pre>
 </div>
 </div>
@@ -679,15 +679,18 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <li><code>h = 1e-30</code></li>
 </ol>
 </section>
-<section id="forward-difference-2" class="slide level2">
-<h2>Forward difference</h2>
+<section id="forward-difference-example" class="slide level2">
+<h2>Forward difference: example</h2>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Julia</a></li><li><a href="#tabset-1-2">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">deriv_x_squared</span>(h,x) <span class="op">=</span> ((x<span class="op">+</span>h)<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> x<span class="op">^</span><span class="fl">2</span>)<span class="op">/</span>h <span class="co"># derivative function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>deriv_x_squared (generic function with 2 methods)</code></pre>
 </div>
 </div>
-<div class="fragment">
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">println</span>(<span class="st">"</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>        The derivative with h<span class="op">=</span><span class="fl">1e-1</span>  is<span class="op">:</span> <span class="op">$</span>(<span class="fu">deriv_x_squared</span>(<span class="fl">1e-1</span> ,<span class="fl">2</span>.))</span>
@@ -698,6 +701,16 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
         The derivative with h=1e-1  is: 4.100000000000001
         The derivative with h=1e-12 is: 4.000355602329364
         The derivative with h=1e-30 is: 0.0</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2">
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> deriv_x_squared(h, x):</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="cf">return</span> ((x <span class="op">+</span> h)<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> x<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> h <span class="co"># derivative function</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="bu">print</span>(<span class="ss">f"The derivative with h=1e-1  is: </span><span class="sc">{</span>deriv_x_squared(<span class="fl">1e-1</span>, <span class="fl">2.0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="bu">print</span>(<span class="ss">f"The derivative with h=1e-12 is: </span><span class="sc">{</span>deriv_x_squared(<span class="fl">1e-12</span>, <span class="fl">2.0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="bu">print</span>(<span class="ss">f"The derivative with h=1e-30 is: </span><span class="sc">{</span>deriv_x_squared(<span class="fl">1e-30</span>, <span class="fl">2.0</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -895,11 +908,279 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <li>We learned how to program simple derivatives using the principles of finite differencing. But there’s a lot to figure out:
 <ul>
 <li>Can we pick an optimal <span class="math inline">\(h\)</span> depending on the function?</li>
-<li></li>
-<li>improve, especially if we want to calculate higher order derivatives</li>
+<li>What if we want to use more than two points in central differencing? It’s gotta be pretty complicated to program</li>
+<li>And higher-order derivaties seem a pain to program too…</li>
 </ul></li>
-<li></li>
 </ul>
+<div class="fragment">
+<p><strong>Despair not!</strong> That’s what (reliable) packages are for. <em>And we thank the good souls who programmed those tools for free so we can focus on solving our research questions</em></p>
+<ul>
+<li>For finite differencing, we will pick package <code>FiniteDifferences.jl</code> in Julia
+<ul>
+<li>(If you are working in Python, a good option is package <a href="https://pypi.org/project/numdifftools/"><code>numdifftools</code></a>)</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="using-finitedifferences.jl-basics" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: basics</h2>
+<ul>
+<li>This package gives us the tools to create our customized <strong>differentiation functions</strong>
+<ul>
+<li>It means that it will return a function itself that will perform finite differentiation based on the method and parameters we specify</li>
+</ul></li>
+</ul>
+<p>Let’s start with the scalar (univariate) case</p>
+<ul>
+<li>There are three types of methods:
+<ul>
+<li><code>forward_fdm(p, q)</code>: forward finite differences method</li>
+<li><code>backward_fdm(p, q)</code>: forward finite differences method</li>
+<li><code>central_fdm(p, q)</code>: forward finite differences method</li>
+</ul></li>
+<li>Each of these functions take as minimum arguments
+<ul>
+<li><span class="math inline">\(p\)</span>: The order of approximation (number of points you want to use)<br>
+</li>
+<li><span class="math inline">\(q\)</span>: The order of the derivative (e.g., <code>1</code> for first-order )</li>
+</ul></li>
+<li><em>Note that, by default, you don’t need to specify</em> <span class="math inline">\(h\)</span>: <em>it figures out the optimal one based on an adaptative algorithm</em></li>
+</ul>
+</section>
+<section id="using-finitedifferences.jl-scalars" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: scalars</h2>
+<p>Let’s create an operator for 1st-order differentation with each type using the simplest case with 2 points</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a><span class="im">using</span> <span class="bu">FiniteDifferences; </span><span class="co"># Import package</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>my_forward_diff  <span class="op">=</span> <span class="fu">forward_fdm</span>(<span class="fl">2</span>, <span class="fl">1</span>) <span class="co"># Forward difference operator</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>FiniteDifferenceMethod:
+  order of method:       2
+  order of derivative:   1
+  grid:                  [0, 1]
+  coefficients:          [-1.0, 1.0]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a>my_central_diff  <span class="op">=</span> <span class="fu">central_fdm</span>(<span class="fl">2</span>, <span class="fl">1</span>) <span class="co"># Central difference operator</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>FiniteDifferenceMethod:
+  order of method:       2
+  order of derivative:   1
+  grid:                  [-1, 1]
+  coefficients:          [-0.5, 0.5]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span>;</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">my_forward_diff</span>(f, <span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>20.000000066172465</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">my_central_diff</span>(f, <span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<pre><code>19.999999866700435</code></pre>
+</div>
+</div>
+</section>
+<section id="using-finitedifferences.jl-scalars-1" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: scalars</h2>
+<p>As expected, increasing the number of points (order of method) will increase precision</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a>my_forward_diff_6pts  <span class="op">=</span> <span class="fu">forward_fdm</span>(<span class="fl">6</span>, <span class="fl">1</span>) <span class="co"># Forward difference operator with 6 points</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<pre><code>FiniteDifferenceMethod:
+  order of method:       6
+  order of derivative:   1
+  grid:                  [0, 1, 2, 3, 4, 5]
+  coefficients:          [-2.283333333333333, 5.0, -5.0, 3.3333333333333335, -1.25, 0.2]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a>my_central_diff_6pts  <span class="op">=</span> <span class="fu">central_fdm</span>(<span class="fl">6</span>, <span class="fl">1</span>) <span class="co"># Central difference operator with 6 points</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<pre><code>FiniteDifferenceMethod:
+  order of method:       6
+  order of derivative:   1
+  grid:                  [-3, -2, -1, 1, 2, 3]
+  coefficients:          [-0.016666666666666666, 0.15, -0.75, 0.75, -0.15, 0.016666666666666666]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">my_forward_diff_6pts</span>(f, <span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
+<pre><code>20.000000000092676</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">my_central_diff_6pts</span>(f, <span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+<pre><code>19.9999999999984</code></pre>
+</div>
+</div>
+</section>
+<section id="using-finitedifferences.jl-higher-orders" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: higher orders</h2>
+<p>Higher-order derivatives are also easy!</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a>my_central_diff_2nd_order  <span class="op">=</span> <span class="fu">central_fdm</span>(<span class="fl">3</span>, <span class="fl">2</span>) <span class="co"># Central difference operator for 2nd order derivative</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>FiniteDifferenceMethod:
+  order of method:       3
+  order of derivative:   2
+  grid:                  [-1, 0, 1]
+  coefficients:          [1.0, -2.0, 1.0]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">my_central_diff</span>(cos, <span class="fl">0.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="48">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">my_central_diff_2nd_order</span>(cos, <span class="fl">0.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="49">
+<pre><code>-0.9999999993696194</code></pre>
+</div>
+</div>
+</section>
+<section id="using-finitedifferences.jl-gradients" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: gradients</h2>
+<p>We can also use this package to calculate derivatives of functions of vectors (multivariate functions). To do so, we use function <code>grad</code> and pass our <code>fdm</code> operator first</p>
+<p>Let’s see an example for function <span class="math inline">\(g(x_1, x_2) = x_1^2 + 2x_1 + x_2^2 - 2x_2 + 4 x_1 x_2\)</span> evaluated at <span class="math inline">\((1, 1)\)</span>. We know gradients are</p>
+<ul>
+<li><span class="math inline">\(\frac{\partial g}{\partial x_1} = 2x_1 + 2 + 4x_2\)</span></li>
+<li><span class="math inline">\(\frac{\partial g}{\partial x_2} = 2x_2 - 2 + 4x_1\)</span></li>
+</ul>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">g</span>(x) <span class="op">=</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">+</span> <span class="fl">4</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>];</span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="fu">grad</span>(my_central_diff, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="50">
+<pre><code>([8.000000010231267, 3.9999999945594786],)</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Note that the return value is a tuple and the vector of derivatives is the first element. We can access it directly doing by adding <code>[1]</code>:</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">grad</span>(my_central_diff, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="51">
+<pre><code>2-element Vector{Float64}:
+ 8.000000010231267
+ 3.9999999945594786</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="using-finitedifferences.jl-jacobians-of-scalar-functions" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: Jacobians of scalar functions</h2>
+<p>The Jacobian matrix for a multivariate scalar function <span class="math inline">\(f: \mathbb{R}^n \rightarrow \mathbb{R}\)</span> is the row vector of first-order partial derivatives of <span class="math inline">\(f\)</span>:</p>
+<p><span class="math display">\[
+J = \begin{bmatrix}
+\frac{\partial f}{\partial x_1} &amp; \frac{\partial f}{\partial x_2} &amp; \cdots &amp; \frac{\partial f}{\partial x_n}
+\end{bmatrix}
+\]</span></p>
+<div class="fragment">
+<p>So, in this case, the Jacobian for <span class="math inline">\(g(x_1, x_2) = x_1^2 + 2x_1 + x_2^2 - 2x_2 + 4 x_1 x_2\)</span> is the same as the gradient</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">jacobian</span>(my_central_diff, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])[<span class="fl">1</span>] <span class="co"># Again, [1] gets is the first element of the tuple</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="52">
+<pre><code>1×2 Matrix{Float64}:
+ 8.0  4.0</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="using-finitedifferences.jl-jacobians-of-vector-functions" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: Jacobians of vector functions</h2>
+<p>In many instances, we will work vector functions of the type <span class="math inline">\(f: \mathbb{R}^n \rightarrow \mathbb{R}^n\)</span>, where <span class="math inline">\(f = (f_1, f_2, \ldots, f_n)\)</span> and each <span class="math inline">\(f_i\)</span> is a function of <span class="math inline">\(n\)</span> variables <span class="math inline">\(x_1, x_2, \ldots, x_n\)</span></p>
+<p>The Jacobian matrix can be represented as follows:</p>
+<p><span class="math display">\[
+J = \begin{bmatrix}
+\frac{\partial f_1}{\partial x_1} &amp; \frac{\partial f_1}{\partial x_2} &amp; \cdots &amp; \frac{\partial f_1}{\partial x_n} \\
+\frac{\partial f_2}{\partial x_1} &amp; \frac{\partial f_2}{\partial x_2} &amp; \cdots &amp; \frac{\partial f_2}{\partial x_n} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial f_n}{\partial x_1} &amp; \frac{\partial f_n}{\partial x_2} &amp; \cdots &amp; \frac{\partial f_n}{\partial x_n} \\
+\end{bmatrix}
+\]</span></p>
+</section>
+<section id="using-finitedifferences.jl-jacobians-of-vector-functions-1" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: Jacobians of vector functions</h2>
+<p>The process with <code>FiniteDifferences.jl</code> for vector functions is the same. Let’s try it with <span class="math inline">\(G: \mathbb{R}^2 \rightarrow \mathbb{R}^2\)</span></p>
+<p><span class="math display">\[
+G(\mathbf{X}) = \begin{bmatrix}
+x_1^2 + 2x_1 + x_2^2 - 2x_2 + 4 x_1 x_2  \\
+x_1^2 - 2x_1 + x_2^2 + 2x_2 - 4 x_1 x_2  \\
+\end{bmatrix}
+\]</span></p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">function</span> <span class="fu">G</span>(x)</span>
+<span id="cb38-2"><a href="#cb38-2"></a>    G <span class="op">=</span> <span class="fu">similar</span>(x) <span class="co"># Initializes a vector with same dimensions as x (2x1)</span></span>
+<span id="cb38-3"><a href="#cb38-3"></a>    G[<span class="fl">1</span>] <span class="op">=</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2.0</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2.0</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">+</span> <span class="fl">4.0</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>]</span>
+<span id="cb38-4"><a href="#cb38-4"></a>    G[<span class="fl">2</span>] <span class="op">=</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2.0</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2.0</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">-</span> <span class="fl">4.0</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>]</span>
+<span id="cb38-5"><a href="#cb38-5"></a>    <span class="cf">return</span> G</span>
+<span id="cb38-6"><a href="#cb38-6"></a><span class="kw">end</span>;</span>
+<span id="cb38-7"><a href="#cb38-7"></a></span>
+<span id="cb38-8"><a href="#cb38-8"></a><span class="fu">jacobian</span>(my_central_diff, G, [<span class="fl">1.0</span> <span class="fl">1.0</span>])[<span class="fl">1</span>] <span class="co">#[1] returns the first element of the output tuple (a matrix)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="53">
+<pre><code>2×2 Matrix{Float64}:
+  8.0  4.0
+ -4.0  0.0</code></pre>
+</div>
+</div>
+</section>
+<section id="using-finitedifferences.jl-hesssian-of-scalar-functions" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: Hesssian of scalar functions</h2>
+<p>The Hessian matrix for a function <span class="math inline">\(f: \mathbb{R}^n \rightarrow \mathbb{R}\)</span> is a square matrix of second-order partial derivatives of <span class="math inline">\(f\)</span>:</p>
+<p><span class="math display">\[
+H = \begin{bmatrix}
+\frac{\partial^2 f}{\partial x_1^2} &amp; \frac{\partial^2 f}{\partial x_1 \partial x_2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+\frac{\partial^2 f}{\partial x_2 \partial x_1} &amp; \frac{\partial^2 f}{\partial x_2^2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial^2 f}{\partial x_n \partial x_1} &amp; \frac{\partial^2 f}{\partial x_n \partial x_2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_n^2} \\
+\end{bmatrix}
+\]</span></p>
+<div class="fragment">
+<p><code>FiniteDifferences.jl</code> currently doesn’t have a specific function to calculate Hessians directly. But it’s easy to do it by acknowledging that each row <span class="math inline">\(i\)</span> of a Hessian matrix is the Jacobian of function <span class="math inline">\(f_i(x) = \frac{\partial f(x)}{\partial x_i} \rightarrow\)</span> it’s a Jacobian of a Jacobian!</p>
+</div>
+</section>
+<section id="using-finitedifferences.jl-hesssian-of-scalar-functions-1" class="slide level2">
+<h2>Using <code>FiniteDifferences.jl</code>: Hesssian of scalar functions</h2>
+<p>Let’s write a function to calculate a Hessian matrix</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1"></a><span class="kw">function</span> <span class="fu">hessian</span>(fdm, f, x)</span>
+<span id="cb40-2"><a href="#cb40-2"></a>    <span class="co"># Calculate the Jacobian of function f</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a>    <span class="fu">f_i</span>(x) <span class="op">=</span> <span class="fu">jacobian</span>(fdm, f, x)[<span class="fl">1</span>] <span class="co">#[1] gets the 1st element in the tuple output, which is a vector of partial derivatives</span></span>
+<span id="cb40-4"><a href="#cb40-4"></a>    <span class="co"># Calculate the Jacobian of vector function f_i</span></span>
+<span id="cb40-5"><a href="#cb40-5"></a>    H <span class="op">=</span> <span class="fu">jacobian</span>(fdm, f_i, x)[<span class="fl">1</span>]</span>
+<span id="cb40-6"><a href="#cb40-6"></a>    <span class="cf">return</span> H</span>
+<span id="cb40-7"><a href="#cb40-7"></a><span class="kw">end</span>;</span>
+<span id="cb40-8"><a href="#cb40-8"></a><span class="fu">hessian</span>(my_central_diff, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="54">
+<pre><code>2×2 Matrix{Float64}:
+ 2.00789  3.80655
+ 3.51684  2.45064</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>This is a pretty bad approximation! Let’s try it again with more points:</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">hessian</span>(my_central_diff_6pts, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="55">
+<pre><code>2×2 Matrix{Float64}:
+ 2.0  4.0
+ 4.0  2.0</code></pre>
+</div>
+</div>
+<p>Much better!</p>
+</div>
+</section></section>
+<section>
+<section id="automatic-differentiation" class="title-slide slide level1 center">
+<h1>Automatic differentiation</h1>
+
 </section>
 <section id="differentiation-without-error" class="slide level2">
 <h2>Differentiation without error?</h2>
@@ -916,14 +1197,14 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 </ul>
 </div>
 <div class="fragment">
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">deriv_x_squared</span>(x) <span class="op">=</span> <span class="fl">2</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">deriv_x_squared</span>(x) <span class="op">=</span> <span class="fl">2</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>deriv_x_squared (generic function with 2 methods)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">println</span>(<span class="st">"The deriviative is: </span><span class="sc">$</span>(<span class="fu">deriv_x_squared</span>(<span class="fl">2</span>.))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">println</span>(<span class="st">"The deriviative is: </span><span class="sc">$</span>(<span class="fu">deriv_x_squared</span>(<span class="fl">2</span>.))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The deriviative is: 4.0</code></pre>
 </div>
@@ -978,63 +1259,96 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 </ul>
 </div>
 </section>
-<section id="autodiff-let-the-computer-do-it-2" class="slide level2">
-<h2>Autodiff: let the computer do it</h2>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Your function needs to be written in a particular way because the autodiff package can</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="co"># only accept arrays as arguments. But it's easy to adapt it to work with scalars: you</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="co"># just need to define an array with one element</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a><span class="fu">ff</span>(x) <span class="op">=</span> (x[<span class="fl">1</span>])<span class="op">^</span><span class="fl">2</span> <span class="co"># x^2</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>x <span class="op">=</span> [<span class="fl">2.0</span>]; <span class="co"># location to evaluate: ff(x) = 2^2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="fragment">
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="im">using</span> <span class="bu">ForwardDiff </span><span class="co"># This is the package that has autodiff</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">g</span>(f,x) <span class="op">=</span> ForwardDiff.<span class="fu">gradient</span>(f,x); <span class="co"># Define g = ∇f for a generic function</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="fu">println</span>(<span class="st">"ff'(x) at </span><span class="sc">$</span>(x[<span class="fl">1</span>])<span class="st"> is: </span><span class="sc">$</span>(<span class="fu">g</span>(ff,x)[<span class="fl">1</span>])<span class="st">"</span>) <span class="co"># display gradient value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>ff'(x) at 2.0 is: 4.0</code></pre>
-</div>
-</div>
-<p><strong>Exact solution!</strong></p>
-</div>
+<section id="forwarddiff.jl-basics" class="slide level2">
+<h2><code>ForwardDiff.jl</code>: basics</h2>
+<p>There are four basic methods we are interested in</p>
+<ul>
+<li><code>derivative(f, x)</code>: derivative of univariate scalar function <code>f</code> at point <code>x</code></li>
+<li><code>gradient(f, x)</code>: partial derivatives of multivariate scalar function <code>f</code></li>
+<li><code>jacobian(f, x)</code>: Jacobian matrix of multivariate <strong>vector</strong> function <code>f</code>
+<ul>
+<li>Note: <code>f</code> MUST return a vector, even if it’s a single dimension</li>
+</ul></li>
+<li><code>hessian(f, x)</code>: Hessian maxtir of multivariate scalar function <code>f</code></li>
+</ul>
 </section>
-<section id="autodiff-let-the-computer-do-it-3" class="slide level2">
-<h2>Autodiff: let the computer do it</h2>
-<p>Once you get the hang of coding up function for autodiff it’s not that hard</p>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">fff</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span>) <span class="co"># write it in the autodiff way</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>x <span class="op">=</span> [<span class="fl">2.0</span>]  <span class="co"># location to evaluate: ff(x) = 2^2</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="fu">g</span>(f,x) <span class="op">=</span> ForwardDiff.<span class="fu">gradient</span>(f,x)  <span class="co"># g = ∇f</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="37">
-<pre><code>g (generic function with 1 method)</code></pre>
+<section id="forwarddiff.jl-scalars-and-gradients" class="slide level2">
+<h2><code>ForwardDiff.jl</code>: scalars and gradients</h2>
+<p>Calculating scalar derivatives of univariate functions is easy:</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1"></a><span class="im">using</span> <span class="bu">ForwardDiff</span></span>
+<span id="cb48-2"><a href="#cb48-2"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span>;</span>
+<span id="cb48-3"><a href="#cb48-3"></a>ForwardDiff.<span class="fu">derivative</span>(f, <span class="fl">2.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="58">
+<pre><code>4.0</code></pre>
 </div>
 </div>
 <div class="fragment">
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">println</span>(<span class="st">"fff'(x) at </span><span class="sc">$</span>(x[<span class="fl">1</span>])<span class="st"> is: </span><span class="sc">$</span>(<span class="fu">g</span>(fff,x)[<span class="fl">1</span>])<span class="st">"</span>) <span class="co"># display gradient value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>fff'(x) at 2.0 is: -2.6145744834544478</code></pre>
+<p>The same goes for gradients:</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">g</span>(x) <span class="op">=</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">+</span> <span class="fl">4</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>];</span>
+<span id="cb50-2"><a href="#cb50-2"></a>ForwardDiff.<span class="fu">gradient</span>(g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="59">
+<pre><code>2-element Vector{Float64}:
+ 8.0
+ 4.0</code></pre>
+</div>
+</div>
+<p>Note: <code>ForwardDiff.jl</code> doesn’t implement higher-order derivatives. But you can easily calculate them by composition: define derivatives as functions and apply derivatives on them.</p>
+</div>
+</section>
+<section id="forwarddiff.jl-jacobians" class="slide level2">
+<h2><code>ForwardDiff.jl</code>: Jacobians</h2>
+<p>For Jacobians, you need to be careful and make sure your function always returns an array, even if it’s one-dimensional</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Note the square brackets that make array_g return an array</span></span>
+<span id="cb52-2"><a href="#cb52-2"></a><span class="fu">array_g</span>(x) <span class="op">=</span> [x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">+</span> <span class="fl">4</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>]];</span>
+<span id="cb52-3"><a href="#cb52-3"></a><span class="fu">array_g</span>([<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="60">
+<pre><code>1-element Vector{Float64}:
+ 6.0</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1"></a>ForwardDiff.<span class="fu">jacobian</span>(array_g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="61">
+<pre><code>1×2 Matrix{Float64}:
+ 8.0  4.0</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Jacobians on “true” vector functions follows the same procedure</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href="#cb56-1"></a><span class="kw">function</span> <span class="fu">G</span>(x)</span>
+<span id="cb56-2"><a href="#cb56-2"></a>    G <span class="op">=</span> <span class="fu">similar</span>(x)</span>
+<span id="cb56-3"><a href="#cb56-3"></a>    G[<span class="fl">1</span>] <span class="op">=</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2.0</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2.0</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">+</span> <span class="fl">4.0</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>]</span>
+<span id="cb56-4"><a href="#cb56-4"></a>    G[<span class="fl">2</span>] <span class="op">=</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2.0</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2.0</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">-</span> <span class="fl">4.0</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>]</span>
+<span id="cb56-5"><a href="#cb56-5"></a>    <span class="cf">return</span> G</span>
+<span id="cb56-6"><a href="#cb56-6"></a><span class="kw">end</span>;</span>
+<span id="cb56-7"><a href="#cb56-7"></a>ForwardDiff.<span class="fu">jacobian</span>(G, [<span class="fl">1.0</span> <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="62">
+<pre><code>2×2 Matrix{Float64}:
+  8.0  4.0
+ -4.0  0.0</code></pre>
 </div>
 </div>
 </div>
 </section>
-<section id="blueautodiff-let-the-computer-do-it" class="slide level2">
-<h2>.blue<a href="#/autodiff-let-the-computer-do-it">Autodiff: let the computer do it</a></h2>
-<p>Try it out! Code up the derivative of <span class="math inline">\(log(10 + x)\)</span> at <code>x=5.5</code> using automatic differentiation</p>
-<ol type="1">
-<li>Make sure you have the <code>ForwardDiff</code> package</li>
-<li>If not type <code>using Pkg</code> then <code>Pkg.add("ForwardDiff")</code></li>
-<li>Define your function <code>my_fun</code></li>
-<li>Define <code>x</code> as a 1-element array containing <code>5.5</code></li>
-<li>Define the gradient operator <code>g</code> using <code>ForwardDiff.gradient(f,x)</code></li>
-<li>Use <code>g</code> to evaluate the derivative</li>
-<li>Derive the analytic solution and compare to your numeric one</li>
-</ol>
+<section id="forwarddiff.jl-hessians" class="slide level2">
+<h2><code>ForwardDiff.jl</code>: Hessians</h2>
+<p>Hessians are also easy to obtain:</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1"></a>ForwardDiff.<span class="fu">hessian</span>(g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="63">
+<pre><code>2×2 Matrix{Float64}:
+ 2.0  4.0
+ 4.0  2.0</code></pre>
+</div>
+</div>
 </section></section>
 <section>
-<section id="appendix" class="title-slide slide level1 center">
-<h1>Appendix</h1>
+<section id="appendix-symbolics" class="title-slide slide level1 center">
+<h1>Appendix: Symbolics</h1>
 <p><em>Analytical differentiation in Julia</em></p>
 </section>
 <section id="programming-analytical-derivatives" class="slide level2">
@@ -1067,7 +1381,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <li>As it turns out, you can also do that in Julia using the package <code>Symbolics.jl</code></li>
 <li>This appendix is just a short tutorial on how to perform analytical operations (not only derivatives)
 <ul>
-<li>Since most times we want to take those expressions and use them in papers and assignments, we will also use package <code>Latexify</code> to generate LaTeX expressions for us</li>
+<li>Since most times we want to take those expressions and use them in papers and assignments, we will also use package <code>Latexify.jl</code> to generate LaTeX expressions for us</li>
 </ul></li>
 </ul>
 <div class="footer footer-default">

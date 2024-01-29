@@ -324,13 +324,15 @@ Let's see how it works in practice by calculating derivatives of $x^2$ at $x=2$
   3. `h = 1e-30`
 
 
-## Forward difference
+## Forward difference: example
+
+::: {.panel-tabset}
+
+### Julia
 
 ```{julia, results = 'hide'}
 deriv_x_squared(h,x) = ((x+h)^2 - x^2)/h # derivative function
 ```
-
-. . .
 
 ```{julia}
 println("
@@ -338,6 +340,18 @@ println("
         The derivative with h=1e-12 is: $(deriv_x_squared(1e-12,2.))
         The derivative with h=1e-30 is: $(deriv_x_squared(1e-30,2.))")
 ```
+
+### Python
+
+```python
+def deriv_x_squared(h, x):
+    return ((x + h)**2 - x**2) / h # derivative function
+
+print(f"The derivative with h=1e-1  is: {deriv_x_squared(1e-1, 2.0)}")
+print(f"The derivative with h=1e-12 is: {deriv_x_squared(1e-12, 2.0)}")
+print(f"The derivative with h=1e-30 is: {deriv_x_squared(1e-30, 2.0)}")
+```
+:::
 
 
 
@@ -566,7 +580,8 @@ Second derivatives are important for calculating Hessians and checking maxima or
 
 **Despair not!** That's what (reliable) packages are for. *And we thank the good souls who programmed those tools for free so we can focus on solving our research questions*
 
-- For finite differencing, we will pick package `FiniteDifferences.jl`
+- For finite differencing, we will pick package `FiniteDifferences.jl` in Julia
+  - (If you are working in Python, a good option is package [`numdifftools`](https://pypi.org/project/numdifftools/))
   
 
 ## Using `FiniteDifferences.jl`: basics
@@ -590,11 +605,182 @@ Let's start with the scalar (univariate) case
 Let's create an operator for 1st-order differentation with each type using the simplest case with 2 points
 
 ```{julia}
-using FiniteDifferences # Import package
-my
+using FiniteDifferences; # Import package
+my_forward_diff  = forward_fdm(2, 1) # Forward difference operator
+```
+```{julia}
+my_central_diff  = central_fdm(2, 1) # Central difference operator
+```
+
+```{julia}
+f(x) = x^2;
+my_forward_diff(f, 10.0)
+```
+
+```{julia}
+my_central_diff(f, 10.0)
 ```
 
 
+## Using `FiniteDifferences.jl`: scalars
+
+As expected, increasing the number of points (order of method) will increase precision
+
+```{julia}
+my_forward_diff_6pts  = forward_fdm(6, 1) # Forward difference operator with 6 points
+```
+```{julia}
+my_central_diff_6pts  = central_fdm(6, 1) # Central difference operator with 6 points
+```
+
+```{julia}
+my_forward_diff_6pts(f, 10.0)
+```
+
+```{julia}
+my_central_diff_6pts(f, 10.0)
+```
+
+
+## Using `FiniteDifferences.jl`: higher orders
+
+Higher-order derivatives are also easy!
+
+```{julia}
+my_central_diff_2nd_order  = central_fdm(3, 2) # Central difference operator for 2nd order derivative
+```
+
+```{julia}
+my_central_diff(cos, 0.0)
+```
+
+```{julia}
+my_central_diff_2nd_order(cos, 0.0)
+```
+
+
+## Using `FiniteDifferences.jl`: gradients 
+
+We can also use this package to calculate derivatives of functions of vectors (multivariate functions). To do so, we use function `grad` and pass our `fdm` operator first
+
+Let's see an example for function $g(x_1, x_2) = x_1^2 + 2x_1 + x_2^2 - 2x_2 + 4 x_1 x_2$ evaluated at $(1, 1)$. We know gradients are 
+
+- $\frac{\partial g}{\partial x_1} = 2x_1 + 2 + 4x_2$
+- $\frac{\partial g}{\partial x_2} = 2x_2 - 2 + 4x_1$
+
+```{julia}
+g(x) = x[1]^2 + 2*x[1] + x[2]^2 - 2*x[2] + 4*x[1]*x[2];
+grad(my_central_diff, g, [1.0, 1.0])
+```
+
+. . . 
+
+Note that the return value is a tuple and the vector of derivatives is the first element. We can access it directly doing by adding `[1]`:
+
+```{julia}
+grad(my_central_diff, g, [1.0, 1.0])[1]
+```
+
+
+## Using `FiniteDifferences.jl`: Jacobians of scalar functions
+
+The Jacobian matrix for a multivariate scalar function $f: \mathbb{R}^n \rightarrow \mathbb{R}$ is the row vector of first-order partial derivatives of $f$: 
+
+$$
+J = \begin{bmatrix}
+\frac{\partial f}{\partial x_1} & \frac{\partial f}{\partial x_2} & \cdots & \frac{\partial f}{\partial x_n}
+\end{bmatrix}
+$$
+
+. . .
+
+So, in this case, the Jacobian for $g(x_1, x_2) = x_1^2 + 2x_1 + x_2^2 - 2x_2 + 4 x_1 x_2$ is the same as the gradient
+```{julia}
+jacobian(my_central_diff, g, [1.0, 1.0])[1] # Again, [1] gets is the first element of the tuple
+```
+
+
+## Using `FiniteDifferences.jl`: Jacobians of vector functions
+
+In many instances, we will work vector functions of the type $f: \mathbb{R}^n \rightarrow \mathbb{R}^n$, where $f = (f_1, f_2, \ldots, f_n)$ and each $f_i$ is a function of $n$ variables $x_1, x_2, \ldots, x_n$
+
+The Jacobian matrix can be represented as follows:
+
+$$
+J = \begin{bmatrix}
+\frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_n} \\
+\frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial f_n}{\partial x_1} & \frac{\partial f_n}{\partial x_2} & \cdots & \frac{\partial f_n}{\partial x_n} \\
+\end{bmatrix}
+$$
+
+
+## Using `FiniteDifferences.jl`: Jacobians of vector functions
+
+The process with `FiniteDifferences.jl` for vector functions is the same. Let's try it with $G: \mathbb{R}^2 \rightarrow \mathbb{R}^2$
+
+$$
+G(\mathbf{X}) = \begin{bmatrix}
+x_1^2 + 2x_1 + x_2^2 - 2x_2 + 4 x_1 x_2  \\
+x_1^2 - 2x_1 + x_2^2 + 2x_2 - 4 x_1 x_2  \\
+\end{bmatrix}
+$$
+
+```{julia}
+function G(x)
+    G = similar(x) # Initializes a vector with same dimensions as x (2x1)
+    G[1] = x[1]^2 + 2.0*x[1] + x[2]^2 - 2.0*x[2] + 4.0*x[1]*x[2]
+    G[2] = x[1]^2 - 2.0*x[1] + x[2]^2 + 2.0*x[2] - 4.0*x[1]*x[2]
+    return G
+end;
+
+jacobian(my_central_diff, G, [1.0 1.0])[1] #[1] returns the first element of the output tuple (a matrix)
+```
+
+
+
+## Using `FiniteDifferences.jl`: Hesssian of scalar functions
+
+The Hessian matrix for a function $f: \mathbb{R}^n \rightarrow \mathbb{R}$ is a square matrix of second-order partial derivatives of $f$:
+
+$$
+H = \begin{bmatrix}
+\frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+\frac{\partial^2 f}{\partial x_2 \partial x_1} & \frac{\partial^2 f}{\partial x_2^2} & \cdots & \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial^2 f}{\partial x_n \partial x_1} & \frac{\partial^2 f}{\partial x_n \partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_n^2} \\
+\end{bmatrix}
+$$
+
+. . .
+
+`FiniteDifferences.jl` currently doesn't have a specific function to calculate Hessians directly. But it's easy to do it by acknowledging that each row $i$ of a Hessian matrix is the Jacobian of function $f_i(x) = \frac{\partial f(x)}{\partial x_i} \rightarrow$ it's a Jacobian of a Jacobian!
+
+## Using `FiniteDifferences.jl`: Hesssian of scalar functions
+
+Let's write a function to calculate a Hessian matrix
+
+```{julia}
+function hessian(fdm, f, x)
+    # Calculate the Jacobian of function f
+    f_i(x) = jacobian(fdm, f, x)[1] #[1] gets the 1st element in the tuple output, which is a vector of partial derivatives
+    # Calculate the Jacobian of vector function f_i
+    H = jacobian(fdm, f_i, x)[1]
+    return H
+end;
+hessian(my_central_diff, g, [1.0, 1.0])
+```
+
+. . .
+
+This is a pretty bad approximation! Let's try it again with more points:
+
+```{julia}
+hessian(my_central_diff_6pts, g, [1.0, 1.0])
+```
+
+Much better!
 
 # Automatic differentiation
 
@@ -619,7 +805,7 @@ deriv_x_squared(x) = 2x
 ```
 
 ```{julia, echo = F}
-println("The deriviative is: $(deriv_x_squared(2.))")
+println("The derivative is: $(deriv_x_squared(2.))")
 ```
 
 . . .
@@ -673,65 +859,82 @@ There are methods that basically apply a giant *chain rule* to your whole progra
 
 . . .
 
-The details of decomposing calculations with computer instructions get pretty complicated pretty fast. We're not going to code it by hand. Instead, we're going to use a package for that: `ForwardDiff`
+The details of decomposing calculations with computer instructions get pretty complicated pretty fast. We're not going to code it by hand. Instead, we're going to use a package for that: `ForwardDiff.jl`
 
 - The name follows from *forward mode*, which is one way of doing autodiff
-- Check out Nocedal & Wright Ch.8 for more details
+  - Check out Nocedal & Wright Ch.8 for more details
+- *(For Python, a popular autodiff package is [JAX](https://jax.readthedocs.io/en/latest/tutorials/automatic-differentiation.html))
 
 
 
-## Autodiff: let the computer do it
+## `ForwardDiff.jl`: basics
 
-```{julia, results = 'hide'}
-# Your function needs to be written in a particular way because the autodiff package can
-# only accept arrays as arguments. But it's easy to adapt it to work with scalars: you
-# just need to define an array with one element
-ff(x) = (x[1])^2 # x^2
-x = [2.0]; # location to evaluate: ff(x) = 2^2
+There are four basic methods we are interested in
+  
+- `derivative(f, x)`: derivative of univariate scalar function `f` at point `x`
+- `gradient(f, x)`: partial derivatives of multivariate scalar function `f` 
+- `jacobian(f, x)`: Jacobian matrix of multivariate **vector** function `f`
+  - Note: `f` MUST return a vector, even if it's a single dimension
+- `hessian(f, x)`: Hessian matrix of multivariate scalar function `f`
+
+
+## `ForwardDiff.jl`: scalars and gradients
+
+Calculating scalar derivatives of univariate functions is easy:
+
+```{julia}
+using ForwardDiff
+f(x) = x^2;
+ForwardDiff.derivative(f, 2.0)
 ```
 
 . . .
 
+The same goes for gradients:
+
 ```{julia}
-using ForwardDiff # This is the package that has autodiff
-g(f,x) = ForwardDiff.gradient(f,x); # Define g = ∇f for a generic function
-println("ff'(x) at $(x[1]) is: $(g(ff,x)[1])") # display gradient value
+g(x) = x[1]^2 + 2*x[1] + x[2]^2 - 2*x[2] + 4*x[1]*x[2];
+ForwardDiff.gradient(g, [1.0, 1.0])
 ```
 
-**Exact solution!**
+Note: `ForwardDiff.jl` doesn't implement higher-order derivatives. But you can easily calculate them by composition: define derivatives as functions and apply derivatives on them.
 
+## `ForwardDiff.jl`: Jacobians
 
+For Jacobians, you need to be careful and make sure your function always returns an array, even if it's one-dimensional
 
-## Autodiff: let the computer do it
+```{julia}
+# Note the square brackets that make array_g return an array
+array_g(x) = [x[1]^2 + 2*x[1] + x[2]^2 - 2*x[2] + 4*x[1]*x[2]];
+array_g([1.0, 1.0])
+```
 
-Once you get the hang of coding up function for autodiff it's not that hard
-
-```{julia, results = 'hide'}
-fff(x) = sin(x[1]^2) # write it in the autodiff way
-x = [2.0]  # location to evaluate: ff(x) = 2^2
-g(f,x) = ForwardDiff.gradient(f,x)  # g = ∇f
+```{julia}
+ForwardDiff.jacobian(array_g, [1.0, 1.0])
 ```
 
 . . .
 
+Jacobians of "true" vector functions follow the same procedure
+
 ```{julia}
-println("fff'(x) at $(x[1]) is: $(g(fff,x)[1])") # display gradient value
+function G(x)
+    G = similar(x)
+    G[1] = x[1]^2 + 2.0*x[1] + x[2]^2 - 2.0*x[2] + 4.0*x[1]*x[2]
+    G[2] = x[1]^2 - 2.0*x[1] + x[2]^2 + 2.0*x[2] - 4.0*x[1]*x[2]
+    return G
+end;
+ForwardDiff.jacobian(G, [1.0 1.0])
 ```
 
 
+## `ForwardDiff.jl`: Hessians
 
+Hessians are also easy to obtain:
 
-## .blue[Autodiff: let the computer do it]
-
-Try it out! Code up the derivative of $log(10 + x)$ at `x=5.5` using automatic differentiation
-
-1. Make sure you have the `ForwardDiff` package
-  1. If not type `using Pkg` then `Pkg.add("ForwardDiff")`
-2. Define your function `my_fun`
-3. Define `x` as a 1-element array containing `5.5`
-4. Define the gradient operator `g` using `ForwardDiff.gradient(f,x)`
-5. Use `g` to evaluate the derivative
-6. Derive the analytic solution and compare to your numeric one
+```{julia}
+ForwardDiff.hessian(g, [1.0, 1.0])
+```
 
 
 # Appendix: Symbolics

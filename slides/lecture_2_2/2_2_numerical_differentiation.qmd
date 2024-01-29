@@ -29,7 +29,7 @@ editor:
 using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
-Pkg.add("ForwardDiff"); Pkg.add("FiniteDifferences"); Pkg.add("Symbolics")
+Pkg.add("ForwardDiff"); Pkg.add("FiniteDifferences"); Pkg.add("Symbolics"); Pkg.add("Latexify")
 ```
 
 
@@ -960,8 +960,152 @@ ForwardDiff.hessian(g, [1.0, 1.0])
 - Analytical derivatives (and general manipulation of mathematical expressions) is typically done in computers using a **CAS: Computer Algebra System**
   - Mathematica and Maple are some examples of systems like this
 - As it turns out, you can also do that in Julia using the package `Symbolics.jl`
+  - *(In Python, you can use SymPy package to perform symbolic operations)*
 - This appendix is just a short tutorial on how to perform analytical operations (not only derivatives)
   - Since most times we want to take those expressions and use them in papers and assignments, we will also use package `Latexify.jl` to generate LaTeX expressions for us
 
+
+## `Symbolics.jl`: defining symbols
+
+Let's work out a simple example of a profit function with isoelastic inverse demand $p(q) = \alpha q^{-1/\epsilon}$ and quadratic cost $c(q) = \kappa \frac{1}{2}q^2$
+
+$$
+\pi(q) = q p(q) - c(q) = q [\alpha q^{-1/\epsilon}] - \kappa \frac{1}{2}q^2
+$$
+
+. . .
+
+We start by using macro `@variables` to register the name of symbols (symbolic variables)
+
+```{julia}
+using Symbolics, Latexify
+@variables q, α, ϵ, κ # Declare symbolic variables and constants
+```
+
+## `Symbolics.jl`: defining symbols
+
+Then, define the symbol for $\pi$ as a function of other symbols
+
+```{julia}
+symb_π = q*(α*q^(-1/ϵ)) - 0.5*κ*q^2
+```
+
+
+## `Symbolics.jl`: taking derivatives
+
+```{julia}
+symb_dπdq = Symbolics.derivative(symb_π, q)
+```
+
+. . .
+
+We can use `Latexify.jl` to print it in LaTeX for us:
+
+```{julia}
+println(latexify(symb_dπdq))
+```
+
+
+
+## `Symbolics.jl`: taking Jacobians
+
+Now let's expand this to a duopoly problem:
+
+$$
+\begin{gather}
+\pi_1(q_1, q_2) = q_1 p(q_1 + q_2) - c(q_1) = q_1 [\alpha (q_1+q_2)^{-1/\epsilon}] - \kappa_1 \frac{1}{2}q_1^2 \\
+\pi_2(q_1, q_2) = q_2 p(q_1 + q_2) - c(q_2) = q_2 [\alpha (q_1+q_2)^{-1/\epsilon}] - \kappa_2 \frac{1}{2}q_2^2
+\end{gather}
+$$
+
+```{julia}
+@variables q_1, q_2, κ_1, κ_2;
+symb_π_1 = q_1*(α*(q_1+q_2)^(-1/ϵ)) - 0.5*κ_1*q_1^2
+```
+
+```{julia}
+symb_π_2 = q_2*(α*(q_1+q_2)^(-1/ϵ)) - 0.5*κ_2*q_2^2
+```
+
+## `Symbolics.jl`: taking Jacobians
+
+We can obtain the Jacobian matrix of the stacked profit functions with
+
+```{julia}
+symb_jacobian = Symbolics.jacobian([symb_π_1, symb_π_2], [q_1, q_2])
+```
+
+
+## `Symbolics.jl`: turning symbolics into numerics
+
+This packages also offers a handy way to turn those expressions into actual Julia functions!
+
+But first we need to assign the global values for our constant parameters
+
+```{julia}
+α = 2.0;
+ϵ = 1.6;
+κ_1 = 0.6;
+κ_2 = 0.8;
+```
+
+. . .
+
+```{julia}
+jl_π_1 = eval(build_function(symb_π_1, q_1, q_2)) # Julia function for π_1
+```
+
+```{julia}
+jl_π_2 = eval(build_function(symb_π_2, q_1, q_2)) # Julia function for π_1
+```
+
+
+## `Symbolics.jl`: turning symbolics into numerics
+
+
+Testing some values
+```{julia}
+jl_π_1(0.2, 0.2)
+```
+
+```{julia}
+jl_π_2(0.2, 0.2)
+```
+
+
+## `Symbolics.jl`: turning symbolics derivatives into numerical ones
+
+Now, we are ready to create a Julia function for the Jacobian
+
+```{julia}
+jl_jacobian = eval(build_function(symb_jacobian, q_1, q_2)[1]) 
+```
+
+- Note: `build_function` function actually give us two options in this case. 
+  - The First is a function that allocates a new matrix
+  - The second is a memory-optimized version that modifies a pre-allocated matrix in place.
+  - We are using the first one here
+
+## `Symbolics.jl`: turning symbolics derivatives into numerical ones
+
+Next, we use a wrapper function to map vector `q` into symbolic variables
+
+```{julia}
+f_jacob(q) = jl_jacobian(q[1], q[2]);
+# Test it
+f_jacob([0.2, 0.2])
+```
+
+. . .
+
+Let's check if it matches with Autodiff
+
+```{julia}
+π_vector(q) = [jl_π_1(q[1], q[2]);
+               jl_π_2(q[1], q[2])] # Note this is a 2x1 array
+ForwardDiff.jacobian(π_vector, [0.2, 0.2])
+```
+
+Success!
 
 

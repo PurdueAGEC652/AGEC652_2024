@@ -561,7 +561,7 @@ Diego S. Cardoso
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># fifth and third order Taylor approximations</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="fu">sin_error_5</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x) <span class="op">-</span> (x <span class="op">-</span> x<span class="op">^</span><span class="fl">3</span><span class="op">/</span><span class="fl">6</span> <span class="op">+</span> x<span class="op">^</span><span class="fl">5</span><span class="op">/</span><span class="fl">120</span>)</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="fu">sin_error_3</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x) <span class="op">-</span> (x <span class="op">-</span> x<span class="op">^</span><span class="fl">3</span><span class="op">/</span><span class="fl">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="187">
+<div class="cell-output cell-output-display" data-execution_count="97">
 <pre><code>sin_error_3 (generic function with 1 method)</code></pre>
 </div>
 </div>
@@ -687,7 +687,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <div id="tabset-1-1">
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">deriv_x_squared</span>(h,x) <span class="op">=</span> ((x<span class="op">+</span>h)<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> x<span class="op">^</span><span class="fl">2</span>)<span class="op">/</span>h <span class="co"># derivative function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="189">
+<div class="cell-output cell-output-display" data-execution_count="99">
 <pre><code>deriv_x_squared (generic function with 2 methods)</code></pre>
 </div>
 </div>
@@ -953,7 +953,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a><span class="im">using</span> <span class="bu">FiniteDifferences; </span><span class="co"># Import package</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>my_forward_diff  <span class="op">=</span> <span class="fu">forward_fdm</span>(<span class="fl">2</span>, <span class="fl">1</span>) <span class="co"># Forward difference operator</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="191">
+<div class="cell-output cell-output-display" data-execution_count="101">
 <pre><code>FiniteDifferenceMethod:
   order of method:       2
   order of derivative:   1
@@ -963,7 +963,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 </div>
 <div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a>my_central_diff  <span class="op">=</span> <span class="fu">central_fdm</span>(<span class="fl">2</span>, <span class="fl">1</span>) <span class="co"># Central difference operator</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="192">
+<div class="cell-output cell-output-display" data-execution_count="102">
 <pre><code>FiniteDifferenceMethod:
   order of method:       2
   order of derivative:   1
@@ -974,13 +974,13 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span>;</span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="fu">my_forward_diff</span>(f, <span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="193">
+<div class="cell-output cell-output-display" data-execution_count="103">
 <pre><code>20.000000066172465</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">my_central_diff</span>(f, <span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="194">
+<div class="cell-output cell-output-display" data-execution_count="104">
 <pre><code>19.999999866700435</code></pre>
 </div>
 </div>
@@ -990,7 +990,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <p>As expected, increasing the number of points (order of method) will increase precision</p>
 <div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a>my_forward_diff_6pts  <span class="op">=</span> <span class="fu">forward_fdm</span>(<span class="fl">6</span>, <span class="fl">1</span>) <span class="co"># Forward difference operator with 6 points</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="195">
+<div class="cell-output cell-output-display" data-execution_count="105">
 <pre><code>FiniteDifferenceMethod:
   order of method:       6
   order of derivative:   1
@@ -1000,7 +1000,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 </div>
 <div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a>my_central_diff_6pts  <span class="op">=</span> <span class="fu">central_fdm</span>(<span class="fl">6</span>, <span class="fl">1</span>) <span class="co"># Central difference operator with 6 points</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="196">
+<div class="cell-output cell-output-display" data-execution_count="106">
 <pre><code>FiniteDifferenceMethod:
   order of method:       6
   order of derivative:   1
@@ -1010,13 +1010,13 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 </div>
 <div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">my_forward_diff_6pts</span>(f, <span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="197">
+<div class="cell-output cell-output-display" data-execution_count="107">
 <pre><code>20.000000000092676</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">my_central_diff_6pts</span>(f, <span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="198">
+<div class="cell-output cell-output-display" data-execution_count="108">
 <pre><code>19.9999999999984</code></pre>
 </div>
 </div>
@@ -1026,7 +1026,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <p>Higher-order derivatives are also easy!</p>
 <div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a>my_central_diff_2nd_order  <span class="op">=</span> <span class="fu">central_fdm</span>(<span class="fl">3</span>, <span class="fl">2</span>) <span class="co"># Central difference operator for 2nd order derivative</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="199">
+<div class="cell-output cell-output-display" data-execution_count="109">
 <pre><code>FiniteDifferenceMethod:
   order of method:       3
   order of derivative:   2
@@ -1036,13 +1036,13 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 </div>
 <div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">my_central_diff</span>(cos, <span class="fl">0.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="200">
+<div class="cell-output cell-output-display" data-execution_count="110">
 <pre><code>0.0</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">my_central_diff_2nd_order</span>(cos, <span class="fl">0.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="201">
+<div class="cell-output cell-output-display" data-execution_count="111">
 <pre><code>-0.9999999993696194</code></pre>
 </div>
 </div>
@@ -1058,7 +1058,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">g</span>(x) <span class="op">=</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">+</span> <span class="fl">4</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>];</span>
 <span id="cb32-2"><a href="#cb32-2"></a><span class="fu">grad</span>(my_central_diff, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="202">
+<div class="cell-output cell-output-display" data-execution_count="112">
 <pre><code>([8.000000010231267, 3.9999999945594786],)</code></pre>
 </div>
 </div>
@@ -1066,7 +1066,7 @@ Error of third-order approximation at x = .1 is: 8.331349481138783e-8</code></pr
 <p>Note that the return value is a tuple and the vector of derivatives is the first element. We can access it directly doing by adding <code>[1]</code>:</p>
 <div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">grad</span>(my_central_diff, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="203">
+<div class="cell-output cell-output-display" data-execution_count="113">
 <pre><code>2-element Vector{Float64}:
  8.000000010231267
  3.9999999945594786</code></pre>
@@ -1086,7 +1086,7 @@ J = \begin{bmatrix}
 <p>So, in this case, the Jacobian for <span class="math inline">\(g(x_1, x_2) = x_1^2 + 2x_1 + x_2^2 - 2x_2 + 4 x_1 x_2\)</span> is the same as the gradient</p>
 <div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">jacobian</span>(my_central_diff, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])[<span class="fl">1</span>] <span class="co"># Again, [1] gets is the first element of the tuple</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="204">
+<div class="cell-output cell-output-display" data-execution_count="114">
 <pre><code>1×2 Matrix{Float64}:
  8.0  4.0</code></pre>
 </div>
@@ -1124,7 +1124,7 @@ x_1^2 - 2x_1 + x_2^2 + 2x_2 - 4 x_1 x_2  \\
 <span id="cb38-6"><a href="#cb38-6"></a><span class="kw">end</span>;</span>
 <span id="cb38-7"><a href="#cb38-7"></a></span>
 <span id="cb38-8"><a href="#cb38-8"></a><span class="fu">jacobian</span>(my_central_diff, G, [<span class="fl">1.0</span> <span class="fl">1.0</span>])[<span class="fl">1</span>] <span class="co">#[1] returns the first element of the output tuple (a matrix)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="205">
+<div class="cell-output cell-output-display" data-execution_count="115">
 <pre><code>2×2 Matrix{Float64}:
   8.0  4.0
  -4.0  0.0</code></pre>
@@ -1158,7 +1158,7 @@ H = \begin{bmatrix}
 <span id="cb40-6"><a href="#cb40-6"></a>    <span class="cf">return</span> H</span>
 <span id="cb40-7"><a href="#cb40-7"></a><span class="kw">end</span>;</span>
 <span id="cb40-8"><a href="#cb40-8"></a><span class="fu">hessian</span>(my_central_diff, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="206">
+<div class="cell-output cell-output-display" data-execution_count="116">
 <pre><code>2×2 Matrix{Float64}:
  2.00789  3.80655
  3.51684  2.45064</code></pre>
@@ -1168,7 +1168,7 @@ H = \begin{bmatrix}
 <p>This is a pretty bad approximation! Let’s try it again with more points:</p>
 <div class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">hessian</span>(my_central_diff_6pts, g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="207">
+<div class="cell-output cell-output-display" data-execution_count="117">
 <pre><code>2×2 Matrix{Float64}:
  2.0  4.0
  4.0  2.0</code></pre>
@@ -1199,7 +1199,7 @@ H = \begin{bmatrix}
 <div class="fragment">
 <div class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">deriv_x_squared</span>(x) <span class="op">=</span> <span class="fl">2</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="208">
+<div class="cell-output cell-output-display" data-execution_count="118">
 <pre><code>deriv_x_squared (generic function with 2 methods)</code></pre>
 </div>
 </div>
@@ -1282,7 +1282,7 @@ H = \begin{bmatrix}
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1"></a><span class="im">using</span> <span class="bu">ForwardDiff</span></span>
 <span id="cb48-2"><a href="#cb48-2"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span>;</span>
 <span id="cb48-3"><a href="#cb48-3"></a>ForwardDiff.<span class="fu">derivative</span>(f, <span class="fl">2.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="210">
+<div class="cell-output cell-output-display" data-execution_count="120">
 <pre><code>4.0</code></pre>
 </div>
 </div>
@@ -1291,7 +1291,7 @@ H = \begin{bmatrix}
 <div class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">g</span>(x) <span class="op">=</span> x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">+</span> <span class="fl">4</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>];</span>
 <span id="cb50-2"><a href="#cb50-2"></a>ForwardDiff.<span class="fu">gradient</span>(g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="211">
+<div class="cell-output cell-output-display" data-execution_count="121">
 <pre><code>2-element Vector{Float64}:
  8.0
  4.0</code></pre>
@@ -1307,14 +1307,14 @@ H = \begin{bmatrix}
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Note the square brackets that make array_g return an array</span></span>
 <span id="cb52-2"><a href="#cb52-2"></a><span class="fu">array_g</span>(x) <span class="op">=</span> [x[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">1</span>] <span class="op">+</span> x[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span>x[<span class="fl">2</span>] <span class="op">+</span> <span class="fl">4</span><span class="op">*</span>x[<span class="fl">1</span>]<span class="op">*</span>x[<span class="fl">2</span>]];</span>
 <span id="cb52-3"><a href="#cb52-3"></a><span class="fu">array_g</span>([<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="212">
+<div class="cell-output cell-output-display" data-execution_count="122">
 <pre><code>1-element Vector{Float64}:
  6.0</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1"></a>ForwardDiff.<span class="fu">jacobian</span>(array_g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="213">
+<div class="cell-output cell-output-display" data-execution_count="123">
 <pre><code>1×2 Matrix{Float64}:
  8.0  4.0</code></pre>
 </div>
@@ -1329,7 +1329,7 @@ H = \begin{bmatrix}
 <span id="cb56-5"><a href="#cb56-5"></a>    <span class="cf">return</span> G</span>
 <span id="cb56-6"><a href="#cb56-6"></a><span class="kw">end</span>;</span>
 <span id="cb56-7"><a href="#cb56-7"></a>ForwardDiff.<span class="fu">jacobian</span>(G, [<span class="fl">1.0</span> <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="214">
+<div class="cell-output cell-output-display" data-execution_count="124">
 <pre><code>2×2 Matrix{Float64}:
   8.0  4.0
  -4.0  0.0</code></pre>
@@ -1342,12 +1342,56 @@ H = \begin{bmatrix}
 <p>Hessians are also easy to obtain:</p>
 <div class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1"></a>ForwardDiff.<span class="fu">hessian</span>(g, [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="215">
+<div class="cell-output cell-output-display" data-execution_count="125">
 <pre><code>2×2 Matrix{Float64}:
  2.0  4.0
  4.0  2.0</code></pre>
 </div>
 </div>
+</section>
+<section id="finite-differences-vs-automatic-differentiation" class="slide level2">
+<h2>Finite differences vs automatic differentiation</h2>
+<table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 46%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Factor</th>
+<th>Finite Differences</th>
+<th>Automatic Differentiation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Accuracy</strong></td>
+<td>- Less accurate and sensitive to step size choice, especially for higher derivatives.</td>
+<td>- Highly accurate for all orders of derivatives.</td>
+</tr>
+<tr class="even">
+<td><strong>Robustness</strong></td>
+<td>- Error prone due to numerical instability.</td>
+<td>- More robust against numerical issues.</td>
+</tr>
+<tr class="odd">
+<td><strong>Efficiency</strong></td>
+<td>- Generally faster, but efficiency decreases with higher orders.</td>
+<td>- Generally slower, but efficiency maintained for higher derivatives.</td>
+</tr>
+<tr class="even">
+<td><strong>Memory Usage</strong></td>
+<td>- Lower memory usage in general.</td>
+<td>- Can be memory-intensive due to graph storage.</td>
+</tr>
+<tr class="odd">
+<td><strong>Scope</strong></td>
+<td>- Works fine with “black box” functions.</td>
+<td>- Needs to modify internal parts of functions, so may fail with complex functions.</td>
+</tr>
+</tbody>
+</table>
 </section></section>
 <section>
 <section id="appendix-symbolics" class="title-slide slide level1 center">
@@ -1402,7 +1446,7 @@ H = \begin{bmatrix}
 <div class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1"></a><span class="im">using</span> <span class="bu">Symbolics</span>, <span class="bu">Latexify</span></span>
 <span id="cb60-2"><a href="#cb60-2"></a><span class="pp">@variables</span> q, α, ϵ, κ <span class="co"># Declare symbolic variables and constants</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="216">
+<div class="cell-output cell-output-display" data-execution_count="126">
 <p><span class="math display">\[ \begin{equation}
 \left[
 \begin{array}{c}
@@ -1423,7 +1467,7 @@ q \\
 <p>Then, define the symbol for <span class="math inline">\(\pi\)</span> as a function of other symbols</p>
 <div class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb61-1"><a href="#cb61-1"></a>symb_π <span class="op">=</span> <span class="fu">q*</span>(α<span class="op">*</span>q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>ϵ)) <span class="op">-</span> <span class="fl">0.5</span><span class="op">*</span>κ<span class="op">*</span>q<span class="op">^</span><span class="fl">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="217">
+<div class="cell-output cell-output-display" data-execution_count="127">
 <p><span class="math display">\[ \begin{equation}
 - 0.5 q^{2} \kappa + q^{\frac{-1}{\epsilon}} q \alpha
 \end{equation}
@@ -1435,7 +1479,7 @@ q \\
 <h2><code>Symbolics.jl</code>: taking derivatives</h2>
 <div class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href="#cb62-1"></a>symb_dπdq <span class="op">=</span> Symbolics.<span class="fu">derivative</span>(symb_π, q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="218">
+<div class="cell-output cell-output-display" data-execution_count="128">
 <p><span class="math display">\[ \begin{equation}
 \frac{ - q^{-1 + \frac{-1}{\epsilon}} q \alpha}{\epsilon} - q \kappa + q^{\frac{-1}{\epsilon}} \alpha
 \end{equation}
@@ -1467,7 +1511,7 @@ q \\
 <div class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1"></a><span class="pp">@variables</span> q_1, q_2, κ_1, κ_2;</span>
 <span id="cb65-2"><a href="#cb65-2"></a>symb_π_1 <span class="op">=</span> <span class="fu">q_1*</span>(<span class="fu">α*</span>(q_1<span class="op">+</span>q_2)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>ϵ)) <span class="op">-</span> <span class="fl">0.5</span><span class="op">*</span>κ_1<span class="op">*</span>q_1<span class="op">^</span><span class="fl">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="220">
+<div class="cell-output cell-output-display" data-execution_count="130">
 <p><span class="math display">\[ \begin{equation}
 - 0.5 q_{1}^{2} \kappa_{1} + \left( q_{1} + q_{2} \right)^{\frac{-1}{\epsilon}} q_{1} \alpha
 \end{equation}
@@ -1476,7 +1520,7 @@ q \\
 </div>
 <div class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1"></a>symb_π_2 <span class="op">=</span> <span class="fu">q_2*</span>(<span class="fu">α*</span>(q_1<span class="op">+</span>q_2)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>ϵ)) <span class="op">-</span> <span class="fl">0.5</span><span class="op">*</span>κ_2<span class="op">*</span>q_2<span class="op">^</span><span class="fl">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="221">
+<div class="cell-output cell-output-display" data-execution_count="131">
 <p><span class="math display">\[ \begin{equation}
 - 0.5 q_{2}^{2} \kappa_{2} + \left( q_{1} + q_{2} \right)^{\frac{-1}{\epsilon}} q_{2} \alpha
 \end{equation}
@@ -1489,7 +1533,7 @@ q \\
 <p>We can obtain the Jacobian matrix of the stacked profit functions with</p>
 <div class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href="#cb67-1"></a>symb_jacobian <span class="op">=</span> Symbolics.<span class="fu">jacobian</span>([symb_π_1, symb_π_2], [q_1, q_2])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="222">
+<div class="cell-output cell-output-display" data-execution_count="132">
 <p><span class="math display">\[ \begin{equation}
 \left[
 \begin{array}{cc}
@@ -1515,14 +1559,14 @@ q \\
 <div class="fragment">
 <div class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href="#cb69-1"></a>jl_π_1 <span class="op">=</span> <span class="fu">eval</span>(<span class="fu">build_function</span>(symb_π_1, q_1, q_2)) <span class="co"># Julia function for π_1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="224">
-<pre><code>#80 (generic function with 1 method)</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="134">
+<pre><code>#48 (generic function with 1 method)</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb71-1"><a href="#cb71-1"></a>jl_π_2 <span class="op">=</span> <span class="fu">eval</span>(<span class="fu">build_function</span>(symb_π_2, q_1, q_2)) <span class="co"># Julia function for π_1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="225">
-<pre><code>#82 (generic function with 1 method)</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="135">
+<pre><code>#50 (generic function with 1 method)</code></pre>
 </div>
 </div>
 </div>
@@ -1532,13 +1576,13 @@ q \\
 <p>Testing some values</p>
 <div class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb73-1"><a href="#cb73-1"></a><span class="fu">jl_π_1</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="226">
+<div class="cell-output cell-output-display" data-execution_count="136">
 <pre><code>0.6972061561162411</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb75-1"><a href="#cb75-1"></a><span class="fu">jl_π_2</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="227">
+<div class="cell-output cell-output-display" data-execution_count="137">
 <pre><code>0.6932061561162411</code></pre>
 </div>
 </div>
@@ -1548,8 +1592,8 @@ q \\
 <p>Now, we are ready to create a Julia function for the Jacobian</p>
 <div class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href="#cb77-1"></a>jl_jacobian <span class="op">=</span> <span class="fu">eval</span>(<span class="fu">build_function</span>(symb_jacobian, q_1, q_2)[<span class="fl">1</span>]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="228">
-<pre><code>#84 (generic function with 1 method)</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="138">
+<pre><code>#52 (generic function with 1 method)</code></pre>
 </div>
 </div>
 <ul>
@@ -1568,7 +1612,7 @@ q \\
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb79-1"><a href="#cb79-1"></a><span class="fu">f_jacob</span>(q) <span class="op">=</span> <span class="fu">jl_jacobian</span>(q[<span class="fl">1</span>], q[<span class="fl">2</span>]);</span>
 <span id="cb79-2"><a href="#cb79-2"></a><span class="co"># Test it</span></span>
 <span id="cb79-3"><a href="#cb79-3"></a><span class="fu">f_jacob</span>([<span class="fl">0.2</span>, <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="229">
+<div class="cell-output cell-output-display" data-execution_count="139">
 <pre><code>2×2 Matrix{Float64}:
   2.3179   -1.10813
  -1.10813   2.2779</code></pre>
@@ -1580,7 +1624,7 @@ q \\
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb81-1"><a href="#cb81-1"></a><span class="fu">π_vector</span>(q) <span class="op">=</span> [<span class="fu">jl_π_1</span>(q[<span class="fl">1</span>], q[<span class="fl">2</span>]);</span>
 <span id="cb81-2"><a href="#cb81-2"></a>               <span class="fu">jl_π_2</span>(q[<span class="fl">1</span>], q[<span class="fl">2</span>])] <span class="co"># Note this is a 2x1 array</span></span>
 <span id="cb81-3"><a href="#cb81-3"></a>ForwardDiff.<span class="fu">jacobian</span>(π_vector, [<span class="fl">0.2</span>, <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="230">
+<div class="cell-output cell-output-display" data-execution_count="140">
 <pre><code>2×2 Matrix{Float64}:
   2.3179   -1.10813
  -1.10813   2.2779</code></pre>

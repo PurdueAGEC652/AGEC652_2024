@@ -936,6 +936,16 @@ Hessians are also easy to obtain:
 ForwardDiff.hessian(g, [1.0, 1.0])
 ```
 
+## Finite differences vs automatic differentiation
+
+| Factor           | Finite Differences                                                                    | Automatic Differentiation                                                          |
+| ---------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **Accuracy**     | - Less accurate and sensitive to step size choice, especially for higher derivatives. | - Highly accurate for all orders of derivatives.                                   |
+| **Robustness**   | - Error prone due to numerical instability.                                           | - More robust against numerical issues.                                            |
+| **Efficiency**   | - Generally faster, but efficiency decreases with higher orders.                      | - Generally slower, but efficiency maintained for higher derivatives.              |
+| **Memory Usage** | - Lower memory usage in general.                                                      | - Can be memory-intensive due to graph storage.                                    |
+| **Scope**        | - Works fine with "black box" functions.                                              | - Needs to modify internal parts of functions, so may fail with complex functions. |
+
 
 # Appendix: Symbolics
 

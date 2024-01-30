@@ -57,7 +57,7 @@ Pkg.add("ForwardDiff"); Pkg.add("FiniteDifferences"); Pkg.add("Symbolics"); Pkg.
 ## Main references for today {background-color="gold"}
 
 -   Miranda & Fackler (2002), Ch. 5
--   Judd (1998), Ch. 3
+-   Judd (1998), Ch. 7
 -   Nocedal & Wright (2006), Ch. 8 
 -   Lecture notes for Ivan Rudik's *Dynamic Optimization* (Cornell) 
 

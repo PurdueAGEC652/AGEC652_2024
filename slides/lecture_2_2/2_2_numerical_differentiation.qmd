@@ -577,8 +577,8 @@ Let's start with the scalar (univariate) case
 
 - There are three types of methods: 
   - `forward_fdm(p, q)`: forward finite differences method
-  - `backward_fdm(p, q)`: forward finite differences method
-  - `central_fdm(p, q)`: forward finite differences method
+  - `backward_fdm(p, q)`: backward finite differences method
+  - `central_fdm(p, q)`: central finite differences method
 - Each of these functions take as minimum arguments
   - $p$: The order of approximation (number of points you want to use)  
   - $q$: The order of the derivative (e.g., `1` for first-order )

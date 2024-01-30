@@ -32,6 +32,33 @@ Pkg.add("Distributions"); Pkg.add("QuantEcon")
 ```
 
 
+
+## Course Roadmap {background-color="gold"}
+
+1.  [Introduction to Scientific Computing]{.gray}
+2.  **Fundamentals of numerical methods**
+    1.  [Numerical arithmetic]{.gray}
+    2.  [Numerical differentiation]{.gray}
+    3.  **Numerical integration**
+3.  Systems of equations
+4.  Optimization
+5.  Structural estimation
+
+## Agenda {background-color="gold"}
+
+- Today we will learn how to calculate integrals
+- Just like derivatives, integrals rely on infinitesimal concepts that the computer cannot represent, so approximations will be required
+- We will also rely on packages to help us automate the difficult parts
+
+
+## Main references for today {background-color="gold"}
+
+-   Miranda & Fackler (2002), Ch. 5
+-   Judd (1998), Ch. 7
+-   Lecture notes for Ivan Rudik's *Dynamic Optimization* (Cornell) 
+
+
+
 ## Numerical integration
 
 First thing: integration is trickier than differentiation
@@ -78,6 +105,7 @@ We avoid this issue in the same way as derivatives: **we replace the infinite su
 . . .
 
 We will see two types of methods:
+
 1. Stochastic approximation with Monte Carlo
 2. Quadrature
 
@@ -94,9 +122,7 @@ It's probably the most commonly used form in empirical economics
 . . .
 
 - Can be effective for very-high-dimensional integrals
-
 - Very simple and intuitive
-
 - But produces a *random approximation*
 
 
@@ -104,13 +130,15 @@ It's probably the most commonly used form in empirical economics
 ## Monte Carlo integration
 
 We integrate 
-$$\xi = \int_0^1 f(x) dx$$ 
+$$
+\xi = \int_0^1 f(x) dx
+$$
+
 by drawing $N$ uniform samples, $x_1,...,x_N$ over interval $[0,1]$
 
 . . .
 
-$\xi$ is equivalent to $E[f(x)]$ with respect to a uniform distribution,
-so estimating the integral is the same as estimating the expected value of $f(x)$
+$\xi$ is equivalent to $E[f(x)]$ with respect to a uniform distribution, so estimating the integral is the same as estimating the expected value of $f(x)$
 
 . . .
 
@@ -203,8 +231,8 @@ One answer is to replace the function with something easier to integrate: **a pi
 . . .
 
 Key things to define up front:
-- $x_i = a + (i-1)/h$ for $i=1,2,...,n$ where $h = \frac{b-a}{n-1}$
 
+- $x_i = a + (i-1)/h$ for $i=1,2,...,n$ where $h = \frac{b-a}{n-1}$
   - $x_i$s are the **quadrature nodes** of the approximation scheme and divide the interval into $n-1$ evenly spaced subintervals of length $h$
 
 
@@ -212,6 +240,7 @@ Key things to define up front:
 ## Midpoint rule
 
 Most basic Newton-Cotes method:
+
 1. Split $[a,b]$ into intervals
 2. Approximate the function in each subinterval by a constant equal to the function at the midpoint of the subinterval
 
@@ -229,9 +258,7 @@ Approximates $f$ by a step function
 ## Midpoint rule
 
 
-<div align="center">
-  <image src="figures/midpoint.drawio.svg" height=400>
-</div>
+![](figures/midpoint.drawio.svg){fig-align="center"}
 
 
 
@@ -240,7 +267,6 @@ Approximates $f$ by a step function
 
 Let's integrate $x^2$ again from $0$ to $100$ (the answer is 333.33...)
 
-. . .
 ```{julia}
 # Generic function to integrate with midpoint
 function integrate_midpoint(f, a, b, N)
@@ -277,6 +303,7 @@ Decent approximation with only 5 nodes. We get pretty close to the answer once w
 ## Trapezoid rule
 
 Increase complexity by 1 degree:
+
 1. Split $[a,b]$ into intervals
 2. Approximate the function in each subinterval by a linear interpolation passing through $(x_i,f(x_i))$ and $(x_{i+1},f(x_{i+1}))$
 
@@ -293,14 +320,10 @@ $$\int_{a}^{b} f(x) dx \approx \sum_{i=1}^n w_i f(x_i)$$
 where $w_1=w_n = h/2$ and $w_i = h$ otherwise
 
 
-
 ## Trapezoid rule
 
 
-<div align="center">
-  <image src="figures/trapezoid.drawio.svg" height=400>
-</div>
-
+![](figures/trapezoid.drawio.svg){fig-align="center"}
 
 
 
@@ -316,19 +339,22 @@ Increase complexity by 1 degree:
 
 Let $n$ be odd then approximate the function across a *pair of subintervals*
 by a quadratic interpolation passing through
+
 - $(x_{2i-1},f(x_{2i-1}))$
 - $(x_{2i},f(x_{2i}))$ and
 - $(x_{2i+1},f(x_{2i+1}))$
 
 . . .
 
-$$\int_{x_i}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{2i-1}) + 4f(x_{2i}) + f(x_{2i+1})]$$
+$$
+\int_{x_i}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{2i-1}) + 4f(x_{2i}) + f(x_{2i+1})]
+$$
 
 
 
 ## Simpson's rule
 
-- $\int_{x_i}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{2i-1}) + 4f(x_{2i}) + f(x_{2i+1})]$
+$\int_{x_i}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{2i-1}) + 4f(x_{2i}) + f(x_{2i+1})]$
 
 We can aggregate this by summing over *every two subintervals*
 
@@ -341,10 +367,7 @@ where $w_1=w_n = h/3$, otherwise and $w_i = 4h/3$ if $i$ is even and $w_i = 2h/3
 ## Simpson's rule
 
 
-<div align="center">
-  <image src="figures/simpson.png" height=400>
-</div>
-
+![](figures/simpson.png){fig-align="center"}
 
 
 ## How accurate is this rule?
@@ -358,9 +381,11 @@ That's weird! Why do we gain 2 orders of accuracy when increasing one order of a
 . . .
 
 1. The approximating piecewise quadratic is exact at the end points and midpoint of the conjoined two subintervals
+
 . . .
 
 2. The difference between a cubic $f(x)$ and the quadratic approximation in $[x_{2i-1},x_{2i+1}]$ is another cubic function
+
 . . .
 
 3. This cubic function is *odd* with respect to the midpoint $\rightarrow$ integrating over the first subinterval cancels integrating over the second subinterval
@@ -395,11 +420,13 @@ We compute separately the $n_1$ nodes and weights $(x_{1i}, w_{1i})$ and $n_2$ f
 
 . . .
 
-$$\int_{a_1}^{b_1} \int_{a_2}^{b_2} f(x_1, x_2) dx_2 dx_1  \approx \sum_{i=1}^{n_1} \sum_{j=1}^{n_2} w_{1i} w_{2j} f(x_{1i}, x_{2j})$$
+$$
+\int_{a_1}^{b_1} \int_{a_2}^{b_2} f(x_1, x_2) dx_2 dx_1  \approx \sum_{i=1}^{n_1} \sum_{j=1}^{n_2} w_{1i} w_{2j} f(x_{1i}, x_{2j})
+$$
 
 . . .
 
-- We can use the same idea for 3+ dimensions. But the number of points increases very quickly: **curse of dimensionality**
+We can use the same idea for 3+ dimensions. But the number of points increases very quickly: **curse of dimensionality**
 
 
 
@@ -425,12 +452,13 @@ Gaussian rules try to **exactly integrate** some finite dimensional collection o
 
 . . .
 
-For a given order of approximation $n$, the weights $w_1,...,w_n$ and nodes $x_1,...,x_n$
-are chosen to satisfy $2n$ **moment matching conditions**:
+For a given order of approximation $n$, the weights $w_1,...,w_n$ and nodes $x_1,...,x_n$ are chosen to satisfy $2n$ **moment matching conditions**:
 
 . . .
 
-$$\int_I x^kw(x)dx = \sum_{i=1}^n w_i x^k_i, \;\text{for}\; k=0,...,2n-1$$
+$$
+\int_I x^kw(x)dx = \sum_{i=1}^n w_i x^k_i, \;\text{for}\; k=0,...,2n-1
+$$
 
 where $I$ is the interval over which we are integrating and $w(x)$ is a given weight function
 
@@ -442,7 +470,9 @@ The moment matching conditions pin down $w_i$s and $x_i$s so we can approximate 
 
 . . .
 
-$$\int_i f(x) w(x)dx \approx \sum_{i=1}^n w_i f(x_i)$$
+$$
+\int_i f(x) w(x)dx \approx \sum_{i=1}^n w_i f(x_i)
+$$
 
 . . .
 
@@ -478,7 +508,9 @@ This can approximate the integral of any function arbitrarily well by increasing
 
 Sometimes we want to compute exponentially discounted sums like
 
-$$\int_I f(x) e^{-x} dx$$
+$$
+\int_I f(x) e^{-x} dx
+$$
 
 The weighting function $e^{-x}$ is **Gauss-Laguerre quadrature**
 
@@ -492,11 +524,13 @@ The weighting function $e^{-x}$ is **Gauss-Laguerre quadrature**
 
 Sometimes we want to take expectations of functions of normally distributed variables
 
-$$\int_I f(x) e^{-x^2} dx$$
+$$
+\int_I f(x) e^{-x^2} dx
+$$
+
 . . .
 
 - Other methods exist for specialized functional forms/distributions: gamma, beta, chi-square, etc 
-
 
 
 ## Gaussian quadrature nodes and weights
@@ -508,14 +542,16 @@ $$\int_I f(x) e^{-x^2} dx$$
 It's a non-trivial task: we have to solve $2n$ nonlinear equations to get $n$ pairs $(x_i, w_n)$
 
 
-We'll use a package for that: `QuantEcon`
-- Another package `FastGaussQuadrature` does a better job with high-order integrals or weights with singularities 
+We'll use a package for that: `QuantEcon.jl`
+
+- Another package `FastGaussQuadrature.jl` does a better job with high-order integrals or weights with singularities 
 - `QuadGK` has methods to improve precision further with adaptive subdomains
+- (This package is also implemented in Python: [QuantEconPy](https://quantecon.org/quantecon-py/))
 
 
 
 
-## Gaussian quadrature with `QuantEcon`
+## `QuantEcon.jl`: Gaussian quadrature
 
 Let's go back to our previous example and integrate $x^2$ from $0$ to $10$ again (the answer is 333.333...)
 
@@ -534,7 +570,7 @@ end;
 
 
 
-## Gaussian quadrature with `QuantEcon`
+## `QuantEcon.jl`: Gaussian quadrature
 
 
 ```{julia}
@@ -546,22 +582,21 @@ println("Integrating with 2 nodes:$(integrate_gauss(f, 0, 10, 2))")
 . . .
 
 All we needed was 2 nodes!
+
 - We need 1000 draws with Monte Carlo and 100 nodes with midpoint to get limited approximations
 
 
 
-## Other quadratures with `QuantEcon`
+## `QuantEcon.jl`: Other quadratures
 
-`QuantEcon.jl` has a lot more to offer<sup>1</sup> 
+`QuantEcon.jl` has a lot more to offer^[Check out the [documentation](http://quantecon.github.io/QuantEcon.jl/latest/api/QuantEcon.html)]
 
 - Trapezoid (`qnwtrap`) and Simpson's (`qnwsimp`) rule
 - Gauss-Hermite (`qnwnorm`) or Gaussian with any continuous distribution (`qnwdist`)
 - Generic quadrature integration (`quadrect`)
 
-.footnote[Check out the documentation at [http://quantecon.github.io/QuantEcon.jl/latest/api/QuantEcon.html](http://quantecon.github.io/QuantEcon.jl/latest/api/QuantEcon.html)]
 
-
-## .blue[Practice integration with `QuantEcon`]
+## Practice integration with `QuantEcon.jl`
 
 Let's integrate $f(x) = \frac{1}{x^2 + 1}$ from 0 to 1
 
@@ -578,16 +613,31 @@ Tip: Type `?` in the REPL and the name of the function to read its documentation
 Do we know what is the analytic solution to this integral?
 
 
+## Practice integration with `QuantEcon.jl`
 
-## .blue[Course roadmap]
 
-Up next:
+```{julia}
+f(x) = 1.0./(x.^2 .+ 1.0);
+# 1. Use `quadrect` to integrate using Monte Carlo with 1000 nodes
+quadrect(f, 1000, 0.0, 1.0, "R")
+```
+```{julia}
+# 2. Use `qnwtrap` to integrate using the Trapezoid rule quadrature with 7 nodes
+x, w = qnwtrap(7, 0.0, 1.0);
+# Perform quadrature approximation
+sum(w .* f(x))
+```
+```{julia}
 
-1. .gray[Intro to Scientific Computing]
-2. **Numerical operations and representations** 
-   1. .gold[Numerical arithmetic] 
-   2. .gold[Numerical differentiation and integration] 
-3. **Systems of equations** $\leftarrow$
-4. Function approximation
-5. Optimization
-6. Structural estimation
+# 3. Use `qnwlege` to integrate using Gaussian quadrature with 7 nodes
+x, w = qnwlege(7, 0.0, 1.0);
+# Perform quadrature approximation
+sum(w .* f(x))
+```
+
+. . .
+
+By the way, $\int^1_0 1/(x^2 + 1) = \arctan(1) = \pi/4$
+```{julia}
+π/4
+```

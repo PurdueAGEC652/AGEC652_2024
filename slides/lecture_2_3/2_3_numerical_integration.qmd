@@ -1,6 +1,6 @@
 ---
-title: "AGEC 652 - Lecture 2.1"
-subtitle: "Numerical arithmetic"
+title: "AGEC 652 - Lecture 2.3"
+subtitle: "Numerical integration"
 author: "Diego S. Cardoso"
 institute: "Purdue University"
 execute:
@@ -71,6 +71,7 @@ We need to do integration for many things in economics
 
 - Calculating expectations 
   - $E[g(x)] = \int_S g(x)dP(x), \; g: S \rightarrow \mathbb{R}, \; P$ is the probability measure on measurable space $S$
+
 . . .
 
 - Adding up a continuous measure of things
@@ -89,6 +90,7 @@ Integrals are effectively infinite sums
 $$\lim_{dx_i\rightarrow0}\sum_{i=0}^{(a-b)/dx_i} f(x_i) dx_i$$
 
 where
+
 - $dx_i$ is the lenght of some subset of $[a,b]$
 - $x_i$ is some evaluation point (e.g. midpoint of $dx_i$)
 
@@ -134,25 +136,25 @@ $$
 \xi = \int_0^1 f(x) dx
 $$
 
-by drawing $N$ uniform samples, $x_1,...,x_N$ over interval $[0,1]$
+by drawing $N$ uniform samples, $x_1,\dots,x_N$ over interval $[0,1]$
 
 . . .
 
-$\xi$ is equivalent to $E[f(x)]$ with respect to a uniform distribution, so estimating the integral is the same as estimating the expected value of $f(x)$
+- $\xi$ is equivalent to $E[f(x)]$ with respect to a uniform distribution, so estimating the integral is the same as estimating the expected value of $f(x)$
 
 . . .
 
-In general we have that $\hat{\xi} = V\frac{1}{N}\sum_{i=1}^N f(x_i)$, where $V$ is the volume over which we are integrating
+- In general we have that $\hat{\xi} = V\frac{1}{N}\sum_{i=1}^N f(x_i)$, where $V$ is the volume over which we are integrating
 
 . . .
 
-LLN gives us that the $plim_{N\rightarrow\infty} \hat{\xi} = \xi$
+- LLN gives us that the $plim_{N\rightarrow\infty} \hat{\xi} = \xi$
 
 
 
 ## Monte Carlo integration
 
-The variance of $\hat{\xi}$ is $$\sigma^2_{\hat{\xi}} = var(\frac{V}{N}\sum_{i=1}^N f(x_i)) = \frac{V^2}{N^2} \sum_{i=1}^N var(f(X)) = \frac{V^2}{N}\sigma^2_{f(X)}$$
+The variance of $\hat{\xi}$ is $$\sigma^2_{\hat{\xi}} = Var(\frac{V}{N}\sum_{i=1}^N f(x_i)) = \frac{V^2}{N^2} \sum_{i=1}^N Var(f(X)) = \frac{V^2}{N}\sigma^2_{f(X)}$$
 
 . . .
 
@@ -169,19 +171,15 @@ Notes:
 
 Suppose we want to integrate $x^2$ from 0 to 10, we know this is $10^3/3 = 333.333$
 
-```{julia, results = 'hide'}
+```{julia}
 # Package for drawing random numbers
 using Distributions
-
 # Define a function to do the integration for an arbitrary function
 function integrate_mc(f, lower, upper, num_draws)
-
   # Draw from a uniform distribution
   xs = rand(Uniform(lower, upper), num_draws)
-
   # Expectation = mean(x)*volume
   expectation = mean(f(xs))*(upper - lower)
-
 end
 ```
 
@@ -192,7 +190,6 @@ end
 Suppose we want to integrate $x^2$ from 0 to 10, we know this is $10^3/3 = 333.333$
 
 ```{julia}
-# Integrate
 f(x) = x.^2;
 integrate_mc(f, 0, 10, 1000)
 ```
@@ -203,7 +200,7 @@ Quite close for a random process!
 
 ## Quadrature rules
 
-We can also approximate integrals using a technique called .hi-blue[quadrature]
+We can also approximate integrals using a technique called **quadrature**
 
 . . .
 
@@ -329,7 +326,7 @@ where $w_1=w_n = h/2$ and $w_i = h$ otherwise
 
 ## How accurate is this rule?
 
-Trapezoid rule is $O(h^2)$ and **first-order exact**: it can integrate any linear function exactly
+Trapezoid rule is $O(h^2)$ and **first-order exact**: it can integrate any linear function exactly!
 
 
 
@@ -337,8 +334,7 @@ Trapezoid rule is $O(h^2)$ and **first-order exact**: it can integrate any linea
 
 Increase complexity by 1 degree:
 
-Let $n$ be odd then approximate the function across a *pair of subintervals*
-by a quadratic interpolation passing through
+Let $n$ be odd then approximate the function across a *pair of subintervals* by a quadratic interpolation passing through
 
 - $(x_{2i-1},f(x_{2i-1}))$
 - $(x_{2i},f(x_{2i}))$ and
@@ -412,7 +408,11 @@ We can generalize the unidimensional Newton-Cotes quadrature with tensor product
 
 . . .
 
-Suppose we want to integrate over a rectangle $\{(x_1, x_2) | a_1 \leq x_1 \leq b_1, a_2 \leq x_2 \leq b_2\} \in \mathbb{R}^2$
+Suppose we want to integrate over a rectangle 
+
+$$
+\{(x_1, x_2) | a_1 \leq x_1 \leq b_1, a_2 \leq x_2 \leq b_2\} \in \mathbb{R}^2
+$$
 
 . . .
 
@@ -544,9 +544,9 @@ It's a non-trivial task: we have to solve $2n$ nonlinear equations to get $n$ pa
 
 We'll use a package for that: `QuantEcon.jl`
 
+- *(QuantEcon functions are also implemented in Python: [QuantEconPy](https://quantecon.org/quantecon-py/))*
 - Another package `FastGaussQuadrature.jl` does a better job with high-order integrals or weights with singularities 
 - `QuadGK` has methods to improve precision further with adaptive subdomains
-- (This package is also implemented in Python: [QuantEconPy](https://quantecon.org/quantecon-py/))
 
 
 
@@ -604,7 +604,7 @@ Tip: Type `?` in the REPL and the name of the function to read its documentation
 
 
 1. Use `quadrect` to integrate using Monte Carlo
-  1. You will need to code your function `f` to accept an array (`.` syntax)
+  - You will need to code your function `f` to accept an array (`.` syntax)
 2. Use `qnwtrap` to integrate using the Trapezoid rule quadrature
 3. Use `qnwlege` to integrate using Gaussian quadrature
 

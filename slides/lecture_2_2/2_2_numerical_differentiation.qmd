@@ -326,9 +326,6 @@ Let's see how it works in practice by calculating derivatives of $x^2$ at $x=2$
 
 ## Forward difference: example
 
-::: {.panel-tabset}
-
-### Julia
 
 ```{julia, results = 'hide'}
 deriv_x_squared(h,x) = ((x+h)^2 - x^2)/h # derivative function
@@ -340,19 +337,6 @@ println("
         The derivative with h=1e-12 is: $(deriv_x_squared(1e-12,2.))
         The derivative with h=1e-30 is: $(deriv_x_squared(1e-30,2.))")
 ```
-
-### Python
-
-```python
-def deriv_x_squared(h, x):
-    return ((x + h)**2 - x**2) / h # derivative function
-
-print(f"The derivative with h=1e-1  is: {deriv_x_squared(1e-1, 2.0)}")
-print(f"The derivative with h=1e-12 is: {deriv_x_squared(1e-12, 2.0)}")
-print(f"The derivative with h=1e-30 is: {deriv_x_squared(1e-30, 2.0)}")
-```
-:::
-
 
 
 ## Error, it's there

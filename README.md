@@ -20,4 +20,6 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
 
 - Unit 2 - Numerical Operations
   - Lecture 2.1 - [Numerical arithmetic](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_2_1/2_1_numerical_arithmetic.html)
+  - Lecture 2.2 - [Numerical differentiation](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_2_2/2_2_numerical_differentiation.html)
+  - Lecture 2.3 - [Numerical integration](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_2_3/2_3_numerical_integration.html)
 

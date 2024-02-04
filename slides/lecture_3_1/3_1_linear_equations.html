@@ -414,9 +414,8 @@ Diego S. Cardoso
 <li><span class="gray">Fundamentals of numerical methods</span></li>
 <li><strong>Systems of equations</strong>
 <ol type="1">
-<li>Linear systems</li>
-<li>Nonlinear systems: derivative-free methods</li>
-<li>Nonlinear systems: derivative-based methods</li>
+<li><strong>Linear systems</strong></li>
+<li>Nonlinear systems</li>
 </ol></li>
 <li>Optimization</li>
 <li>Structural estimation</li>
@@ -458,7 +457,7 @@ Diego S. Cardoso
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a>A <span class="op">=</span> [<span class="op">-</span><span class="fl">3</span> <span class="fl">2</span> <span class="fl">3</span>; <span class="op">-</span><span class="fl">3</span> <span class="fl">2</span> <span class="fl">1</span>; <span class="fl">3</span> <span class="fl">0</span> <span class="fl">0</span>]; b <span class="op">=</span> [<span class="fl">10</span>; <span class="fl">8</span>; <span class="op">-</span><span class="fl">3</span>];</span>
 <span id="cb1-2"><a href="#cb1-2"></a>x <span class="op">=</span> A<span class="op">\</span>b <span class="co"># This is an optimized division, faster than inverting A (more on that later)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="68">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>3-element Vector{Float64}:
  -1.0
   2.0
@@ -846,7 +845,7 @@ x_1 = &amp; (y_1 - u_{13}y_1 - u_{12}y_2)/u_{11} = [10 - (3)(1) - (2)(2)]/(-3) =
 <span id="cb3-12"><a href="#cb3-12"></a>    <span class="cf">return</span> dets <span class="op">./</span> <span class="fu">det</span>(A)</span>
 <span id="cb3-13"><a href="#cb3-13"></a></span>
 <span id="cb3-14"><a href="#cb3-14"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="69">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>solve_cramer (generic function with 1 method)</code></pre>
 </div>
 </div>
@@ -872,9 +871,9 @@ x_1 = &amp; (y_1 - u_{13}y_1 - u_{12}y_2)/u_{11} = [10 - (3)(1) - (2)(2)]/(-3) =
 <span id="cb6-10"><a href="#cb6-10"></a>LU is <span class="op">$</span>(<span class="fu">round</span>(cramer_time<span class="op">/</span>lu_time, digits <span class="op">=</span> <span class="fl">0</span>)) times faster </span>
 <span id="cb6-11"><a href="#cb6-11"></a> and uses <span class="op">$</span>(<span class="fu">round</span>(lu_allocation<span class="op">/</span>cramer_allocation<span class="op">*</span><span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">2</span>))<span class="op">%</span>  of the memory.<span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Cramer's rule solved in 18.945558961 seconds and used 16016296704 kilobytes of memory.
-LU solved in 0.017916565 seconds and used 8016304 kilobytes of memory.
-LU is 1057.0 times faster 
+<pre><code>Cramer's rule solved in 18.102869757 seconds and used 16016296704 kilobytes of memory.
+LU solved in 0.014225097 seconds and used 8016304 kilobytes of memory.
+LU is 1273.0 times faster 
  and uses 0.05%  of the memory.</code></pre>
 </div>
 </div>
@@ -893,9 +892,9 @@ LU is 1057.0 times faster
 <span id="cb8-8"><a href="#cb8-8"></a>LU is <span class="op">$</span>(<span class="fu">round</span>(invers_time<span class="op">/</span>lu_time, digits <span class="op">=</span> <span class="fl">2</span>)) times faster</span>
 <span id="cb8-9"><a href="#cb8-9"></a> and uses <span class="op">$</span>(<span class="fu">round</span>(lu_allocation<span class="op">/</span>invers_allocation<span class="op">*</span><span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">2</span>))<span class="op">%</span>  of the memory.<span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Matrix inversion solved in 0.061331634 seconds and used 8528432 kilobytes of memory.
-LU solved in 0.017916565 seconds and used 8016304 kilobytes of memory.
-LU is 3.42 times faster
+<pre><code>Matrix inversion solved in 0.230339068 seconds and used 8528432 kilobytes of memory.
+LU solved in 0.014225097 seconds and used 8016304 kilobytes of memory.
+LU is 16.19 times faster
  and uses 94.0%  of the memory.</code></pre>
 </div>
 </div>
@@ -1098,7 +1097,7 @@ True solution for M=1e20 is approximately [1.0, 1.0], computed solution is [-0.0
 <span id="cb16-2"><a href="#cb16-2"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.0001</span>])</span>
 <span id="cb16-3"><a href="#cb16-3"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.00000001</span>])</span>
 <span id="cb16-4"><a href="#cb16-4"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.000000000001</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="76">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>3.999491959654264e12</code></pre>
 </div>
 </div>

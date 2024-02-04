@@ -38,9 +38,8 @@ Pkg.add("BenchmarkTools"); Pkg.add("LinearAlgebra")
 1.  [Introduction to Scientific Computing]{.gray}
 2.  [Fundamentals of numerical methods]{.gray}
 3.  **Systems of equations**
-    1. Linear systems
-    2. Nonlinear systems: derivative-free methods
-    3. Nonlinear systems: derivative-based methods
+    1. **Linear systems**
+    2. Nonlinear systems
 4.  Optimization
 5.  Structural estimation
 

@@ -1,6 +1,6 @@
 ---
-title: "AGEC 652 - Lecture 2.3"
-subtitle: "Numerical integration"
+title: "AGEC 652 - Lecture 3.1"
+subtitle: "Linear systems"
 author: "Diego S. Cardoso"
 institute: "Purdue University"
 execute:
@@ -28,7 +28,7 @@ editor:
 using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
-Pkg.add("BenchmarkTools")
+Pkg.add("BenchmarkTools"); Pkg.add("LinearAlgebra")
 ```
 
 
@@ -40,7 +40,7 @@ Pkg.add("BenchmarkTools")
 3.  **Systems of equations**
     1. Linear systems
     2. Nonlinear systems: derivative-free methods
-    3. Nonlinear systems: Newton and Quasi-Newton methods
+    3. Nonlinear systems: derivative-based methods
 4.  Optimization
 5.  Structural estimation
 
@@ -230,8 +230,6 @@ This uses the fact that we can do the following operations to a linear system **
 1. multiply one row by a scalar and add to another row
 2. swap rows
 
-. . .
-
 We'll use that to turn a matrix $(IA)$ into $(LU)$
 
 
@@ -375,6 +373,7 @@ y_3 \\
 8 \\
 \end{bmatrix}
 $$
+
 which is easy to solve
 
 
@@ -401,6 +400,7 @@ y_3 \\
 8 \\
 \end{bmatrix}
 $$
+
 . . .
 
 We solve by forward substitution as
@@ -438,6 +438,7 @@ y_3 \\
 -2 \\
 \end{bmatrix}
 $$
+
 . . .
 
 We solve by backward substitution as
@@ -482,6 +483,7 @@ For a 10x10 system this can really matter:
 ## Example: LU vs Cramer
 
 Julia description of the division operator `\`:
+
 > If A is upper or lower triangular (or diagonal), no factorization of A is required and the system is solved with either forward or backward substitution. For non-triangular square matrices, an LU factorization is used.
 
 So we can do LU factorization to solve systems by just doing **`x = A\b`**. But we could write it ourselves as well
@@ -491,7 +493,9 @@ So we can do LU factorization to solve systems by just doing **`x = A\b`**. But 
 ## Example: LU vs Cramer
 
 Cramer's Rule can be written as a simple loop:
-```{julia, results = 'hide'}
+
+```{julia}
+using LinearAlgebra
 function solve_cramer(A, b)
 
     dets = Vector(undef, length(b))
@@ -507,10 +511,10 @@ function solve_cramer(A, b)
 end
 ```
 
-```{julia, results = 'hide'}
-n = 1000
-A = rand(n, n)
-b = rand(n)
+```{julia}
+n = 1000;
+A = rand(n, n);
+b = rand(n);
 ```
 
 
@@ -518,6 +522,7 @@ b = rand(n)
 ## Example: LU vs Cramer
 
 Let's see the full results of the competition for a 1,000 x 1,000 matrix:
+
 ```{julia}
 using BenchmarkTools
 cramer_time = @elapsed solve_cramer(A, b);
@@ -538,6 +543,7 @@ LU is $(round(cramer_time/lu_time, digits = 0)) times faster
 ## Example: LU vs matrix inversion
 
 Let's see the full results of the competition for a 1,000 x 1,000 matrix:
+
 ```{julia}
 using BenchmarkTools
 invers_time = @elapsed ((A^-1)*b);
@@ -830,7 +836,10 @@ In a more useful method, we can rewrite $Ax=b$ as $Qx = b + (Q - A)x$ for some s
 
 Rearranging, we get $x = Q^{-1}b + (I - Q^{-1}A)x$, which suggests the iterating rule
 
-$$x^{(k+1)} = Q^{-1}b + (I - Q^{-1}A)x^{(k)} $$
+$$
+x^{(k+1)} = Q^{-1}b + (I - Q^{-1}A)x^{(k)}
+$$
+
 . . .
 
 It is easy to check that if $x^{(k+1)}=x^{(k)}$, then $x^{(k)}$ is a solution to $Ax=b$
@@ -1081,6 +1090,7 @@ p^{(k)} \\
 q^{(k)} \\
 \end{bmatrix}
 $$
+
 . . .
 
 $$
@@ -1109,43 +1119,22 @@ $$
 
 ## A visual example: Gauss-Jacobi
 
-::: {.columns}
-::: {.column}
+
+<div style="float:right">
+ <image src="figures/tattonement-Base.png" height=550>
+</div>
+
 Let's start from initial guess $q_0=1$ and $p_0=4$ and see how Gauss-Jacobi proceeds
 
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k)}$
 :::
-::: {.column}
-![](figures/tattonement-Base.png)
-:::
-:::
 
 
-
-
-## A visual example: Gauss-Jacobi
-
-::: {.columns}
-::: {.column}
-
-The iteration rules are
-
-$q^{(k+1)} = 1 + p^{(k)}/2$
-
-$p^{(k+1)} = 10 - q^{(k)}$
-
-So
-
-$q_1 = 1 + (4)/2 = 3$
-:::
-::: {.column}
-![](figures/tattonement-GJ-0p.png)
-:::
-:::
 
 
 ## A visual example: Gauss-Jacobi
@@ -1154,13 +1143,32 @@ $q_1 = 1 + (4)/2 = 3$
  <image src="figures/tattonement-GJ-0p.png" height=550>
 </div>
 
-.blue[
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k)}$
-]
+:::
+
+So
+
+$q_1 = 1 + (4)/2 = 3$
+
+
+## A visual example: Gauss-Jacobi
+
+<div style="float:right">
+ <image src="figures/tattonement-GJ-0p.png" height=550>
+</div>
+
+:::{.blue}
+The iteration rules are
+
+$q^{(k+1)} = 1 + p^{(k)}/2$
+
+$p^{(k+1)} = 10 - q^{(k)}$
+:::
 
 So
 
@@ -1177,13 +1185,13 @@ $p_1 = 10 - 1 = 9$
  <image src="figures/tattonement-GJ-1.png" height=550>
 </div>
 
-.blue[
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k)}$
-]
+:::
 
 So
 
@@ -1201,15 +1209,16 @@ And we move to $(3,9)$
  <image src="figures/tattonement-GJ-2.png" height=550>
 </div>
 
-.blue[
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k)}$
-]
+:::
 
 Next, we get
+
 . . .
 
 $q_2 = 1 + (9)/2 = 5.5$
@@ -1226,15 +1235,16 @@ And we move to $(5.5,7)$
  <image src="figures/tattonement-GJ-3.png" height=550>
 </div>
 
-.blue[
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k)}$
-]
+:::
 
 Then, we get
+
 . . .
 
 $q_3 = 1 + (7)/2 = 4.5$
@@ -1251,13 +1261,13 @@ And we move to $(4.5,4.5)$
  <image src="figures/tattonement-GJ-4.png" height=550>
 </div>
 
-.blue[
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k)}$
-]
+:::
 
 And we continue to process until the difference between $(q^{(k+1)},p^{(k+1)})$ and $(q^{(k)},p^{(k)})$ is smaller than our `tolerance` parameter (i.e., it converges)
 
@@ -1274,6 +1284,7 @@ q^{(k+1)} & = 1 + p^{(k)}/2 \\
 p^{(k+1)} & = 10 - \mathbf{q^{(k+1)}}
 \end{align*}
 $$
+
 . . .
 
 $p^{(k+1)}$ is a function of $q^{(k+1)}$, not $q^{(k)}$
@@ -1383,12 +1394,13 @@ $$
 
 Once again, we start from initial guess $q_0=1$ and $p_0=4$
 
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k+1)}$
-
+:::
 
 
 ## A visual example: Gauss-Seidel
@@ -1397,11 +1409,14 @@ $p^{(k+1)} = 10 - q^{(k+1)}$
  <image src="figures/tattonement-GS-1.png" height=550>
 </div>
 
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k+1)}$
+:::
+
 
 So
 
@@ -1415,11 +1430,14 @@ $q_1 = 1 + (4)/2 = 3$
  <image src="figures/tattonement-GS-2.png" height=550>
 </div>
 
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k+1)}$
+:::
+
 
 So
 
@@ -1436,11 +1454,14 @@ $p_1 = 10 - (3) = 7$
  <image src="figures/tattonement-GS-3.png" height=550>
 </div>
 
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k+1)}$
+:::
+
 
 So
 
@@ -1459,11 +1480,14 @@ $q_2 = 1 + (7)/2 = 4.5$
  <image src="figures/tattonement-GS-4.png" height=550>
 </div>
 
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k+1)}$
+:::
+
 
 So
 
@@ -1484,11 +1508,14 @@ $p_2 = 10 - 4.5 = 5.5$
  <image src="figures/tattonement-GS-5.png" height=550>
 </div>
 
+:::{.blue}
 The iteration rules are
 
 $q^{(k+1)} = 1 + p^{(k)}/2$
 
 $p^{(k+1)} = 10 - q^{(k+1)}$
+:::
+
 
 And we continue to process until the difference between $(q^{(k+1)},p^{(k+1)})$ and $(q^{(k)},p^{(k)})$ is smaller than our `tolerance` parameter (i.e., it converges)
 

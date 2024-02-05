@@ -718,7 +718,7 @@ The root of f(x) is 3.9990234375</code></pre>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">f</span>(<span class="fl">2.0</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="fu">f</span>(<span class="fl">4.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="69">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>2.9375</code></pre>
 </div>
 </div>
@@ -989,7 +989,7 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <span id="cb15-3"><a href="#cb15-3"></a>    F <span class="op">=</span> Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">.-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>) <span class="op">.*</span>q <span class="op">.-</span> c <span class="op">.*</span>q</span>
 <span id="cb15-4"><a href="#cb15-4"></a><span class="kw">end</span>;</span>
 <span id="cb15-5"><a href="#cb15-5"></a><span class="fu">f</span>([<span class="fl">0.2</span>; <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="75">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>2-element Vector{Float64}:
  1.0989480808247896
  1.0589480808247895</code></pre>
@@ -1057,7 +1057,7 @@ c_{1} &amp; 0\\
 <span id="cb17-6"><a href="#cb17-6"></a>    J <span class="op">=</span> <span class="op">-</span>A <span class="op">.*</span> [<span class="fl">2</span> <span class="fl">1</span>; <span class="fl">1</span> <span class="fl">2</span>] <span class="op">+</span> (A<span class="op">*</span>B) <span class="op">.*</span> [q q] <span class="op">-</span> <span class="bu">LinearAlgebra</span>.<span class="fu">Diagonal</span>(c)</span>
 <span id="cb17-7"><a href="#cb17-7"></a><span class="kw">end</span>;</span>
 <span id="cb17-8"><a href="#cb17-8"></a><span class="fu">f_jacobian</span>([<span class="fl">0.2</span>; <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="76">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>2×2 Matrix{Float64}:
  -3.88977   -0.519438
  -0.519438  -4.08977</code></pre>
@@ -1109,7 +1109,7 @@ Intermediate guess: [0.8359566131332257, 0.6874038938481142]
 Intermediate guess: [0.8395632064645864, 0.6887954351409207]
 The root of f(x) is [0.8395676035295858, 0.6887964311626718]</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="78">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>2-element Vector{Float64}:
  0.8395676035295858
  0.6887964311626718</code></pre>
@@ -1121,7 +1121,7 @@ The root of f(x) is [0.8395676035295858, 0.6887964311626718]</code></pre>
 <p>Let’s check our solution</p>
 <div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">f</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="79">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>2-element Vector{Float64}:
  5.7654991891809004e-12
  9.037215420448774e-13</code></pre>
@@ -1270,6 +1270,9 @@ B^{(k+1)} = B^{(k)} + \frac{[d^{(k)} - u^{(k)}]{d^{(k)T}}B_{(k)}}{{d^{(k)T}} u^{
 <p>Let’s revisit our previous example but now solve it using Broyden’s method</p>
 <p>We won’t code it by hand. Instead, we use package <code>NLsolve.jl</code></p>
 <p>Function <code>NLsolve.nlsolve</code> has a ton of options to solve nonlinear equations</p>
+<ul>
+<li><em>(In Python, package <code>scipy</code> also has Broyden’s and many other rootfinding methods implemented via the <a href="https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding"><code>optimize</code> interface</a>)</em></li>
+</ul>
 <div class="fragment">
 <p>Once again, we are looking a pair <span class="math inline">\((q_1, q_2)\)</span> which are roots to two nonlinear equations</p>
 <p><span class="math display">\[
@@ -1302,7 +1305,7 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
      9     3.116015e-10     1.486563e-13
     10     1.252332e-13     1.177236e-19</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="80">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: broyden without line-search
  * Starting Point: [1.0, 2.0]
@@ -1342,7 +1345,7 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, f_jacobian, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
 <span id="cb28-2"><a href="#cb28-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="81">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: Newton with line-search
  * Starting Point: [1.0, 2.0]
@@ -1363,7 +1366,7 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
 <span id="cb30-2"><a href="#cb30-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="82">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: Newton with line-search
  * Starting Point: [1.0, 2.0]
@@ -1384,11 +1387,66 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton, autodiff<span class="op">=:</span>forward,</span>
 <span id="cb32-2"><a href="#cb32-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="83">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: Newton with line-search
  * Starting Point: [1.0, 2.0]
  * Zero: [0.8395676035356598, 0.6887964311630005]
+ * Inf-norm of residuals: 0.000000
+ * Iterations: 5
+ * Convergence: true
+   * |x - x'| &lt; 1.0e-08: true
+   * |f(x)| &lt; 0.0e+00: false
+ * Function Calls (f): 6
+ * Jacobian Calls (df/dx): 6</code></pre>
+</div>
+</div>
+</section>
+<section id="quick-detour" class="slide level2">
+<h2>Quick detour</h2>
+<p>Before we continue, take a look again at our <span class="math inline">\(f\)</span></p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">function</span> <span class="fu">f</span>(q)</span>
+<span id="cb34-2"><a href="#cb34-2"></a>    Q <span class="op">=</span> <span class="fu">sum</span>(q)</span>
+<span id="cb34-3"><a href="#cb34-3"></a>    F <span class="op">=</span> Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">.-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>) <span class="op">.*</span>q <span class="op">.-</span> c <span class="op">.*</span>q</span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Do you see any potential inefficiency?</p>
+<div class="fragment">
+<p>We allocate a new <code>F</code> every time we call this function!</p>
+<p>Instead, we can be more efficient by writing a function that modifies a pre-allocated vector</p>
+</div>
+</section>
+<section id="quick-detour-functions-that-modify-arguments" class="slide level2">
+<h2>Quick detour: functions that modify arguments</h2>
+<p>By convention, in Julia we name functions that modify arguments with a <code>!</code> at the end. For our <span class="math inline">\(f\)</span>, we can define</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">function</span> <span class="fu">f!</span>(F, q)</span>
+<span id="cb35-2"><a href="#cb35-2"></a>    F[<span class="fl">1</span>] <span class="op">=</span> <span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)<span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>)<span class="op">*</span>q[<span class="fl">1</span>] <span class="op">-</span> c[<span class="fl">1</span>]<span class="op">*</span>q[<span class="fl">1</span>]</span>
+<span id="cb35-3"><a href="#cb35-3"></a>    F[<span class="fl">2</span>] <span class="op">=</span> <span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)<span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>)<span class="op">*</span>q[<span class="fl">2</span>] <span class="op">-</span> c[<span class="fl">2</span>]<span class="op">*</span>q[<span class="fl">2</span>]</span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="kw">end</span>;</span>
+<span id="cb35-5"><a href="#cb35-5"></a>F <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">2</span>) <span class="co"># This allocates a 2-vector with elements equal to zero</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="fu">f!</span>(F, [<span class="fl">0.2</span>; <span class="fl">0.2</span>]); <span class="co"># Note the first argument is a pre-allocated vector</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a>F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>2-element Vector{Float64}:
+ 1.0989480808247896
+ 1.0589480808247895</code></pre>
+</div>
+</div>
+</section>
+<section id="quick-detour-functions-that-modify-arguments-1" class="slide level2">
+<h2>Quick detour: functions that modify arguments</h2>
+<p><code>NLsolve.nlsolve</code> understands when we pass a <code>!</code> function and pre-allocates the vector for us</p>
+<p>Because it allocates only once, it will be more efficient</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1"></a>NLsolve.<span class="fu">nlsolve</span>(f!, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
+<span id="cb37-2"><a href="#cb37-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>Results of Nonlinear Solver Algorithm
+ * Algorithm: Newton with line-search
+ * Starting Point: [1.0, 2.0]
+ * Zero: [0.83956760353566, 0.6887964311630005]
  * Inf-norm of residuals: 0.000000
  * Iterations: 5
  * Convergence: true

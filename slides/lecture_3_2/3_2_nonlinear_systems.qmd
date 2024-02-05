@@ -851,6 +851,8 @@ We won't code it by hand. Instead, we use package `NLsolve.jl`
 
 Function `NLsolve.nlsolve` has a ton of options to solve nonlinear equations
 
+- *(In Python, package `scipy` also has Broyden's and many other rootfinding methods implemented via the [`optimize` interface](https://docs.scipy.org/doc/scipy/reference/optimize.html#root-finding))*
+
 . . .
 
 Once again, we are looking a pair $(q_1, q_2)$ which are roots to two nonlinear equations
@@ -916,6 +918,57 @@ You can add argument `autodiff=:forward` to use forward autodifferentiation inst
 NLsolve.nlsolve(f, [1.0; 2.0], method=:newton, autodiff=:forward,
                 xtol=:1e-8, ftol=:0.0, iterations=:1000)
 ```
+
+
+## Quick detour
+
+Before we continue, take a look again at our $f$
+
+```{julia}
+function f(q)
+    Q = sum(q)
+    F = Q^(-1/epsilon) .- (1/epsilon)Q^(-1/epsilon-1) .*q .- c .*q
+end;
+```
+
+Do you see any potential inefficiency?
+
+. . .
+
+We allocate a new `F` every time we call this function!
+
+Instead, we can be more efficient by writing a function that modifies a pre-allocated vector
+
+
+
+## Quick detour: functions that modify arguments
+
+By convention, in Julia we name functions that modify arguments with a `!` at the end. For our $f$, we can define
+
+```{julia}
+function f!(F, q)
+    F[1] = sum(q)^(-1/epsilon) - (1/epsilon)sum(q)^(-1/epsilon-1)*q[1] - c[1]*q[1]
+    F[2] = sum(q)^(-1/epsilon) - (1/epsilon)sum(q)^(-1/epsilon-1)*q[2] - c[2]*q[2]
+end;
+F = zeros(2) # This allocates a 2-vector with elements equal to zero
+f!(F, [0.2; 0.2]); # Note the first argument is a pre-allocated vector
+F
+```
+
+
+
+## Quick detour: functions that modify arguments
+
+`NLsolve.nlsolve` understands when we pass a `!` function and pre-allocates the vector for us
+
+Because it allocates only once, it will be more efficient
+
+```{julia}
+NLsolve.nlsolve(f!, [1.0; 2.0], method=:newton,
+                xtol=:1e-8, ftol=:0.0, iterations=:1000)
+```
+
+
 
 
 # Comparing methods
@@ -1004,3 +1057,4 @@ Besides convergence rates and algorithm speed, you should also factor developmen
 -   If derivatives are complex, quasi-Newton methods are good candidates
 -   Bisection and function iteration are generally dominated options but are easy to program/debug, so they have value as a quick proof-of-concept
     -   Bisection is often used in hybrid methods, such as Dekker's and Brent's. Hybrid methods select between bisection, secant, or other basic solution methods every iteration depending on a set of criteria
+

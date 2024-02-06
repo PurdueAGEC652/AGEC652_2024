@@ -338,21 +338,21 @@ Increase complexity by 1 degree:
 
 Let $n$ be odd then approximate the function across a *pair of subintervals* by a quadratic interpolation passing through
 
-- $(x_{2i-1},f(x_{2i-1}))$
-- $(x_{2i},f(x_{2i}))$ and
-- $(x_{2i+1},f(x_{2i+1}))$
+- $(x_{i-1},f(x_{i-1}))$
+- $(x_{i},f(x_{i}))$ and
+- $(x_{i+1},f(x_{i+1}))$
 
 . . .
 
 $$
-\int_{x_i}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{2i-1}) + 4f(x_{2i}) + f(x_{2i+1})]
+\int_{x_{i-1}}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{i-1}) + 4f(x_{i}) + f(x_{i+1})]
 $$
 
 
 
 ## Simpson's rule
 
-$\int_{x_i}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{2i-1}) + 4f(x_{2i}) + f(x_{2i+1})]$
+$\int_{x_{i-1}}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{i-1}) + 4f(x_{i}) + f(x_{i+1})]$
 
 We can aggregate this by summing over *every two subintervals*
 

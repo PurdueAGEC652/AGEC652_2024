@@ -553,7 +553,7 @@ Diego S. Cardoso
 <span id="cb1-7"><a href="#cb1-7"></a>  <span class="co"># Expectation = mean(x)*volume</span></span>
 <span id="cb1-8"><a href="#cb1-8"></a>  expectation <span class="op">=</span> <span class="fu">mean</span>(<span class="fu">f</span>(xs))<span class="fu">*</span>(upper <span class="op">-</span> lower)</span>
 <span id="cb1-9"><a href="#cb1-9"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>integrate_mc (generic function with 1 method)</code></pre>
 </div>
 </div>
@@ -564,8 +564,8 @@ Diego S. Cardoso
 <div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">.^</span><span class="fl">2</span>;</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">integrate_mc</span>(f, <span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
-<pre><code>343.9518140403404</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>346.4094569108971</code></pre>
 </div>
 </div>
 <p>Quite close for a random process!</p>
@@ -683,19 +683,19 @@ Integrating with 100 nodes:333.3248307995783</code></pre>
 <p>Increase complexity by 1 degree:</p>
 <p>Let <span class="math inline">\(n\)</span> be odd then approximate the function across a <em>pair of subintervals</em> by a quadratic interpolation passing through</p>
 <ul>
-<li><span class="math inline">\((x_{2i-1},f(x_{2i-1}))\)</span></li>
-<li><span class="math inline">\((x_{2i},f(x_{2i}))\)</span> and</li>
-<li><span class="math inline">\((x_{2i+1},f(x_{2i+1}))\)</span></li>
+<li><span class="math inline">\((x_{i-1},f(x_{i-1}))\)</span></li>
+<li><span class="math inline">\((x_{i},f(x_{i}))\)</span> and</li>
+<li><span class="math inline">\((x_{i+1},f(x_{i+1}))\)</span></li>
 </ul>
 <div class="fragment">
 <p><span class="math display">\[
-\int_{x_i}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{2i-1}) + 4f(x_{2i}) + f(x_{2i+1})]
+\int_{x_{i-1}}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{i-1}) + 4f(x_{i}) + f(x_{i+1})]
 \]</span></p>
 </div>
 </section>
 <section id="simpsons-rule-1" class="slide level2">
 <h2>Simpson’s rule</h2>
-<p><span class="math inline">\(\int_{x_i}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{2i-1}) + 4f(x_{2i}) + f(x_{2i+1})]\)</span></p>
+<p><span class="math inline">\(\int_{x_{i-1}}^{x_{i+1}} f(x) dx \approx \frac{h}{3}[f(x_{i-1}) + 4f(x_{i}) + f(x_{i+1})]\)</span></p>
 <p>We can aggregate this by summing over <em>every two subintervals</em></p>
 <p><span class="math display">\[\int_{a}^{b} f(x) dx \approx \sum_{i=1}^n w_i f(x_i)\]</span></p>
 <p>where <span class="math inline">\(w_1=w_n = h/3\)</span>, otherwise and <span class="math inline">\(w_i = 4h/3\)</span> if <span class="math inline">\(i\)</span> is even and <span class="math inline">\(w_i = 2h/3\)</span> if <span class="math inline">\(i\)</span> is odd</p>
@@ -914,8 +914,8 @@ Integrating with 2 nodes:333.3333333333334</code></pre>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fl">1.0</span><span class="op">./</span>(x<span class="op">.^</span><span class="fl">2</span> <span class="op">.+</span> <span class="fl">1.0</span>);</span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="co"># 1. Use `quadrect` to integrate using Monte Carlo with 1000 nodes</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="fu">quadrect</span>(f, <span class="fl">1000</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="st">"R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
-<pre><code>0.7855073735075424</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>0.7843120364756414</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="9">
@@ -923,7 +923,7 @@ Integrating with 2 nodes:333.3333333333334</code></pre>
 <span id="cb13-2"><a href="#cb13-2"></a>x, w <span class="op">=</span> <span class="fu">qnwtrap</span>(<span class="fl">7</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>);</span>
 <span id="cb13-3"><a href="#cb13-3"></a><span class="co"># Perform quadrature approximation</span></span>
 <span id="cb13-4"><a href="#cb13-4"></a><span class="fu">sum</span>(w <span class="op">.*</span> <span class="fu">f</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>0.7842407666178157</code></pre>
 </div>
 </div>
@@ -932,7 +932,7 @@ Integrating with 2 nodes:333.3333333333334</code></pre>
 <span id="cb15-2"><a href="#cb15-2"></a>x, w <span class="op">=</span> <span class="fu">qnwlege</span>(<span class="fl">7</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>);</span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="co"># Perform quadrature approximation</span></span>
 <span id="cb15-4"><a href="#cb15-4"></a><span class="fu">sum</span>(w <span class="op">.*</span> <span class="fu">f</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>0.785398164063432</code></pre>
 </div>
 </div>
@@ -940,7 +940,7 @@ Integrating with 2 nodes:333.3333333333334</code></pre>
 <p>By the way, <span class="math inline">\(\int^1_0 1/(x^2 + 1) = \arctan(1) = \pi/4\)</span></p>
 <div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="cn">π</span><span class="op">/</span><span class="fl">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="38">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>0.7853981633974483</code></pre>
 </div>
 </div>

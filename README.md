@@ -23,3 +23,5 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
   - Lecture 2.2 - [Numerical differentiation](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_2_2/2_2_numerical_differentiation.html)
   - Lecture 2.3 - [Numerical integration](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_2_3/2_3_numerical_integration.html)
 
+- Unit 3 - Systems of equations
+  - Lecture 3.1 - [Linear systems](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_3_1/3_1_linear_equations.html)

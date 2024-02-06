@@ -528,11 +528,15 @@ Diego S. Cardoso
 <h2>Monte Carlo integration</h2>
 <p>The variance of <span class="math inline">\(\hat{\xi}\)</span> is <span class="math display">\[\sigma^2_{\hat{\xi}} = Var(\frac{V}{N}\sum_{i=1}^N f(x_i)) = \frac{V^2}{N^2} \sum_{i=1}^N Var(f(X)) = \frac{V^2}{N}\sigma^2_{f(X)}\]</span></p>
 <div class="fragment">
-<p>So average error is <span class="math inline">\(\frac{V}{\sqrt{N}}\sigma_{f(X)}\)</span>. Yhis gives us its rate of convergence: <span class="math inline">\(O(\sqrt{N})\)</span></p>
+<p>So average error is <span class="math inline">\(\frac{V}{\sqrt{N}}\sigma_{f(X)}\)</span>. This gives us its rate of convergence: <span class="math inline">\(O(1/\sqrt{N})\)</span></p>
 <p>Notes:</p>
 <ol type="1">
 <li>The rate of convergence is independent of the dimension of x</li>
-<li>Quasi-Monte Carlo methods can get you <span class="math inline">\(O(1/N)\)</span></li>
+<li>Quasi-Monte Carlo methods can get you <span class="math inline">\(O(1/N)\)</span>
+<ul>
+<li>These methods have a smarter approach to sampling</li>
+<li>They use nonrandom sequences like so they cover the support in more efficient ways (see details on Ch 5.4 of Miranda and Fackler)</li>
+</ul></li>
 </ol>
 </div>
 </section>
@@ -549,7 +553,7 @@ Diego S. Cardoso
 <span id="cb1-7"><a href="#cb1-7"></a>  <span class="co"># Expectation = mean(x)*volume</span></span>
 <span id="cb1-8"><a href="#cb1-8"></a>  expectation <span class="op">=</span> <span class="fu">mean</span>(<span class="fu">f</span>(xs))<span class="fu">*</span>(upper <span class="op">-</span> lower)</span>
 <span id="cb1-9"><a href="#cb1-9"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="146">
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>integrate_mc (generic function with 1 method)</code></pre>
 </div>
 </div>
@@ -560,8 +564,8 @@ Diego S. Cardoso
 <div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">.^</span><span class="fl">2</span>;</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">integrate_mc</span>(f, <span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="147">
-<pre><code>348.1121709745394</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>343.9518140403404</code></pre>
 </div>
 </div>
 <p>Quite close for a random process!</p>
@@ -910,8 +914,8 @@ Integrating with 2 nodes:333.3333333333334</code></pre>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fl">1.0</span><span class="op">./</span>(x<span class="op">.^</span><span class="fl">2</span> <span class="op">.+</span> <span class="fl">1.0</span>);</span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="co"># 1. Use `quadrect` to integrate using Monte Carlo with 1000 nodes</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="fu">quadrect</span>(f, <span class="fl">1000</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="st">"R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="152">
-<pre><code>0.7786705590746643</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>0.7855073735075424</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="9">
@@ -919,7 +923,7 @@ Integrating with 2 nodes:333.3333333333334</code></pre>
 <span id="cb13-2"><a href="#cb13-2"></a>x, w <span class="op">=</span> <span class="fu">qnwtrap</span>(<span class="fl">7</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>);</span>
 <span id="cb13-3"><a href="#cb13-3"></a><span class="co"># Perform quadrature approximation</span></span>
 <span id="cb13-4"><a href="#cb13-4"></a><span class="fu">sum</span>(w <span class="op">.*</span> <span class="fu">f</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="153">
+<div class="cell-output cell-output-display" data-execution_count="36">
 <pre><code>0.7842407666178157</code></pre>
 </div>
 </div>
@@ -928,7 +932,7 @@ Integrating with 2 nodes:333.3333333333334</code></pre>
 <span id="cb15-2"><a href="#cb15-2"></a>x, w <span class="op">=</span> <span class="fu">qnwlege</span>(<span class="fl">7</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>);</span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="co"># Perform quadrature approximation</span></span>
 <span id="cb15-4"><a href="#cb15-4"></a><span class="fu">sum</span>(w <span class="op">.*</span> <span class="fu">f</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="154">
+<div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>0.785398164063432</code></pre>
 </div>
 </div>
@@ -936,7 +940,7 @@ Integrating with 2 nodes:333.3333333333334</code></pre>
 <p>By the way, <span class="math inline">\(\int^1_0 1/(x^2 + 1) = \arctan(1) = \pi/4\)</span></p>
 <div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="cn">π</span><span class="op">/</span><span class="fl">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="155">
+<div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>0.7853981633974483</code></pre>
 </div>
 </div>

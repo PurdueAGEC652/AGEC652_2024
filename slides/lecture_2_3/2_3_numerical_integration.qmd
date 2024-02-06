@@ -158,12 +158,14 @@ The variance of $\hat{\xi}$ is $$\sigma^2_{\hat{\xi}} = Var(\frac{V}{N}\sum_{i=1
 
 . . .
 
-So average error is $\frac{V}{\sqrt{N}}\sigma_{f(X)}$. Yhis gives us its rate of convergence: $O(\sqrt{N})$
+So average error is $\frac{V}{\sqrt{N}}\sigma_{f(X)}$. This gives us its rate of convergence: $O(1/\sqrt{N})$
 
 Notes:
 
 1. The rate of convergence is independent of the dimension of x
 2. Quasi-Monte Carlo methods can get you $O(1/N)$
+   - These methods have a smarter approach to sampling 
+   - They use nonrandom sequences like so they cover the support in more efficient ways (see details on Ch 5.4 of Miranda and Fackler)
 
 
 

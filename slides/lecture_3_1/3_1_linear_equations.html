@@ -775,9 +775,9 @@ y_3 = &amp; (b_3 - l_{31}y_1 - l_{32}y_2)/l_{33} = [8 - (1)(10) - (0)(7)]/1 = -2
 \end{bmatrix}
 \times
 \begin{bmatrix}
-y_1 \\
-y_2 \\
-y_3 \\
+x_1 \\
+x_2 \\
+x_3 \\
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -871,9 +871,9 @@ x_1 = &amp; (y_1 - u_{13}y_1 - u_{12}y_2)/u_{11} = [10 - (3)(1) - (2)(2)]/(-3) =
 <span id="cb6-10"><a href="#cb6-10"></a>LU is <span class="op">$</span>(<span class="fu">round</span>(cramer_time<span class="op">/</span>lu_time, digits <span class="op">=</span> <span class="fl">0</span>)) times faster </span>
 <span id="cb6-11"><a href="#cb6-11"></a> and uses <span class="op">$</span>(<span class="fu">round</span>(lu_allocation<span class="op">/</span>cramer_allocation<span class="op">*</span><span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">2</span>))<span class="op">%</span>  of the memory.<span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Cramer's rule solved in 18.102869757 seconds and used 16016296704 kilobytes of memory.
-LU solved in 0.014225097 seconds and used 8016304 kilobytes of memory.
-LU is 1273.0 times faster 
+<pre><code>Cramer's rule solved in 7.678292748 seconds and used 16016296704 kilobytes of memory.
+LU solved in 0.007972891 seconds and used 8016304 kilobytes of memory.
+LU is 963.0 times faster 
  and uses 0.05%  of the memory.</code></pre>
 </div>
 </div>
@@ -892,9 +892,9 @@ LU is 1273.0 times faster
 <span id="cb8-8"><a href="#cb8-8"></a>LU is <span class="op">$</span>(<span class="fu">round</span>(invers_time<span class="op">/</span>lu_time, digits <span class="op">=</span> <span class="fl">2</span>)) times faster</span>
 <span id="cb8-9"><a href="#cb8-9"></a> and uses <span class="op">$</span>(<span class="fu">round</span>(lu_allocation<span class="op">/</span>invers_allocation<span class="op">*</span><span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">2</span>))<span class="op">%</span>  of the memory.<span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Matrix inversion solved in 0.230339068 seconds and used 8528432 kilobytes of memory.
-LU solved in 0.014225097 seconds and used 8016304 kilobytes of memory.
-LU is 16.19 times faster
+<pre><code>Matrix inversion solved in 0.139332145 seconds and used 8528432 kilobytes of memory.
+LU solved in 0.007972891 seconds and used 8016304 kilobytes of memory.
+LU is 17.48 times faster
  and uses 94.0%  of the memory.</code></pre>
 </div>
 </div>
@@ -1094,11 +1094,21 @@ True solution for M=1e20 is approximately [1.0, 1.0], computed solution is [-0.0
 <p>Rule of thumb: <em>for each power of 10, a significant digit is lost in the computation of</em> <span class="math inline">\(x\)</span></p>
 <div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra;</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.0001</span>])</span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.00000001</span>])</span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.000000000001</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.0001</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
-<pre><code>3.999491959654264e12</code></pre>
+<pre><code>40002.00007491187</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.00000001</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>4.000000065548868e8</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">cond</span>([<span class="fl">1</span>. <span class="fl">1</span>.; <span class="fl">1</span>. <span class="fl">1.000000000001</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>3.99940450394283e12</code></pre>
 </div>
 </div>
 <ul>
@@ -1211,15 +1221,15 @@ x^{(k+1)} = Q^{-1}b + (I - Q^{-1}A)x^{(k)}
 <section id="convergence-2" class="slide level2">
 <h2>Convergence</h2>
 <p>An example of how to test both the convergence and maximum iteration conditions is</p>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a>dx <span class="op">=</span> <span class="cn">Inf</span> <span class="co"># Start with a very large number</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>tol <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># One example</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>iteration <span class="op">=</span> <span class="fl">0</span> <span class="co"># Initialize value</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a>max_iterations <span class="op">=</span> <span class="fl">1000</span> <span class="co"># Set max of 1000 iterations</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="cf">while</span> (dx <span class="op">&gt;=</span> tol <span class="op">&amp;&amp;</span> iteration <span class="op">&lt;=</span> max_iterations)</span>
-<span id="cb18-6"><a href="#cb18-6"></a>  iteration <span class="op">=</span> iteration <span class="op">+</span> <span class="fl">1</span></span>
-<span id="cb18-7"><a href="#cb18-7"></a>  <span class="co"># Here you iterate your solutions and recalculate dx</span></span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a>dx <span class="op">=</span> <span class="cn">Inf</span> <span class="co"># Start with a very large number</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>tol <span class="op">=</span> <span class="fl">1e-6</span> <span class="co"># One example</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>iteration <span class="op">=</span> <span class="fl">0</span> <span class="co"># Initialize value</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a>max_iterations <span class="op">=</span> <span class="fl">1000</span> <span class="co"># Set max of 1000 iterations</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="cf">while</span> (dx <span class="op">&gt;=</span> tol <span class="op">&amp;&amp;</span> iteration <span class="op">&lt;=</span> max_iterations)</span>
+<span id="cb22-6"><a href="#cb22-6"></a>  iteration <span class="op">=</span> iteration <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a>  <span class="co"># Here you iterate your solutions and recalculate dx</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="gauss-seidel-method" class="slide level2">

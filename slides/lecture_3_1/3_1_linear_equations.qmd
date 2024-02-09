@@ -426,9 +426,9 @@ $$
 \end{bmatrix}
 \times
 \begin{bmatrix}
-y_1 \\
-y_2 \\
-y_3 \\
+x_1 \\
+x_2 \\
+x_3 \\
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -777,7 +777,13 @@ Rule of thumb: *for each power of 10, a significant digit is lost in the computa
 ```{julia}
 using LinearAlgebra;
 cond([1. 1.; 1. 1.0001])
+```
+
+```{julia}
 cond([1. 1.; 1. 1.00000001])
+```
+
+```{julia}
 cond([1. 1.; 1. 1.000000000001])
 ```
 

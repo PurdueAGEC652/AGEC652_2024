@@ -425,7 +425,7 @@ Diego S. Cardoso
 <h2>Agenda</h2>
 <ul>
 <li>We continue our study of methods to solve systems of equations, now looking at systems that contain nonlinear equations</li>
-<li>Unlike linear systems, nonlinear systems we don’t have guarantees of closed-form solutions, so solving them is harder</li>
+<li>Unlike linear systems, with nonlinear systems we don’t have guarantees of closed-form solutions, so solving them is harder</li>
 <li>We will study two types of methods: derivative-free and derivative-based</li>
 </ul>
 </section>
@@ -636,7 +636,7 @@ Diego S. Cardoso
 <div class="fragment">
 <p><strong>Let’s try it</strong></p>
 <ul>
-<li>We will Write a function that takes <code>(f, a, b)</code> and returns a root of <span class="math inline">\(f\)</span> using the bisection method.</li>
+<li>We will write a function that takes <code>(f, a, b)</code> and returns a root of <span class="math inline">\(f\)</span> using the bisection method.</li>
 <li>Then, we use it to find the root of <span class="math inline">\(f(x) = -x^{-2} + x - 1\)</span> between <span class="math inline">\([0.2, 4]\)</span></li>
 </ul>
 </div>
@@ -716,9 +716,14 @@ The root of f(x) is 3.9990234375</code></pre>
 <h2>Bisection method</h2>
 <p>So it’s a good idea to check if you have the right boundaries</p>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">f</span>(<span class="fl">2.0</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">f</span>(<span class="fl">4.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">f</span>(<span class="fl">2.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>0.75</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">f</span>(<span class="fl">4.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>2.9375</code></pre>
 </div>
 </div>
@@ -755,27 +760,27 @@ f(x) = 0 \Rightarrow g(x) = x - f(x)
 </section>
 <section id="function-iteration-1" class="slide level2">
 <h2>Function iteration</h2>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">function</span> <span class="fu">function_iteration</span>(f, initial_guess)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>    tolerance <span class="op">=</span> <span class="fl">1e-3</span>   <span class="co"># tolerance for solution</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>    difference <span class="op">=</span> <span class="cn">Inf</span>   <span class="co"># initialize difference</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>    x <span class="op">=</span> initial_guess  <span class="co"># initialize current value</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>    </span>
-<span id="cb8-6"><a href="#cb8-6"></a>    <span class="cf">while</span> <span class="fu">abs</span>(difference) <span class="op">&gt;</span> tolerance <span class="co"># loop until convergence</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>        <span class="fu">println</span>(<span class="st">"Intermediate guess: </span><span class="sc">$</span>x<span class="st">"</span>)</span>
-<span id="cb8-8"><a href="#cb8-8"></a>        x_prev <span class="op">=</span> x  <span class="co"># store previous value</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a>        x <span class="op">=</span> x_prev <span class="op">-</span> <span class="fu">f</span>(x_prev) <span class="co"># calculate next guess</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a>        difference <span class="op">=</span> x <span class="op">-</span> x_prev <span class="co"># update difference</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a>    <span class="cf">end</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a>    <span class="fu">println</span>(<span class="st">"The root of f(x) is </span><span class="sc">$</span>x<span class="st">"</span>)</span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">function</span> <span class="fu">function_iteration</span>(f, initial_guess)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    tolerance <span class="op">=</span> <span class="fl">1e-3</span>   <span class="co"># tolerance for solution</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>    difference <span class="op">=</span> <span class="cn">Inf</span>   <span class="co"># initialize difference</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>    x <span class="op">=</span> initial_guess  <span class="co"># initialize current value</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>    </span>
+<span id="cb10-6"><a href="#cb10-6"></a>    <span class="cf">while</span> <span class="fu">abs</span>(difference) <span class="op">&gt;</span> tolerance <span class="co"># loop until convergence</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>        <span class="fu">println</span>(<span class="st">"Intermediate guess: </span><span class="sc">$</span>x<span class="st">"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8"></a>        x_prev <span class="op">=</span> x  <span class="co"># store previous value</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a>        x <span class="op">=</span> x_prev <span class="op">-</span> <span class="fu">f</span>(x_prev) <span class="co"># calculate next guess</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a>        difference <span class="op">=</span> x <span class="op">-</span> x_prev <span class="co"># update difference</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a>    <span class="cf">end</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a>    <span class="fu">println</span>(<span class="st">"The root of f(x) is </span><span class="sc">$</span>x<span class="st">"</span>)</span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="function-iteration-2" class="slide level2">
 <h2>Function iteration</h2>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="op">-</span>x<span class="op">^</span>(<span class="op">-</span><span class="fl">2</span>) <span class="op">+</span> x <span class="op">-</span> <span class="fl">1</span>;</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">function_iteration</span>(f, <span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="op">-</span>x<span class="op">^</span>(<span class="op">-</span><span class="fl">2</span>) <span class="op">+</span> x <span class="op">-</span> <span class="fl">1</span>;</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">function_iteration</span>(f, <span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Intermediate guess: 1.0
 Intermediate guess: 2.0
@@ -814,7 +819,13 @@ The root of f(x) is 1.4658445625216316</code></pre>
 </section>
 <section id="function-iteration-4" class="slide level2">
 <h2>Function iteration</h2>
-<p>Function iteration is guaranteed to converge to a fixed point <span class="math inline">\(x^*\)</span> if 1. <span class="math inline">\(g\)</span> is differentiable, and 2. the initial guess is “sufficiently close” an <span class="math inline">\(x^*\)</span> at which <span class="math inline">\(\|g^\prime (x^{*}) \| &lt; 1\)</span></p>
+<p>Function iteration is guaranteed to converge to a fixed point <span class="math inline">\(x^*\)</span> if</p>
+<ol type="1">
+<li><span class="math inline">\(g\)</span> is differentiable, and</li>
+<li><ol start="2" type="1">
+<li>the initial guess is “sufficiently close” to an <span class="math inline">\(x^*\)</span> at which <span class="math inline">\(\|g^\prime (x^{*}) \| &lt; 1\)</span></li>
+</ol></li>
+</ol>
 <p>It may also converge when these conditions are not met</p>
 <p>Since this is an easy method to implement, it’s worth trying it before switching to more complex methods</p>
 </section>
@@ -900,29 +911,29 @@ f(\mathbf{x}) \approx f(\mathbf{x^{(k)}}) + f'(\mathbf{x^{(k)}})(\mathbf{x^{(k+1
 </section>
 <section id="newtons-method-5" class="slide level2">
 <h2>Newton’s method</h2>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">function</span> <span class="fu">newtons_method</span>(f, f_prime, initial_guess)</span>
-<span id="cb11-2"><a href="#cb11-2"></a>  tolerance <span class="op">=</span> <span class="fl">1e-3</span>   <span class="co"># tolerance for solution</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  difference <span class="op">=</span> <span class="cn">Inf</span>   <span class="co"># initialize difference</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  x <span class="op">=</span> initial_guess  <span class="co"># initialize current value</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>  </span>
-<span id="cb11-6"><a href="#cb11-6"></a>  <span class="cf">while</span> <span class="fu">abs</span>(difference) <span class="op">&gt;</span> tolerance <span class="co"># loop until convergence</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a>      <span class="fu">println</span>(<span class="st">"Intermediate guess: </span><span class="sc">$</span>x<span class="st">"</span>)</span>
-<span id="cb11-8"><a href="#cb11-8"></a>      x_prev <span class="op">=</span> x  <span class="co"># store previous value</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a>      x <span class="op">=</span> x_prev <span class="op">-</span> <span class="fu">f</span>(x_prev)<span class="op">/</span><span class="fu">f_prime</span>(x_prev) <span class="co"># calculate next guess</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a>      <span class="co"># ^ this is the only line that changes from function iteration</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a>      difference <span class="op">=</span> x <span class="op">-</span> x_prev <span class="co"># update difference</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a>  <span class="cf">end</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a>  <span class="fu">println</span>(<span class="st">"The root of f(x) is </span><span class="sc">$</span>x<span class="st">"</span>)</span>
-<span id="cb11-14"><a href="#cb11-14"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">function</span> <span class="fu">newtons_method</span>(f, f_prime, initial_guess)</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  tolerance <span class="op">=</span> <span class="fl">1e-3</span>   <span class="co"># tolerance for solution</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>  difference <span class="op">=</span> <span class="cn">Inf</span>   <span class="co"># initialize difference</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>  x <span class="op">=</span> initial_guess  <span class="co"># initialize current value</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>  </span>
+<span id="cb13-6"><a href="#cb13-6"></a>  <span class="cf">while</span> <span class="fu">abs</span>(difference) <span class="op">&gt;</span> tolerance <span class="co"># loop until convergence</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>      <span class="fu">println</span>(<span class="st">"Intermediate guess: </span><span class="sc">$</span>x<span class="st">"</span>)</span>
+<span id="cb13-8"><a href="#cb13-8"></a>      x_prev <span class="op">=</span> x  <span class="co"># store previous value</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a>      x <span class="op">=</span> x_prev <span class="op">-</span> <span class="fu">f</span>(x_prev)<span class="op">/</span><span class="fu">f_prime</span>(x_prev) <span class="co"># calculate next guess</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a>      <span class="co"># ^ this is the only line that changes from function iteration</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a>      difference <span class="op">=</span> x <span class="op">-</span> x_prev <span class="co"># update difference</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a>  <span class="cf">end</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a>  <span class="fu">println</span>(<span class="st">"The root of f(x) is </span><span class="sc">$</span>x<span class="st">"</span>)</span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="newtons-method-6" class="slide level2">
 <h2>Newton’s method</h2>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="op">-</span>x<span class="op">^</span>(<span class="op">-</span><span class="fl">2</span>) <span class="op">+</span> x <span class="op">-</span> <span class="fl">1</span>;</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">f_prime</span>(x) <span class="op">=</span> <span class="fl">2</span>x<span class="op">^</span>(<span class="op">-</span><span class="fl">3</span>) <span class="op">+</span> <span class="fl">1</span>;</span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">newtons_method</span>(f, f_prime, <span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="op">-</span>x<span class="op">^</span>(<span class="op">-</span><span class="fl">2</span>) <span class="op">+</span> x <span class="op">-</span> <span class="fl">1</span>;</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">f_prime</span>(x) <span class="op">=</span> <span class="fl">2</span>x<span class="op">^</span>(<span class="op">-</span><span class="fl">3</span>) <span class="op">+</span> <span class="fl">1</span>;</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="fu">newtons_method</span>(f, f_prime, <span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Intermediate guess: 1.0
 Intermediate guess: 1.3333333333333333
@@ -979,17 +990,17 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <section id="newtons-method-a-duopoly-example-2" class="slide level2">
 <h2>Newton’s method: a duopoly example</h2>
 <p>For this example, <span class="math inline">\(\epsilon = 1.6, c_1 = 0.6, c_2 = 0.8\)</span></p>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a>epsilon <span class="op">=</span> <span class="fl">1.6</span>; c <span class="op">=</span> [<span class="fl">0.6</span>; <span class="fl">0.8</span>]; <span class="co"># column vector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a>epsilon <span class="op">=</span> <span class="fl">1.6</span>; c <span class="op">=</span> [<span class="fl">0.6</span>; <span class="fl">0.8</span>]; <span class="co"># column vector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><span class="math inline">\(f(q)\)</span> will return a vector (<em>pay attention to how I used the dot syntax</em>)</p>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">function</span> <span class="fu">f</span>(q)</span>
-<span id="cb15-2"><a href="#cb15-2"></a>    Q <span class="op">=</span> <span class="fu">sum</span>(q)</span>
-<span id="cb15-3"><a href="#cb15-3"></a>    F <span class="op">=</span> Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">.-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>) <span class="op">.*</span>q <span class="op">.-</span> c <span class="op">.*</span>q</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="kw">end</span>;</span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="fu">f</span>([<span class="fl">0.2</span>; <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">function</span> <span class="fu">f</span>(q)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    Q <span class="op">=</span> <span class="fu">sum</span>(q)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    F <span class="op">=</span> Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">.-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>) <span class="op">.*</span>q <span class="op">.-</span> c <span class="op">.*</span>q</span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="kw">end</span>;</span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="fu">f</span>([<span class="fl">0.2</span>; <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>2-element Vector{Float64}:
  1.0989480808247896
  1.0589480808247895</code></pre>
@@ -1048,16 +1059,16 @@ c_{1} &amp; 0\\
 <section id="newtons-method-a-duopoly-example-6" class="slide level2">
 <h2>Newton’s method: a duopoly example</h2>
 <p>Now we define a function for the Jacobian</p>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">function</span> <span class="fu">f_jacobian</span>(q)</span>
-<span id="cb17-3"><a href="#cb17-3"></a>    Q <span class="op">=</span> <span class="fu">sum</span>(q)</span>
-<span id="cb17-4"><a href="#cb17-4"></a>    A <span class="op">=</span> (<span class="fl">1</span><span class="op">/</span>epsilon)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>)</span>
-<span id="cb17-5"><a href="#cb17-5"></a>    B <span class="op">=</span> (<span class="fl">1</span><span class="op">/</span>epsilon<span class="op">+</span><span class="fl">1</span>)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span>)</span>
-<span id="cb17-6"><a href="#cb17-6"></a>    J <span class="op">=</span> <span class="op">-</span>A <span class="op">.*</span> [<span class="fl">2</span> <span class="fl">1</span>; <span class="fl">1</span> <span class="fl">2</span>] <span class="op">+</span> (A<span class="op">*</span>B) <span class="op">.*</span> [q q] <span class="op">-</span> <span class="bu">LinearAlgebra</span>.<span class="fu">Diagonal</span>(c)</span>
-<span id="cb17-7"><a href="#cb17-7"></a><span class="kw">end</span>;</span>
-<span id="cb17-8"><a href="#cb17-8"></a><span class="fu">f_jacobian</span>([<span class="fl">0.2</span>; <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="kw">function</span> <span class="fu">f_jacobian</span>(q)</span>
+<span id="cb19-3"><a href="#cb19-3"></a>    Q <span class="op">=</span> <span class="fu">sum</span>(q)</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    A <span class="op">=</span> (<span class="fl">1</span><span class="op">/</span>epsilon)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>)</span>
+<span id="cb19-5"><a href="#cb19-5"></a>    B <span class="op">=</span> (<span class="fl">1</span><span class="op">/</span>epsilon<span class="op">+</span><span class="fl">1</span>)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span>)</span>
+<span id="cb19-6"><a href="#cb19-6"></a>    J <span class="op">=</span> <span class="op">-</span>A <span class="op">.*</span> [<span class="fl">2</span> <span class="fl">1</span>; <span class="fl">1</span> <span class="fl">2</span>] <span class="op">+</span> (A<span class="op">*</span>B) <span class="op">.*</span> [q q] <span class="op">-</span> <span class="bu">LinearAlgebra</span>.<span class="fu">Diagonal</span>(c)</span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="kw">end</span>;</span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="fu">f_jacobian</span>([<span class="fl">0.2</span>; <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>2×2 Matrix{Float64}:
  -3.88977   -0.519438
  -0.519438  -4.08977</code></pre>
@@ -1067,21 +1078,21 @@ c_{1} &amp; 0\\
 <section id="newtons-method-a-duopoly-example-7" class="slide level2">
 <h2>Newton’s method: a duopoly example</h2>
 <p>We need to write a new version of our Newton’s method so it can handle <span class="math inline">\(n\)</span>-dimensional functions</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">function</span> <span class="fu">newtons_method_multidim</span>(f, f_jacobian, initial_guess) </span>
-<span id="cb19-2"><a href="#cb19-2"></a>    tolerance <span class="op">=</span> <span class="fl">1e-3</span>   </span>
-<span id="cb19-3"><a href="#cb19-3"></a>    difference <span class="op">=</span> <span class="cn">Inf</span>   </span>
-<span id="cb19-4"><a href="#cb19-4"></a>    x <span class="op">=</span> initial_guess  </span>
-<span id="cb19-5"><a href="#cb19-5"></a>    </span>
-<span id="cb19-6"><a href="#cb19-6"></a>    <span class="cf">while</span> <span class="fu">norm</span>(difference) <span class="op">&gt;</span> tolerance <span class="co"># &lt;=== Changed here</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a>        <span class="fu">println</span>(<span class="st">"Intermediate guess: </span><span class="sc">$</span>x<span class="st">"</span>)</span>
-<span id="cb19-8"><a href="#cb19-8"></a>        x_prev <span class="op">=</span> x  </span>
-<span id="cb19-9"><a href="#cb19-9"></a>        x <span class="op">=</span> x_prev <span class="op">-</span> <span class="fu">f_jacobian</span>(x_prev)<span class="fu">\f</span>(x_prev) <span class="co"># &lt;=== and here</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a>        difference <span class="op">=</span> x <span class="op">-</span> x_prev </span>
-<span id="cb19-11"><a href="#cb19-11"></a>    <span class="cf">end</span></span>
-<span id="cb19-12"><a href="#cb19-12"></a>    <span class="fu">println</span>(<span class="st">"The root of f(x) is </span><span class="sc">$</span>x<span class="st">"</span>)</span>
-<span id="cb19-13"><a href="#cb19-13"></a>    <span class="cf">return</span> x</span>
-<span id="cb19-14"><a href="#cb19-14"></a>  <span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">function</span> <span class="fu">newtons_method_multidim</span>(f, f_jacobian, initial_guess) </span>
+<span id="cb21-2"><a href="#cb21-2"></a>    tolerance <span class="op">=</span> <span class="fl">1e-3</span>   </span>
+<span id="cb21-3"><a href="#cb21-3"></a>    difference <span class="op">=</span> <span class="cn">Inf</span>   </span>
+<span id="cb21-4"><a href="#cb21-4"></a>    x <span class="op">=</span> initial_guess  </span>
+<span id="cb21-5"><a href="#cb21-5"></a>    </span>
+<span id="cb21-6"><a href="#cb21-6"></a>    <span class="cf">while</span> <span class="fu">norm</span>(difference) <span class="op">&gt;</span> tolerance <span class="co"># &lt;=== Changed here</span></span>
+<span id="cb21-7"><a href="#cb21-7"></a>        <span class="fu">println</span>(<span class="st">"Intermediate guess: </span><span class="sc">$</span>x<span class="st">"</span>)</span>
+<span id="cb21-8"><a href="#cb21-8"></a>        x_prev <span class="op">=</span> x  </span>
+<span id="cb21-9"><a href="#cb21-9"></a>        x <span class="op">=</span> x_prev <span class="op">-</span> <span class="fu">f_jacobian</span>(x_prev)<span class="fu">\f</span>(x_prev) <span class="co"># &lt;=== and here</span></span>
+<span id="cb21-10"><a href="#cb21-10"></a>        difference <span class="op">=</span> x <span class="op">-</span> x_prev </span>
+<span id="cb21-11"><a href="#cb21-11"></a>    <span class="cf">end</span></span>
+<span id="cb21-12"><a href="#cb21-12"></a>    <span class="fu">println</span>(<span class="st">"The root of f(x) is </span><span class="sc">$</span>x<span class="st">"</span>)</span>
+<span id="cb21-13"><a href="#cb21-13"></a>    <span class="cf">return</span> x</span>
+<span id="cb21-14"><a href="#cb21-14"></a>  <span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="newtons-method-a-duopoly-example-8" class="slide level2">
@@ -1099,8 +1110,8 @@ c_{1} &amp; 0\\
 <section id="newtons-method-a-duopoly-example-9" class="slide level2">
 <h2>Newton’s method: a duopoly example</h2>
 <p>Let’s test it out with initial guess <span class="math inline">\((0.2, 0.2)\)</span></p>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a>x <span class="op">=</span> <span class="fu">newtons_method_multidim</span>(f, f_jacobian, [<span class="fl">0.2</span>; <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a>x <span class="op">=</span> <span class="fu">newtons_method_multidim</span>(f, f_jacobian, [<span class="fl">0.2</span>; <span class="fl">0.2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Intermediate guess: [0.2, 0.2]
 Intermediate guess: [0.4522233972882232, 0.4268911412785466]
@@ -1109,7 +1120,7 @@ Intermediate guess: [0.8359566131332257, 0.6874038938481142]
 Intermediate guess: [0.8395632064645864, 0.6887954351409207]
 The root of f(x) is [0.8395676035295858, 0.6887964311626718]</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>2-element Vector{Float64}:
  0.8395676035295858
  0.6887964311626718</code></pre>
@@ -1119,9 +1130,9 @@ The root of f(x) is [0.8395676035295858, 0.6887964311626718]</code></pre>
 <section id="newtons-method-a-duopoly-example-10" class="slide level2">
 <h2>Newton’s method: a duopoly example</h2>
 <p>Let’s check our solution</p>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">f</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">f</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>2-element Vector{Float64}:
  5.7654991891809004e-12
  9.037215420448774e-13</code></pre>
@@ -1286,10 +1297,10 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <section id="broydens-method-a-duopoly-example-1" class="slide level2">
 <h2>Broyden’s method: a duopoly example</h2>
 <p>Using our previously defined <span class="math inline">\(f\)</span>, we run</p>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a><span class="im">using</span> <span class="bu">NLsolve</span></span>
-<span id="cb25-2"><a href="#cb25-2"></a>NLsolve.<span class="fu">nlsolve</span>(f, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>broyden,</span>
-<span id="cb25-3"><a href="#cb25-3"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>, show_trace<span class="op">=:</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a><span class="im">using</span> <span class="bu">NLsolve</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>NLsolve.<span class="fu">nlsolve</span>(f, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>broyden,</span>
+<span id="cb27-3"><a href="#cb27-3"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>, show_trace<span class="op">=:</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Iter     f(x) inf-norm    Step 2-norm 
 ------   --------------   --------------
@@ -1305,7 +1316,7 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
      9     3.116015e-10     1.486563e-13
     10     1.252332e-13     1.177236e-19</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: broyden without line-search
  * Starting Point: [1.0, 2.0]
@@ -1342,10 +1353,10 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <section id="nlsolve.jl" class="slide level2">
 <h2><code>NLsolve.jl</code></h2>
 <p>We can use this package to solve with Newton’s method as well. Here we make use of the analytic Jacobian we defined earlier</p>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, f_jacobian, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
-<span id="cb28-2"><a href="#cb28-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, f_jacobian, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
+<span id="cb30-2"><a href="#cb30-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: Newton with line-search
  * Starting Point: [1.0, 2.0]
@@ -1363,10 +1374,10 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <section id="nlsolve.jl-1" class="slide level2">
 <h2><code>NLsolve.jl</code></h2>
 <p>If you omit the Jacobian, <code>nlsolve</code> will calculate it numerically for you using centered finite differencing</p>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
-<span id="cb30-2"><a href="#cb30-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
+<span id="cb32-2"><a href="#cb32-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: Newton with line-search
  * Starting Point: [1.0, 2.0]
@@ -1384,10 +1395,10 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <section id="nlsolve.jl-2" class="slide level2">
 <h2><code>NLsolve.jl</code></h2>
 <p>You can add argument <code>autodiff=:forward</code> to use forward autodifferentiation instead of finite differences</p>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton, autodiff<span class="op">=:</span>forward,</span>
-<span id="cb32-2"><a href="#cb32-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a>NLsolve.<span class="fu">nlsolve</span>(f, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton, autodiff<span class="op">=:</span>forward,</span>
+<span id="cb34-2"><a href="#cb34-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: Newton with line-search
  * Starting Point: [1.0, 2.0]
@@ -1405,11 +1416,11 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <section id="quick-detour" class="slide level2">
 <h2>Quick detour</h2>
 <p>Before we continue, take a look again at our <span class="math inline">\(f\)</span></p>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">function</span> <span class="fu">f</span>(q)</span>
-<span id="cb34-2"><a href="#cb34-2"></a>    Q <span class="op">=</span> <span class="fu">sum</span>(q)</span>
-<span id="cb34-3"><a href="#cb34-3"></a>    F <span class="op">=</span> Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">.-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>) <span class="op">.*</span>q <span class="op">.-</span> c <span class="op">.*</span>q</span>
-<span id="cb34-4"><a href="#cb34-4"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">function</span> <span class="fu">f</span>(q)</span>
+<span id="cb36-2"><a href="#cb36-2"></a>    Q <span class="op">=</span> <span class="fu">sum</span>(q)</span>
+<span id="cb36-3"><a href="#cb36-3"></a>    F <span class="op">=</span> Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">.-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)Q<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>) <span class="op">.*</span>q <span class="op">.-</span> c <span class="op">.*</span>q</span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="kw">end</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Do you see any potential inefficiency?</p>
 <div class="fragment">
@@ -1420,15 +1431,15 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <section id="quick-detour-functions-that-modify-arguments" class="slide level2">
 <h2>Quick detour: functions that modify arguments</h2>
 <p>By convention, in Julia we name functions that modify arguments with a <code>!</code> at the end. For our <span class="math inline">\(f\)</span>, we can define</p>
-<div class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">function</span> <span class="fu">f!</span>(F, q)</span>
-<span id="cb35-2"><a href="#cb35-2"></a>    F[<span class="fl">1</span>] <span class="op">=</span> <span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)<span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>)<span class="op">*</span>q[<span class="fl">1</span>] <span class="op">-</span> c[<span class="fl">1</span>]<span class="op">*</span>q[<span class="fl">1</span>]</span>
-<span id="cb35-3"><a href="#cb35-3"></a>    F[<span class="fl">2</span>] <span class="op">=</span> <span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)<span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>)<span class="op">*</span>q[<span class="fl">2</span>] <span class="op">-</span> c[<span class="fl">2</span>]<span class="op">*</span>q[<span class="fl">2</span>]</span>
-<span id="cb35-4"><a href="#cb35-4"></a><span class="kw">end</span>;</span>
-<span id="cb35-5"><a href="#cb35-5"></a>F <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">2</span>) <span class="co"># This allocates a 2-vector with elements equal to zero</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a><span class="fu">f!</span>(F, [<span class="fl">0.2</span>; <span class="fl">0.2</span>]); <span class="co"># Note the first argument is a pre-allocated vector</span></span>
-<span id="cb35-7"><a href="#cb35-7"></a>F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">function</span> <span class="fu">f!</span>(F, q)</span>
+<span id="cb37-2"><a href="#cb37-2"></a>    F[<span class="fl">1</span>] <span class="op">=</span> <span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)<span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>)<span class="op">*</span>q[<span class="fl">1</span>] <span class="op">-</span> c[<span class="fl">1</span>]<span class="op">*</span>q[<span class="fl">1</span>]</span>
+<span id="cb37-3"><a href="#cb37-3"></a>    F[<span class="fl">2</span>] <span class="op">=</span> <span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon) <span class="op">-</span> (<span class="fl">1</span><span class="op">/</span>epsilon)<span class="fu">sum</span>(q)<span class="op">^</span>(<span class="op">-</span><span class="fl">1</span><span class="op">/</span>epsilon<span class="op">-</span><span class="fl">1</span>)<span class="op">*</span>q[<span class="fl">2</span>] <span class="op">-</span> c[<span class="fl">2</span>]<span class="op">*</span>q[<span class="fl">2</span>]</span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="kw">end</span>;</span>
+<span id="cb37-5"><a href="#cb37-5"></a>F <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">2</span>) <span class="co"># This allocates a 2-vector with elements equal to zero</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="fu">f!</span>(F, [<span class="fl">0.2</span>; <span class="fl">0.2</span>]); <span class="co"># Note the first argument is a pre-allocated vector</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a>F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>2-element Vector{Float64}:
  1.0989480808247896
  1.0589480808247895</code></pre>
@@ -1439,10 +1450,10 @@ f_2(q_1, q_2) &amp; = (q_1 + q_2)^{-1/\epsilon} - (1/\epsilon)(q_1 + q_2)^{-1/\e
 <h2>Quick detour: functions that modify arguments</h2>
 <p><code>NLsolve.nlsolve</code> understands when we pass a <code>!</code> function and pre-allocates the vector for us</p>
 <p>Because it allocates only once, it will be more efficient</p>
-<div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1"></a>NLsolve.<span class="fu">nlsolve</span>(f!, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
-<span id="cb37-2"><a href="#cb37-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1"></a>NLsolve.<span class="fu">nlsolve</span>(f!, [<span class="fl">1.0</span>; <span class="fl">2.0</span>], method<span class="op">=:</span>newton,</span>
+<span id="cb39-2"><a href="#cb39-2"></a>                xtol<span class="op">=:</span><span class="fl">1e-8</span>, ftol<span class="op">=:</span><span class="fl">0.0</span>, iterations<span class="op">=:</span><span class="fl">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>Results of Nonlinear Solver Algorithm
  * Algorithm: Newton with line-search
  * Starting Point: [1.0, 2.0]

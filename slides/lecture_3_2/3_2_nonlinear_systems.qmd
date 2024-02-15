@@ -43,7 +43,7 @@ Pkg.add("NLsolve"); Pkg.add("LinearAlgebra");
 ## Agenda {background-color="gold"}
 
 -   We continue our study of methods to solve systems of equations, now looking at systems that contain nonlinear equations
--   Unlike linear systems, nonlinear systems we don't have guarantees of closed-form solutions, so solving them is harder
+-   Unlike linear systems, with nonlinear systems we don't have guarantees of closed-form solutions, so solving them is harder
 -   We will study two types of methods: derivative-free and derivative-based
 
 ## Main references for today {background-color="gold"}
@@ -253,7 +253,7 @@ Here are the basic steps:
 
 **Let's try it**
 
--   We will Write a function that takes `(f, a, b)` and returns a root of $f$ using the bisection method.
+-   We will write a function that takes `(f, a, b)` and returns a root of $f$ using the bisection method.
 -   Then, we use it to find the root of $f(x) = -x^{-2} + x - 1$ between $[0.2, 4]$
 
 ## Bisection method
@@ -309,6 +309,9 @@ So it's a good idea to check if you have the right boundaries
 
 ```{julia}
 f(2.0)
+```
+
+```{julia}
 f(4.0)
 ```
 
@@ -388,7 +391,10 @@ A fixed point $x = g(x)$ is at the intersection between $g(x)$ and the 45<sup>o<
 
 ## Function iteration
 
-Function iteration is guaranteed to converge to a fixed point $x^*$ if 1. $g$ is differentiable, and 2. the initial guess is "sufficiently close" an $x^*$ at which $\|g^\prime (x^{*}) \| < 1$
+Function iteration is guaranteed to converge to a fixed point $x^*$ if 
+
+1. $g$ is differentiable, and 
+2. 2. the initial guess is "sufficiently close" to an $x^*$ at which $\|g^\prime (x^{*}) \| < 1$
 
 It may also converge when these conditions are not met
 

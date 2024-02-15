@@ -25,3 +25,5 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
 
 - Unit 3 - Systems of equations
   - Lecture 3.1 - [Linear systems](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_3_1/3_1_linear_equations.html)
+  - Lecture 3.2 - [Nonlinear systems](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_3_2/3_2_nonlinear_systems.html)
+  - Lecture 3.3 - [Complementarity problems](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_3_3/3_3_complementarity.html)

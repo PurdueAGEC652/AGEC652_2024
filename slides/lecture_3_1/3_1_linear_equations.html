@@ -871,9 +871,9 @@ x_1 = &amp; (y_1 - u_{13}y_1 - u_{12}y_2)/u_{11} = [10 - (3)(1) - (2)(2)]/(-3) =
 <span id="cb6-10"><a href="#cb6-10"></a>LU is <span class="op">$</span>(<span class="fu">round</span>(cramer_time<span class="op">/</span>lu_time, digits <span class="op">=</span> <span class="fl">0</span>)) times faster </span>
 <span id="cb6-11"><a href="#cb6-11"></a> and uses <span class="op">$</span>(<span class="fu">round</span>(lu_allocation<span class="op">/</span>cramer_allocation<span class="op">*</span><span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">2</span>))<span class="op">%</span>  of the memory.<span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Cramer's rule solved in 7.678292748 seconds and used 16016296704 kilobytes of memory.
-LU solved in 0.007972891 seconds and used 8016304 kilobytes of memory.
-LU is 963.0 times faster 
+<pre><code>Cramer's rule solved in 7.244900299 seconds and used 16016296704 kilobytes of memory.
+LU solved in 0.007581173 seconds and used 8016304 kilobytes of memory.
+LU is 956.0 times faster 
  and uses 0.05%  of the memory.</code></pre>
 </div>
 </div>
@@ -892,9 +892,9 @@ LU is 963.0 times faster
 <span id="cb8-8"><a href="#cb8-8"></a>LU is <span class="op">$</span>(<span class="fu">round</span>(invers_time<span class="op">/</span>lu_time, digits <span class="op">=</span> <span class="fl">2</span>)) times faster</span>
 <span id="cb8-9"><a href="#cb8-9"></a> and uses <span class="op">$</span>(<span class="fu">round</span>(lu_allocation<span class="op">/</span>invers_allocation<span class="op">*</span><span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">2</span>))<span class="op">%</span>  of the memory.<span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Matrix inversion solved in 0.139332145 seconds and used 8528432 kilobytes of memory.
-LU solved in 0.007972891 seconds and used 8016304 kilobytes of memory.
-LU is 17.48 times faster
+<pre><code>Matrix inversion solved in 0.150203618 seconds and used 8528432 kilobytes of memory.
+LU solved in 0.007581173 seconds and used 8016304 kilobytes of memory.
+LU is 19.81 times faster
  and uses 94.0%  of the memory.</code></pre>
 </div>
 </div>

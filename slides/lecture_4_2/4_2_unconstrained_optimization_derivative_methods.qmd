@@ -317,9 +317,11 @@ The optimization method analogous to Broyden's that also uses the *secant condit
 
 
 
-## Linear search methods in Julia
+## Linear search methods in practice
 
 Once again, we will use `Optim.jl`. We'll see an example with an easy function, solving it using Steepest Descent, Newton-Raphson, and BFGS
+
+- In Python, the `scipy.optimize` interface offers a [implementations for all these methods](https://docs.scipy.org/doc/scipy/tutorial/optimize.html#unconstrained-minimization-of-multivariate-scalar-functions-minimize)
 
 $$
 (x_1, x_2) = ax_1^2 + bx_2^2 + cx_1 + dx_2 + ex_1 x_2
@@ -344,7 +346,8 @@ curve_levels = exp.(0:log(1.2):log(500)) .- 5; # Define manual, log-scale levels
 ```
 
 ```{julia, echo=FALSE}
-Plots.contour(-5.0:0.1:10.0, -5:0.1:10.0, (x,y)->f([x, y]), fill = true, levels = curve_levels, size = (400, 300))
+Plots.contour(-5.0:0.1:10.0, -5:0.1:10.0, (x,y)->f([x, y]),
+              fill = true, levels = curve_levels, size = (400, 300))
 ```
 
 
@@ -702,13 +705,14 @@ Full trajectory
 
 
 
-## Trust region methods in Julia
-
-`Optim` includes a `NewtonTrustRegion()` solution method. To use it, you can call `optimize` just like you did with `Newton()`
-
-
-
 ## Trust region methods in practice
+
+- In Julia, `Optim` includes a `NewtonTrustRegion()` solution method. To use it, you can call `optimize` just like you did with `Newton()`
+- In Python, the `scipy.optimize` interface offers [Newton-based and other trust region methods](https://docs.scipy.org/doc/scipy/tutorial/optimize.html#unconstrained-minimization-of-multivariate-scalar-functions-minimize)
+
+
+
+## Trust region methods in Julia
 
 
 Let's use `Optim` and `NewtonTrustRegion` to solve the same quadratic function from before^[*Use default parameters. You can tweak solver parameters later by checking out the documentation [https://julianlsolvers.github.io/Optim.jl/stable/#algo/newton_trust_region/](https://julianlsolvers.github.io/Optim.jl/stable/#algo/newton_trust_region/)]

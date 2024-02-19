@@ -393,7 +393,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">AGEC 652 - Lecture 4.1</h1>
-  <p class="subtitle">Unconstrained optimization</p>
+  <p class="subtitle">Unconstrained optimization: intro</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -883,6 +883,9 @@ f(x, y) = (a - x)^2  + b(y - x^2)^2
 <h2>Nelder-Mead in Julia</h2>
 <p>Nelder-Mead is a pain to code efficiently: don’t spend the time doing it yourself!</p>
 <p>For unconstrained optimization, Julia’s most mature package is <code>Optim.jl</code>, which includes NM</p>
+<ul>
+<li>In Python, the <code>scipy.optimize</code> interface offers a <a href="https://docs.scipy.org/doc/scipy/tutorial/optimize.html#nelder-mead-simplex-algorithm-method-nelder-mead">solid implementation of NM</a></li>
+</ul>
 <div class="fragment">
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">using</span> <span class="bu">Optim;</span></span>

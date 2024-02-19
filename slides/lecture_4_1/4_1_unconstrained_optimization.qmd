@@ -1,6 +1,6 @@
 ---
 title: "AGEC 652 - Lecture 4.1"
-subtitle: "Unconstrained optimization"
+subtitle: "Unconstrained optimization: intro"
 author: "Diego S. Cardoso"
 institute: "Purdue University"
 execute:
@@ -481,6 +481,8 @@ Its global minimizer is $(x, y) = (a, a^2 )$
 Nelder-Mead is a pain to code efficiently: don't spend the time doing it yourself!
 
 For unconstrained optimization, Julia's most mature package is `Optim.jl`, which includes NM
+
+- In Python, the `scipy.optimize` interface offers a [solid implementation of NM](https://docs.scipy.org/doc/scipy/tutorial/optimize.html#nelder-mead-simplex-algorithm-method-nelder-mead)
 
 . . .
 

@@ -1,6 +1,6 @@
 # Syllabus AGEC 652 – Spring 2024 <!-- omit in toc -->
 
-*This syllabus is subject to revisions. You will be notified of any changes. Please monitor your Purdue email and Brightspace for updates. This version was created on Jan. 8, 2024.*
+*This syllabus is subject to revisions. You will be notified of any changes. Please monitor your Purdue email and Brightspace for updates. This version was created on Feb. 20, 2024. (Changes the date of the midterm exam).*
 
 
 
@@ -248,19 +248,19 @@ The planned schedule below lists the topics we will cover in this course and the
 
 5. Introduction and overview of methods *(week 9)*
 
-**Midterm exam: March 7 (tentative)**
-
 *(Week 10: Spring break)*
 
-6. Maximum likelihood estimation *(weeks 11-12)*
+**Midterm exam: March 21**
+
+1. Maximum likelihood estimation *(weeks 11-12)*
    1. Theory and properties
    2. Applications: random utility and discrete choice
 
-7. Generalized method of moments *(weeks 13-14)*
+2. Generalized method of moments *(weeks 13-14)*
    1. Theory and properties
    2. Applications: estimating games
 
-8. Simulation-based estimation *(weeks 15-16)*
+3. Simulation-based estimation *(weeks 15-16)*
    1. Theory and properties
    2. Applications
 

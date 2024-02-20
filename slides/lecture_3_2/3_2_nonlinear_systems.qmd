@@ -988,7 +988,7 @@ Rootfinding algorithms will converge at different speeds in terms of the number 
 A sequence of iterates $x^{(k)}$ is said to converge to $x^*$ at a rate of order $p$ if there is a constant $C$ such that
 
 $$
-\|x^{(k+1)}-x^{\*}\|\leq C \|x^{(k)} - x^{\*}\|^p
+\|x^{(k+1)}-x^{*}\|\leq C \|x^{(k)} - x^{*}\|^p
 $$
 
 for sufficiently large $k$
@@ -996,7 +996,7 @@ for sufficiently large $k$
 ## Convergence speed
 
 $$
-\|x^{(k+1)}-x^{\*}\|\leq C \|x^{(k)} - x^{\*}\|^p
+\|x^{(k+1)}-x^{*}\|\leq C \|x^{(k)} - x^{*}\|^p
 $$
 
 -   If $C < 1$ and $p = 1$: linear convergence

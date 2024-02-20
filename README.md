@@ -27,3 +27,7 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
   - Lecture 3.1 - [Linear systems](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_3_1/3_1_linear_equations.html)
   - Lecture 3.2 - [Nonlinear systems](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_3_2/3_2_nonlinear_systems.html)
   - Lecture 3.3 - [Complementarity problems](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_3_3/3_3_complementarity.html)
+ 
+- Unit 4 - Optimization
+  - Lecture 4.1 - [Unconstrained optimization: intro](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_4_1/4_1_unconstrained_optimization.html)
+

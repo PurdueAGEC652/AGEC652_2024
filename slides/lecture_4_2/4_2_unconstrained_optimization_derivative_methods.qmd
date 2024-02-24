@@ -313,6 +313,7 @@ $$
 . . .
 
 The optimization method analogous to Broyden's that also uses the *secant condition* is the **BFGS method**
+
 - Named after its inventors, Broyden, Fletcher, Goldfarb, Shanno
 
 
@@ -510,14 +511,12 @@ Optim.optimize(f, x0, BFGS())
 
 ## Trust region methods
 
-Trust region methods construct an approximating model, $m_k$
-whose behavior near the current iterate $x_k$ is close to that of the actual function $f$
+Trust region methods construct an approximating model, $m_k$ whose behavior near the current iterate $x_k$ is close to that of the actual function $f$
 
 ![](figures/trust_region_shape.png){fig-align="center"}
 
 
 We then search for a minimizer of $m_k$
-
 
 
 

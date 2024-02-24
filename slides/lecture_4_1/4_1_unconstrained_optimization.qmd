@@ -309,7 +309,10 @@ How do we pick $x_1$ and $x_2$?
 
 . . .
 
-Achievable goal for selection process: - New interval is independent of whether the upper or lower bound is replaced - Only requires one function evaluation per iteration
+Achievable goal for selection process: 
+
+- New interval is independent of whether the upper or lower bound is replaced 
+- Only requires one function evaluation per iteration
 
 . . .
 

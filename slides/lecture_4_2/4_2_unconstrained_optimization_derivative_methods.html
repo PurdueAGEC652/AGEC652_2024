@@ -547,7 +547,7 @@ Diego S. Cardoso
 <div class="fragment">
 <p>For any direction <span class="math inline">\(p\)</span> and step length <span class="math inline">\(\alpha\)</span>, we have that</p>
 <p><span class="math display">\[
-f(x_k + \alpha p) = f(x_k) + \alpha\,p^T\,\nabla\,f_k + \frac{1}{2!}\,\alpha^2p^T\,\nabla^2\,f(x_k+tp)\,p
+f(x_k + \alpha p) = f(x_k) + \alpha p^T \nabla f_k + \frac{1}{2!}\alpha^2 p^T\nabla^2 f_k p
 \]</span></p>
 </div>
 <div class="fragment">
@@ -627,15 +627,10 @@ p^N_k = -[\nabla^2 f_k]^{-1}\nabla f_k
 <p>The algorithm is pretty much the same as in Newton’s rootfinding method</p>
 <ol type="1">
 <li>Start with an initial guess <span class="math inline">\(x_0\)</span></li>
-<li>Repeat until convergence</li>
-</ol>
-<ul>
-<li><span class="math inline">\(x_{k+1} \leftarrow x_{k} - \alpha_k [\nabla^2 f_k]^{-1}\nabla f_k\)</span>
-<ul>
-<li>where <span class="math inline">\(\alpha_k\)</span> comes from a step length selection algorithm</li>
-</ul></li>
-</ul>
-<ol start="3" type="1">
+<li>Repeat until convergence
+<ol type="1">
+<li><span class="math inline">\(x_{k+1} \leftarrow x_{k} - \alpha_k [\nabla^2 f_k]^{-1}\nabla f_k\)</span>, where <span class="math inline">\(\alpha_k\)</span> comes from a step length selection algorithm</li>
+</ol></li>
 <li>Terminate with <span class="math inline">\(x^* = x_{k}\)</span></li>
 </ol>
 <div class="fragment">
@@ -676,7 +671,7 @@ d_k = -B_k \nabla f_k
 <h2>Linear search methods in practice</h2>
 <p>Once again, we will use <code>Optim.jl</code>. We’ll see an example with an easy function, solving it using Steepest Descent, Newton-Raphson, and BFGS</p>
 <ul>
-<li>In Python, the <code>scipy.optimize</code> interface offers a <a href="https://docs.scipy.org/doc/scipy/tutorial/optimize.html#unconstrained-minimization-of-multivariate-scalar-functions-minimize">implementations for all these methods</a></li>
+<li>In Python, the <code>scipy.optimize</code> interface offers <a href="https://docs.scipy.org/doc/scipy/tutorial/optimize.html#unconstrained-minimization-of-multivariate-scalar-functions-minimize">implementations for all these methods</a></li>
 </ul>
 <p><span class="math display">\[
 (x_1, x_2) = ax_1^2 + bx_2^2 + cx_1 + dx_2 + ex_1 x_2

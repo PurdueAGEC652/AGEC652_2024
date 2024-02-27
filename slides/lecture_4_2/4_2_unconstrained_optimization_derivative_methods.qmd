@@ -176,7 +176,7 @@ We can verify this is the direction of steepest descent by referring to Taylor's
 For any direction $p$ and step length $\alpha$, we have that
 
 $$
-f(x_k + \alpha p) = f(x_k) + \alpha\,p^T\,\nabla\,f_k + \frac{1}{2!}\,\alpha^2p^T\,\nabla^2\,f(x_k+tp)\,p
+f(x_k + \alpha p) = f(x_k) + \alpha p^T \nabla f_k + \frac{1}{2!}\alpha^2 p^T\nabla^2 f_k p
 $$
 
 . . .
@@ -276,8 +276,7 @@ The algorithm is pretty much the same as in Newton's rootfinding method
 
 1. Start with an initial guess $x_0$
 2. Repeat until convergence
-  - $x_{k+1} \leftarrow x_{k} - \alpha_k [\nabla^2 f_k]^{-1}\nabla f_k$
-      - where $\alpha_k$ comes from a step length selection algorithm
+   1. $x_{k+1} \leftarrow x_{k} - \alpha_k [\nabla^2 f_k]^{-1}\nabla f_k$, where $\alpha_k$ comes from a step length selection algorithm
 3. Terminate with $x^* = x_{k}$
 
 . . .
@@ -322,7 +321,7 @@ The optimization method analogous to Broyden's that also uses the *secant condit
 
 Once again, we will use `Optim.jl`. We'll see an example with an easy function, solving it using Steepest Descent, Newton-Raphson, and BFGS
 
-- In Python, the `scipy.optimize` interface offers a [implementations for all these methods](https://docs.scipy.org/doc/scipy/tutorial/optimize.html#unconstrained-minimization-of-multivariate-scalar-functions-minimize)
+- In Python, the `scipy.optimize` interface offers [implementations for all these methods](https://docs.scipy.org/doc/scipy/tutorial/optimize.html#unconstrained-minimization-of-multivariate-scalar-functions-minimize)
 
 $$
 (x_1, x_2) = ax_1^2 + bx_2^2 + cx_1 + dx_2 + ex_1 x_2

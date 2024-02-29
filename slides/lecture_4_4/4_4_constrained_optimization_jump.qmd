@@ -170,7 +170,7 @@ $$
 $$
 
 ```{julia}
-f(x1,x2) = -exp(-(x1*x2 - 3/2)^2 - (x2-3/2)^2);
+f(x_1,x_2) = -exp(-(x_1*x_2 - 3/2)^2 - (x_2-3/2)^2);
 ```
 
 
@@ -202,15 +202,15 @@ We will focus on non-negative values
 
 ```{julia}
 #| output: true
-@variable(model, x1 >=0)
+@variable(model, x_1 >=0)
 ```
 
 ```{julia}
 #| output: true
-@variable(model, x2 >=0)
+@variable(model, x_2 >=0)
 ```
 
-- You could type `@variable(model, x1)` to declare a $x_1$ as a free variable
+- You could type `@variable(model, x_1)` to declare a $x_1$ as a free variable
 
 
 
@@ -218,7 +218,7 @@ We will focus on non-negative values
 ## Follow along: declare objective
 
 ```{julia}
-@objective(model, Min, f(x1,x2))
+@objective(model, Min, f(x_1,x_2))
 ```
 
 . . .
@@ -238,7 +238,7 @@ register(model, :my_f, n, f, grad, hessian)
 
 First, let's solve the (mostly) unconstrained problem
 
-- Not really unconstrained because we defined non-negative `x1` and `x2` 
+- Not really unconstrained because we defined non-negative `x_1` and `x_2` 
 
 Checking our model
 ```{julia}
@@ -271,10 +271,10 @@ optimize!(model);
 ```
 
 ```{julia}
-unc_x1 = value(x1)
+unc_x_1 = value(x_1)
 ```
 ```{julia}
-unc_x2 = value(x2)
+unc_x_2 = value(x_2)
 ```
 ```{julia}
 unc_obj = objective_value(model)
@@ -311,7 +311,7 @@ Let's add a nonlinear equality constraint $-x_1 + x^2 = 0$ and re-solve the mode
 
 ```{julia}
 #| output: asis
-@constraint(model, -x1 +x2^2 == 0)
+@constraint(model, -x_1 +x_2^2 == 0)
 ```
 ```{julia}
 #| output: asis
@@ -332,13 +332,13 @@ optimize!(model)
 ```
 
 ```{julia}
-eqcon_x1 = value(x1)
+eqcon_x_1 = value(x_1)
 ```
 ```{julia}
-eqcon_x2 = value(x2)
+eqcon_x_2 = value(x_2)
 ```
 ```{julia}
-value(-x1 + x2^2) # We can evaluate expressions too
+value(-x_1 + x_2^2) # We can evaluate expressions too
 ```
 ```{julia}
 eqcon_obj = objective_value(model)
@@ -358,10 +358,10 @@ Next, let's now initialize a new model with inequality constraint $-x_1 + x^2 \l
 
 ```{julia}
 model2 = Model(Ipopt.Optimizer);
-@variable(model2, x1 >=0);
-@variable(model2, x2 >=0);
-@objective(model2, Min, f(x1, x2));
-@constraint(model2, -x1 + x2^2 <= 0);
+@variable(model2, x_1 >=0);
+@variable(model2, x_2 >=0);
+@objective(model2, Min, f(x_1, x_2));
+@constraint(model2, -x_1 + x_2^2 <= 0);
 optimize!(model2);
 ```
 
@@ -370,10 +370,10 @@ optimize!(model2);
 ## Solving the inequality constrained model
 
 ```{julia}
-ineqcon_x1 = value(x1)
+ineqcon_x_1 = value(x_1)
 ```
 ```{julia}
-ineqcon_x2 = value(x2)
+ineqcon_x_2 = value(x_2)
 ```
 ```{julia}
 ineqcon_obj = objective_value(model2)
@@ -395,10 +395,10 @@ What if instead we use inequality constraint $-x_1 + x^2 \leq 1.5$?
 
 ```{julia}
 model3 = Model(Ipopt.Optimizer);
-@variable(model3, x1 >=0);
-@variable(model3, x2 >=0);
-@objective(model3, Min, f(x1, x2));
-@constraint(model3, c1, -x1 + x2^2 <= 1.5);
+@variable(model3, x_1 >=0);
+@variable(model3, x_2 >=0);
+@objective(model3, Min, f(x_1, x_2));
+@constraint(model3, c1, -x_1 + x_2^2 <= 1.5);
 optimize!(model3);
 ```
 
@@ -410,10 +410,10 @@ optimize!(model3);
 ineqcon2_obj = objective_value(model3)
 ```
 ```{julia}
-ineqcon2_x1 = value(x1)
+ineqcon2_x_1 = value(x_1)
 ```
 ```{julia}
-ineqcon2_x2 = value(x2)
+ineqcon2_x_2 = value(x_2)
 ```
 
 We get the same results as in the unconstrained case

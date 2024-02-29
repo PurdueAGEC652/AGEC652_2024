@@ -30,4 +30,6 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
  
 - Unit 4 - Optimization
   - Lecture 4.1 - [Unconstrained optimization: intro](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_4_1/4_1_unconstrained_optimization.html)
+  - Lecture 4.2 - [Line search and trust region methods](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_4_2/4_2_unconstrained_optimization_derivative_methods.html)
+  - Lecture 4.3 - [Constrained optimization: theory and algorithms](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_4_3/4_3_constrained_optimization_algorithms.html)
 

@@ -539,7 +539,7 @@ Diego S. Cardoso
 <h2>Follow along: initialize model</h2>
 <p>Initialize the model for <code>Ipopt</code></p>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>model <span class="op">=</span> <span class="fu">Model</span>(Ipopt.Optimizer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a>my_first_model <span class="op">=</span> <span class="fu">Model</span>(Ipopt.Optimizer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>A JuMP Model
 Feasibility problem with:
@@ -553,7 +553,7 @@ Solver name: Ipopt</code></pre>
 <p>You can set optimzer parameters like this (there are TONS of parameters you can adjust (see the <a href="https://coin-or.github.io/Ipopt/OPTIONS.html">manual</a>)</p>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># This is relative tol. Default is 1e-8</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">set_optimizer_attribute</span>(model, <span class="st">"tol"</span>, <span class="fl">1e-6</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">set_optimizer_attribute</span>(my_first_model, <span class="st">"tol"</span>, <span class="fl">1e-9</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -561,32 +561,34 @@ Solver name: Ipopt</code></pre>
 <h2>Follow along: declare variables</h2>
 <p>We will focus on non-negative values</p>
 <div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="pp">@variable</span>(model, x_1 <span class="op">&gt;=</span><span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="pp">@variable</span>(my_first_model, x_1 <span class="op">&gt;=</span><span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <p>$ x_1 $</p>
 </div>
 </div>
 <div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="pp">@variable</span>(model, x_2 <span class="op">&gt;=</span><span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="pp">@variable</span>(my_first_model, x_2 <span class="op">&gt;=</span><span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <p>$ x_2 $</p>
 </div>
 </div>
 <ul>
-<li>You could type <code>@variable(model, x_1)</code> to declare a <span class="math inline">\(x_1\)</span> as a free variable</li>
+<li>You could type <code>@variable(my_model, x_1)</code> to declare a <span class="math inline">\(x_1\)</span> as a free variable</li>
+<li>If you want to define the initial guess for the variable, you can do it with the <code>start</code> argument like this</li>
 </ul>
+<pre><code>@variable(my_first_model, x_1 &gt;=0, start = 0)</code></pre>
 </section>
 <section id="follow-along-declare-objective" class="slide level2">
 <h2>Follow along: declare objective</h2>
 <div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="pp">@objective</span>(model, Min, <span class="fu">f</span>(x_1,x_2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="pp">@objective</span>(my_first_model, Min, <span class="fu">f</span>(x_1,x_2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <p>$ ({({{({{(x_1x_2 - 1.5)} ^ {2.0}})} - {(x_2^2 - 3 x_2 + 2.25)}})}) $</p>
 </div>
 </div>
 <div class="fragment">
 <p><code>JuMP</code> will use autodiff (with <code>ForwardDiff</code> package) by default. If you want to use your define gradient and Hessian, you need to “register” the function like this</p>
-<pre><code>register(model, :my_f, n, f, grad, hessian)</code></pre>
+<pre><code>register(my_first_model, :my_f, n, f, grad, hessian)</code></pre>
 <ul>
 <li><code>:my_f</code> is the name you want to use inside <code>model</code>, <code>n</code> is the number of variables <code>f</code> takes, and <code>grad</code> <code>hessian</code> are user-defined functions</li>
 </ul>
@@ -600,7 +602,7 @@ Solver name: Ipopt</code></pre>
 </ul>
 <p>Checking our model</p>
 <div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">print</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">print</span>(my_first_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><span class="math display">\[ \begin{aligned}
 \min\quad &amp; \textsf{-}\left({\textsf{exp}\left({{\textsf{-}\left({{\left(x\_1\times x\_2 - 1.5\right)} ^ {2.0}}\right)} - {\left(x\_2^2 - 3 x\_2 + 2.25\right)}}\right)}\right)\\
@@ -613,7 +615,7 @@ Solver name: Ipopt</code></pre>
 <section id="follow-along-solving-the-model-1" class="slide level2">
 <h2>Follow along: solving the model</h2>
 <div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">optimize!</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">optimize!</span>(my_first_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ******************************************************************************
@@ -648,27 +650,29 @@ iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
    6 -9.9994167e-01 0.00e+00 1.94e-02  -2.5 7.65e-02    -  1.00e+00 1.00e+00f  1
    7 -1.0000000e+00 0.00e+00 6.69e-05  -3.8 6.16e-03    -  1.00e+00 1.00e+00f  1
    8 -1.0000000e+00 0.00e+00 1.83e-09  -5.7 4.81e-05    -  1.00e+00 1.00e+00f  1
-   9 -1.0000000e+00 0.00e+00 9.07e-13  -7.0 3.89e-07    -  1.00e+00 1.00e+00f  1
+   9 -1.0000000e+00 0.00e+00 4.78e-13  -8.6 4.09e-07    -  1.00e+00 1.00e+00f  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10 -1.0000000e+00 0.00e+00 1.65e-15 -10.0 5.37e-10    -  1.00e+00 1.00e+00f  1
 
-Number of Iterations....: 9
+Number of Iterations....: 10
 
                                    (scaled)                 (unscaled)
-Objective...............:  -9.9999999999999867e-01   -9.9999999999999867e-01
-Dual infeasibility......:   9.0675424205385623e-13    9.0675424205385623e-13
+Objective...............:  -9.9999999999999956e-01   -9.9999999999999956e-01
+Dual infeasibility......:   1.6498229875971990e-15    1.6498229875971990e-15
 Constraint violation....:   0.0000000000000000e+00    0.0000000000000000e+00
 Variable bound violation:   0.0000000000000000e+00    0.0000000000000000e+00
-Complementarity.........:   9.0909773270063229e-08    9.0909773270063229e-08
-Overall NLP error.......:   9.0909773270063229e-08    9.0909773270063229e-08
+Complementarity.........:   9.0909092205937359e-11    9.0909092205937359e-11
+Overall NLP error.......:   9.0909092205937359e-11    9.0909092205937359e-11
 
 
-Number of objective function evaluations             = 16
-Number of objective gradient evaluations             = 10
+Number of objective function evaluations             = 17
+Number of objective gradient evaluations             = 11
 Number of equality constraint evaluations            = 0
 Number of inequality constraint evaluations          = 0
 Number of equality constraint Jacobian evaluations   = 0
 Number of inequality constraint Jacobian evaluations = 0
-Number of Lagrangian Hessian evaluations             = 9
-Total seconds in IPOPT                               = 0.015
+Number of Lagrangian Hessian evaluations             = 10
+Total seconds in IPOPT                               = 0.006
 
 EXIT: Optimal Solution Found.</code></pre>
 </div>
@@ -678,35 +682,29 @@ EXIT: Optimal Solution Found.</code></pre>
 <h2>Follow along: solving the model</h2>
 <p>The return message is rather long and contains many details about the execution. You can turn this message off with</p>
 <div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">set_silent</span>(model);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">set_silent</span>(my_first_model);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can check minimizers with</p>
 <div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a>unc_x_1 <span class="op">=</span> <span class="fu">value</span>(x_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a>unc_x_1 <span class="op">=</span> <span class="fu">value</span>(x_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>1.0000000202020707</code></pre>
+<pre><code>1.000000000020202</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1"></a>unc_x_2 <span class="op">=</span> <span class="fu">value</span>(x_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a>unc_x_2 <span class="op">=</span> <span class="fu">value</span>(x_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>1.4999999999998486</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a>unc_obj <span class="op">=</span> <span class="fu">objective_value</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
-<pre><code>-0.9999999999999987</code></pre>
+<pre><code>1.4999999999999996</code></pre>
 </div>
 </div>
 </section>
 <section id="follow-along-solving-the-model-3" class="slide level2">
 <h2>Follow along: solving the model</h2>
 <p>And the minimum with</p>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a>unc_obj <span class="op">=</span> <span class="fu">objective_value</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>-0.9999999999999987</code></pre>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a>unc_obj <span class="op">=</span> <span class="fu">objective_value</span>(my_first_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>-0.9999999999999996</code></pre>
 </div>
 </div>
 </section>
@@ -716,42 +714,61 @@ EXIT: Optimal Solution Found.</code></pre>
 <img data-src="figures/jump_ex1.png" class="r-stretch"></section>
 <section id="follow-along-declaring-constraints" class="slide level2">
 <h2>Follow along: declaring constraints</h2>
-<p>Let’s add a nonlinear equality constraint <span class="math inline">\(-x_1 + x^2 = 0\)</span> and re-solve the model</p>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a><span class="pp">@constraint</span>(model, <span class="op">-</span>x_1 <span class="op">+</span>x_2<span class="op">^</span><span class="fl">2</span> <span class="op">==</span> <span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><span class="math display">\[ x\_2^2 - x\_1 = 0 \]</span></p>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">print</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s create a new model that now adds a nonlinear equality constraint <span class="math inline">\(x_1 = x_2^2\)</span></p>
+<ul>
+<li>Note that, for this solution to work, I needed to specify reasonable initial guesses with <code>start</code>. If we don’t do it, the solution will converge to another local minimum that is incorrect.</li>
+</ul>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a>my_model_eqcon <span class="op">=</span> <span class="fu">Model</span>(Ipopt.Optimizer);</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="pp">@variable</span>(my_model_eqcon, x_1 <span class="op">&gt;=</span><span class="fl">0</span>, start <span class="op">=</span> <span class="fl">1.0</span>);</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="pp">@variable</span>(my_model_eqcon, x_2 <span class="op">&gt;=</span><span class="fl">0</span>, start <span class="op">=</span> <span class="fl">1.0</span>);</span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="pp">@objective</span>(my_model_eqcon, Min, <span class="fu">f</span>(x_1, x_2));</span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="pp">@constraint</span>(my_model_eqcon, <span class="op">-</span>x_1 <span class="op">+</span> x_2<span class="op">^</span><span class="fl">2</span> <span class="op">==</span> <span class="fl">0</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">print</span>(my_model_eqcon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><span class="math display">\[ \begin{aligned}
 \min\quad &amp; \textsf{-}\left({\textsf{exp}\left({{\textsf{-}\left({{\left(x\_1\times x\_2 - 1.5\right)} ^ {2.0}}\right)} - {\left(x\_2^2 - 3 x\_2 + 2.25\right)}}\right)}\right)\\
 \text{Subject to} \quad &amp; x\_2^2 - x\_1 = 0\\
 &amp; x\_1 \geq 0\\
 &amp; x\_2 \geq 0\\
 \end{aligned} \]</span></p>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">optimize!</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="follow-along-declaring-constraints-1" class="slide level2">
+<h2>Follow along: declaring constraints</h2>
+<p>Now let’s solve it</p>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">optimize!</span>(my_model_eqcon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is Ipopt version 3.14.14, running with linear solver MUMPS 5.6.2.</p>
+<p>Number of nonzeros in equality constraint Jacobian…: 2 Number of nonzeros in inequality constraint Jacobian.: 0 Number of nonzeros in Lagrangian Hessian………….: 4</p>
+<p>Total number of variables……………………….: 2 variables with only lower bounds: 2 variables with lower and upper bounds: 0 variables with only upper bounds: 0 Total number of equality constraints……………..: 1 Total number of inequality constraints……………: 0 inequality constraints with only lower bounds: 0 inequality constraints with lower and upper bounds: 0 inequality constraints with only upper bounds: 0</p>
+<p>iter objective inf_pr inf_du lg(mu) ||d|| lg(rg) alpha_du alpha_pr ls 0 -6.0653066e-01 0.00e+00 2.17e+00 -1.0 0.00e+00 - 0.00e+00 0.00e+00 0 1 -8.6248277e-01 4.95e-02 1.17e+00 -1.0 8.90e-01 - 5.53e-01 5.00e-01f 2 2 -8.8715068e-01 2.30e-03 3.89e-02 -1.0 6.78e-02 - 1.00e+00 1.00e+00h 1 3 -8.8798525e-01 7.75e-05 1.92e-03 -2.5 1.84e-02 - 1.00e+00 1.00e+00h 1 4 -8.8797477e-01 1.72e-07 4.56e-06 -3.8 8.88e-04 - 1.00e+00 1.00e+00h 1 5 -8.8797474e-01 1.52e-10 4.25e-09 -5.7 2.85e-05 - 1.00e+00 1.00e+00h 1 6 -8.8797474e-01 2.18e-14 5.90e-13 -8.6 3.44e-07 - 1.00e+00 1.00e+00h 1</p>
+<p>Number of Iterations….: 6</p>
+<pre><code>                               (scaled)                 (unscaled)</code></pre>
+<p>Objective……………: -8.8797474226644857e-01 -8.8797474226644857e-01 Dual infeasibility……: 5.8984122094381903e-13 5.8984122094381903e-13 Constraint violation….: 2.1760371282653068e-14 2.1760371282653068e-14 Variable bound violation: 0.0000000000000000e+00 0.0000000000000000e+00 Complementarity………: 2.5063705829537176e-09 2.5063705829537176e-09 Overall NLP error…….: 2.5063705829537176e-09 2.5063705829537176e-09</p>
+<p>Number of objective function evaluations = 12 Number of objective gradient evaluations = 7 Number of equality constraint evaluations = 12 Number of inequality constraint evaluations = 0 Number of equality constraint Jacobian evaluations = 7 Number of inequality constraint Jacobian evaluations = 0 Number of Lagrangian Hessian evaluations = 6 Total seconds in IPOPT = 0.002</p>
+<p>EXIT: Optimal Solution Found.</p>
 </section>
 <section id="follow-along-solving-the-equality-constrained-model" class="slide level2">
 <h2>Follow along: solving the equality constrained model</h2>
-<div class="cell" data-execution_count="22">
+<div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a>eqcon_x_1 <span class="op">=</span> <span class="fu">value</span>(x_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
-<pre><code>149806.47565619063</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>1.3578043159950384</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="23">
+<div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a>eqcon_x_2 <span class="op">=</span> <span class="fu">value</span>(x_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
-<pre><code>387.04841513199693</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>1.1652486069483456</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="24">
+<div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">value</span>(<span class="op">-</span>x_1 <span class="op">+</span> x_2<span class="op">^</span><span class="fl">2</span>) <span class="co"># We can evaluate expressions too</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
-<pre><code>0.0</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>2.1760371282653068e-14</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a>eqcon_obj <span class="op">=</span> <span class="fu">objective_value</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
-<pre><code>-0.0</code></pre>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a>eqcon_obj <span class="op">=</span> <span class="fu">objective_value</span>(my_model_eqcon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>-0.8879747422664486</code></pre>
 </div>
 </div>
 </section>
@@ -762,13 +779,13 @@ EXIT: Optimal Solution Found.</code></pre>
 <section id="solving-the-inequality-constrained-model" class="slide level2">
 <h2>Solving the inequality constrained model</h2>
 <p>Next, let’s now initialize a new model with inequality constraint <span class="math inline">\(-x_1 + x^2 \leq 0\)</span></p>
-<div class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a>model2 <span class="op">=</span> <span class="fu">Model</span>(Ipopt.Optimizer);</span>
-<span id="cb38-2"><a href="#cb38-2"></a><span class="pp">@variable</span>(model2, x_1 <span class="op">&gt;=</span><span class="fl">0</span>);</span>
-<span id="cb38-3"><a href="#cb38-3"></a><span class="pp">@variable</span>(model2, x_2 <span class="op">&gt;=</span><span class="fl">0</span>);</span>
-<span id="cb38-4"><a href="#cb38-4"></a><span class="pp">@objective</span>(model2, Min, <span class="fu">f</span>(x_1, x_2));</span>
-<span id="cb38-5"><a href="#cb38-5"></a><span class="pp">@constraint</span>(model2, <span class="op">-</span>x_1 <span class="op">+</span> x_2<span class="op">^</span><span class="fl">2</span> <span class="op">&lt;=</span> <span class="fl">0</span>);</span>
-<span id="cb38-6"><a href="#cb38-6"></a><span class="fu">optimize!</span>(model2);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a>my_model_ineqcon <span class="op">=</span> <span class="fu">Model</span>(Ipopt.Optimizer);</span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="pp">@variable</span>(my_model_ineqcon, x_1 <span class="op">&gt;=</span><span class="fl">0</span>);</span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="pp">@variable</span>(my_model_ineqcon, x_2 <span class="op">&gt;=</span><span class="fl">0</span>);</span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="pp">@objective</span>(my_model_ineqcon, Min, <span class="fu">f</span>(x_1, x_2));</span>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="pp">@constraint</span>(my_model_ineqcon, <span class="op">-</span>x_1 <span class="op">+</span> x_2<span class="op">^</span><span class="fl">2</span> <span class="op">&lt;=</span> <span class="fl">0</span>);</span>
+<span id="cb38-6"><a href="#cb38-6"></a><span class="fu">optimize!</span>(my_model_ineqcon);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>This is Ipopt version 3.14.14, running with linear solver MUMPS 5.6.2.
 
@@ -826,21 +843,21 @@ EXIT: Optimal Solution Found.</code></pre>
 </section>
 <section id="solving-the-inequality-constrained-model-1" class="slide level2">
 <h2>Solving the inequality constrained model</h2>
-<div class="cell" data-execution_count="27">
+<div class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1"></a>ineqcon_x_1 <span class="op">=</span> <span class="fu">value</span>(x_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>1.3578043178154473</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="28">
+<div class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1"></a>ineqcon_x_2 <span class="op">=</span> <span class="fu">value</span>(x_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>1.1652486056670581</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1"></a>ineqcon_obj <span class="op">=</span> <span class="fu">objective_value</span>(model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1"></a>ineqcon_obj <span class="op">=</span> <span class="fu">objective_value</span>(my_model_ineqcon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>-0.8879747414490442</code></pre>
 </div>
 </div>
@@ -853,13 +870,13 @@ EXIT: Optimal Solution Found.</code></pre>
 <section id="relaxing-the-inequality-constraint" class="slide level2">
 <h2>Relaxing the inequality constraint</h2>
 <p>What if instead we use inequality constraint <span class="math inline">\(-x_1 + x^2 \leq 1.5\)</span>?</p>
-<div class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1"></a>model3 <span class="op">=</span> <span class="fu">Model</span>(Ipopt.Optimizer);</span>
-<span id="cb46-2"><a href="#cb46-2"></a><span class="pp">@variable</span>(model3, x_1 <span class="op">&gt;=</span><span class="fl">0</span>);</span>
-<span id="cb46-3"><a href="#cb46-3"></a><span class="pp">@variable</span>(model3, x_2 <span class="op">&gt;=</span><span class="fl">0</span>);</span>
-<span id="cb46-4"><a href="#cb46-4"></a><span class="pp">@objective</span>(model3, Min, <span class="fu">f</span>(x_1, x_2));</span>
-<span id="cb46-5"><a href="#cb46-5"></a><span class="pp">@constraint</span>(model3, c1, <span class="op">-</span>x_1 <span class="op">+</span> x_2<span class="op">^</span><span class="fl">2</span> <span class="op">&lt;=</span> <span class="fl">1.5</span>);</span>
-<span id="cb46-6"><a href="#cb46-6"></a><span class="fu">optimize!</span>(model3);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1"></a>my_model_ineqcon_2 <span class="op">=</span> <span class="fu">Model</span>(Ipopt.Optimizer);</span>
+<span id="cb46-2"><a href="#cb46-2"></a><span class="pp">@variable</span>(my_model_ineqcon_2, x_1 <span class="op">&gt;=</span><span class="fl">0</span>);</span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="pp">@variable</span>(my_model_ineqcon_2, x_2 <span class="op">&gt;=</span><span class="fl">0</span>);</span>
+<span id="cb46-4"><a href="#cb46-4"></a><span class="pp">@objective</span>(my_model_ineqcon_2, Min, <span class="fu">f</span>(x_1, x_2));</span>
+<span id="cb46-5"><a href="#cb46-5"></a><span class="pp">@constraint</span>(my_model_ineqcon_2, c1, <span class="op">-</span>x_1 <span class="op">+</span> x_2<span class="op">^</span><span class="fl">2</span> <span class="op">&lt;=</span> <span class="fl">1.5</span>);</span>
+<span id="cb46-6"><a href="#cb46-6"></a><span class="fu">optimize!</span>(my_model_ineqcon_2);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>This is Ipopt version 3.14.14, running with linear solver MUMPS 5.6.2.
 
@@ -920,21 +937,21 @@ EXIT: Optimal Solution Found.</code></pre>
 </section>
 <section id="relaxing-the-inequality-constraint-1" class="slide level2">
 <h2>Relaxing the inequality constraint</h2>
-<div class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1"></a>ineqcon2_obj <span class="op">=</span> <span class="fu">objective_value</span>(model3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1"></a>ineqcon2_obj <span class="op">=</span> <span class="fu">objective_value</span>(my_model_ineqcon_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>-1.0</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="32">
+<div class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1"></a>ineqcon2_x_1 <span class="op">=</span> <span class="fu">value</span>(x_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>1.0000000054547011</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="33">
+<div class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1"></a>ineqcon2_x_2 <span class="op">=</span> <span class="fu">value</span>(x_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>1.4999999933331216</code></pre>
 </div>
 </div>

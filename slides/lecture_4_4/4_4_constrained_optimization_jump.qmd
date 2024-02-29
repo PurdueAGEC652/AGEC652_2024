@@ -181,7 +181,7 @@ f(x_1,x_2) = -exp(-(x_1*x_2 - 3/2)^2 - (x_2-3/2)^2);
 Initialize the model for `Ipopt`
 
 ```{julia}
-model = Model(Ipopt.Optimizer)
+my_first_model = Model(Ipopt.Optimizer)
 ```
 
 . . .
@@ -190,7 +190,7 @@ You can set optimzer parameters like this (there are TONS of parameters you can 
 
 ```{julia}
 # This is relative tol. Default is 1e-8
-set_optimizer_attribute(model, "tol", 1e-6) 
+set_optimizer_attribute(my_first_model, "tol", 1e-9) 
 ```
 
 
@@ -202,15 +202,20 @@ We will focus on non-negative values
 
 ```{julia}
 #| output: true
-@variable(model, x_1 >=0)
+@variable(my_first_model, x_1 >=0)
 ```
 
 ```{julia}
 #| output: true
-@variable(model, x_2 >=0)
+@variable(my_first_model, x_2 >=0)
 ```
 
-- You could type `@variable(model, x_1)` to declare a $x_1$ as a free variable
+- You could type `@variable(my_model, x_1)` to declare a $x_1$ as a free variable
+- If you want to define the initial guess for the variable, you can do it with the `start` argument like this
+
+```
+@variable(my_first_model, x_1 >=0, start = 0)
+```
 
 
 
@@ -218,7 +223,7 @@ We will focus on non-negative values
 ## Follow along: declare objective
 
 ```{julia}
-@objective(model, Min, f(x_1,x_2))
+@objective(my_first_model, Min, f(x_1,x_2))
 ```
 
 . . .
@@ -226,7 +231,7 @@ We will focus on non-negative values
 `JuMP` will use autodiff (with `ForwardDiff` package) by default. If you want to use your define gradient and Hessian, you need to "register" the function like this
 
 ```
-register(model, :my_f, n, f, grad, hessian)
+register(my_first_model, :my_f, n, f, grad, hessian)
 ```
 
 - `:my_f` is the name you want to use inside `model`, `n` is the number of variables `f` takes, and `grad` `hessian` are user-defined functions
@@ -242,7 +247,7 @@ First, let's solve the (mostly) unconstrained problem
 
 Checking our model
 ```{julia}
-print(model)
+print(my_first_model)
 ```
 
 
@@ -250,7 +255,7 @@ print(model)
 ## Follow along: solving the model
 
 ```{julia}
-optimize!(model)
+optimize!(my_first_model)
 ```
 
 
@@ -260,14 +265,14 @@ optimize!(model)
 The return message is rather long and contains many details about the execution. You can turn this message off with
 
 ```{julia}
-set_silent(model);
+set_silent(my_first_model);
 ```
 
 We can check minimizers with
 
 ```{julia}
 #|include: false
-optimize!(model);
+optimize!(my_first_model);
 ```
 
 ```{julia}
@@ -276,23 +281,16 @@ unc_x_1 = value(x_1)
 ```{julia}
 unc_x_2 = value(x_2)
 ```
-```{julia}
-unc_obj = objective_value(model)
-```
 
 
 
 ## Follow along: solving the model
 
-```{julia}
-#|include: false
-optimize!(model);
-```
 
 And the minimum with
 
 ```{julia}
-unc_obj = objective_value(model)
+unc_obj = objective_value(my_first_model)
 ```
 
 
@@ -307,29 +305,35 @@ unc_obj = objective_value(model)
 
 ## Follow along: declaring constraints
 
-Let's add a nonlinear equality constraint $-x_1 + x^2 = 0$ and re-solve the model
+Let's create a new model that now adds a nonlinear equality constraint $x_1 = x_2^2$
+
+- Note that, for this solution to work, I needed to specify reasonable initial guesses with `start`. If we don't do it, the solution will converge to another local minimum that is incorrect.
 
 ```{julia}
 #| output: asis
-@constraint(model, -x_1 +x_2^2 == 0)
+my_model_eqcon = Model(Ipopt.Optimizer);
+@variable(my_model_eqcon, x_1 >=0, start = 1.0);
+@variable(my_model_eqcon, x_2 >=0, start = 1.0);
+@objective(my_model_eqcon, Min, f(x_1, x_2));
+@constraint(my_model_eqcon, -x_1 + x_2^2 == 0);
 ```
 ```{julia}
 #| output: asis
-print(model)
+print(my_model_eqcon)
 ```
+
+## Follow along: declaring constraints
+
+Now let's solve it
+
 ```{julia}
-#| output: asis
-optimize!(model)
+optimize!(my_model_eqcon)
 ```
 
 
 
 ## Follow along: solving the equality constrained model
 
-```{julia}
-#| include: false
-optimize!(model)
-```
 
 ```{julia}
 eqcon_x_1 = value(x_1)
@@ -341,7 +345,7 @@ eqcon_x_2 = value(x_2)
 value(-x_1 + x_2^2) # We can evaluate expressions too
 ```
 ```{julia}
-eqcon_obj = objective_value(model)
+eqcon_obj = objective_value(my_model_eqcon)
 ```
 
 
@@ -357,12 +361,12 @@ eqcon_obj = objective_value(model)
 Next, let's now initialize a new model with inequality constraint $-x_1 + x^2 \leq 0$
 
 ```{julia}
-model2 = Model(Ipopt.Optimizer);
-@variable(model2, x_1 >=0);
-@variable(model2, x_2 >=0);
-@objective(model2, Min, f(x_1, x_2));
-@constraint(model2, -x_1 + x_2^2 <= 0);
-optimize!(model2);
+my_model_ineqcon = Model(Ipopt.Optimizer);
+@variable(my_model_ineqcon, x_1 >=0);
+@variable(my_model_ineqcon, x_2 >=0);
+@objective(my_model_ineqcon, Min, f(x_1, x_2));
+@constraint(my_model_ineqcon, -x_1 + x_2^2 <= 0);
+optimize!(my_model_ineqcon);
 ```
 
 
@@ -376,7 +380,7 @@ ineqcon_x_1 = value(x_1)
 ineqcon_x_2 = value(x_2)
 ```
 ```{julia}
-ineqcon_obj = objective_value(model2)
+ineqcon_obj = objective_value(my_model_ineqcon)
 ```
 
 Same results as in the equality constraint: the constraint is binding
@@ -394,12 +398,12 @@ Same results as in the equality constraint: the constraint is binding
 What if instead we use inequality constraint $-x_1 + x^2 \leq 1.5$?
 
 ```{julia}
-model3 = Model(Ipopt.Optimizer);
-@variable(model3, x_1 >=0);
-@variable(model3, x_2 >=0);
-@objective(model3, Min, f(x_1, x_2));
-@constraint(model3, c1, -x_1 + x_2^2 <= 1.5);
-optimize!(model3);
+my_model_ineqcon_2 = Model(Ipopt.Optimizer);
+@variable(my_model_ineqcon_2, x_1 >=0);
+@variable(my_model_ineqcon_2, x_2 >=0);
+@objective(my_model_ineqcon_2, Min, f(x_1, x_2));
+@constraint(my_model_ineqcon_2, c1, -x_1 + x_2^2 <= 1.5);
+optimize!(my_model_ineqcon_2);
 ```
 
 
@@ -407,7 +411,7 @@ optimize!(model3);
 ## Relaxing the inequality constraint
 
 ```{julia}
-ineqcon2_obj = objective_value(model3)
+ineqcon2_obj = objective_value(my_model_ineqcon_2)
 ```
 ```{julia}
 ineqcon2_x_1 = value(x_1)

@@ -201,6 +201,7 @@ $$
 The KKT theorem gives us a first approach to solving unconstrained optimization problems
 
 - If the problem has box constraints ( $a \leq x \leq b$), we can solve the corresponding *mixed complementarity problem* $CP(f^\prime, a, b)$ as we saw in unit 3
+
 . . .
 
 - If constraints are more elaborated and multidimensional, we need to solve a series of nonlinear systems: one for each possible combination of binding inequality constraints
@@ -211,7 +212,7 @@ The KKT theorem gives us a first approach to solving unconstrained optimization 
 
 ## The KKT approach
 
-Let $\mathcal{I}$ be the set of ${1, 2, ..., l}$ inequality constraints. For a subset $\mathcal{P} \in \mathcal{I}$ of, we define the $\mathcal{P}$ problem as the nonlinear system of equations
+Let $\mathcal{I}$ be the set of ${1, 2, ..., l}$ inequality constraints. For a subset $\mathcal{P} \in \mathcal{I}$, we define the $\mathcal{P}$ problem as the nonlinear system of equations
 
 $$
 \begin{gather}
@@ -312,7 +313,7 @@ where $\mathbf{1}$ is an indicator function
 However, the infinite step method is a pretty bad idea
 
 - $Q$ becomes discontinuous and non-differentiable: it's very hard for algorithms to iterate near the region where the constraint binds
-- Any really large value or $\rho$ leads to the same practical problem
+- Any really large value of $\rho$ leads to the same practical problem
 
 . . .
 
@@ -401,7 +402,7 @@ Penalty methods don't have the same problem but still require us to evaluate eve
 
 . . . 
 
-Improving on the KKT approach, **active set methods** strategically to pick a sequence of combinations of constraints
+Improving on the KKT approach, **active set methods** strategically pick a sequence of combinations of constraints
 
 
 

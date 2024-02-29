@@ -501,16 +501,20 @@ Diego S. Cardoso
 <h2>The KKT approach</h2>
 <p>The KKT theorem gives us a first approach to solving unconstrained optimization problems</p>
 <ul>
-<li><p>If the problem has box constraints ( <span class="math inline">\(a \leq x \leq b\)</span>), we can solve the corresponding <em>mixed complementarity problem</em> <span class="math inline">\(CP(f^\prime, a, b)\)</span> as we saw in unit 3 . . .</p></li>
-<li><p>If constraints are more elaborated and multidimensional, we need to solve a series of nonlinear systems: one for each possible combination of binding inequality constraints</p>
+<li>If the problem has box constraints ( <span class="math inline">\(a \leq x \leq b\)</span>), we can solve the corresponding <em>mixed complementarity problem</em> <span class="math inline">\(CP(f^\prime, a, b)\)</span> as we saw in unit 3</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>If constraints are more elaborated and multidimensional, we need to solve a series of nonlinear systems: one for each possible combination of binding inequality constraints
 <ul>
 <li>This is probably how you learned to solve utility maximization with a budget constraint</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="the-kkt-approach-1" class="slide level2">
 <h2>The KKT approach</h2>
-<p>Let <span class="math inline">\(\mathcal{I}\)</span> be the set of <span class="math inline">\({1, 2, ..., l}\)</span> inequality constraints. For a subset <span class="math inline">\(\mathcal{P} \in \mathcal{I}\)</span> of, we define the <span class="math inline">\(\mathcal{P}\)</span> problem as the nonlinear system of equations</p>
+<p>Let <span class="math inline">\(\mathcal{I}\)</span> be the set of <span class="math inline">\({1, 2, ..., l}\)</span> inequality constraints. For a subset <span class="math inline">\(\mathcal{P} \in \mathcal{I}\)</span>, we define the <span class="math inline">\(\mathcal{P}\)</span> problem as the nonlinear system of equations</p>
 <p><span class="math display">\[
 \begin{gather}
   f_x + \lambda^T g_x + \mu^T h_x = 0 \\

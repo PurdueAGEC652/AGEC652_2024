@@ -359,7 +359,7 @@ $$
 
 Combined, the theoretical and statistical models give us an empirical model that can *rationalize* observable outcomes
 
-- This is, for any set of observable variables, there some $\Theta$ that can explain the observed behavior under the theoretical and statistical assumptions
+- This is, for any set of observable variables, there is some $\Theta$ that can explain the observed behavior under the theoretical and statistical assumptions
 
 
 
@@ -388,12 +388,12 @@ With $\Theta$ defined, we construct a statistical object that relates data and t
 The two most common objects are
 
 1. A likelihood function $L(y,x|\Theta)$
-  - Use the Maximum Likelihood Estimator to find $\Theta$
+   - Use the Maximum Likelihood Estimator to find $\Theta$
 
 . . .
 
-2. Conditional moments $E[y|x, \Theta]$
-  - Use Generalized Method of Moments to find $\Theta$
+1. Conditional moments $E[y|x, \Theta]$
+   - Use Generalized Method of Moments to find $\Theta$
 
 . . .
 
@@ -460,7 +460,7 @@ But if, in reality, $\epsilon_t$ includes differences in productivity that are *
 
 ## Structural estimation procedures
 
-In this simple example, the model was simple enough that we could get a **estimating equation** that was linear in the parameters
+In this simple example, the model was simple enough that we could get an **estimating equation** that was linear in the parameters
 
 - In those cases, we can use OLS (if assumptions hold), 2SLS, and other **linear estimation methods**
 
@@ -641,7 +641,7 @@ Regardless the method: **Good data $+$ identification $=$ less restrictive assum
 
 ## Homework
 
-In this unit, we will work with data
+In this part of the course, we will work with data! Please get ready for that
 
 - In Julia, the `DataFrames` package offers interface to work with data tables
   - It's quite similar to R

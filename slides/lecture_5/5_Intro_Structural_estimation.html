@@ -631,7 +631,7 @@ f(x,\xi)
 <div class="fragment">
 <p>Combined, the theoretical and statistical models give us an empirical model that can <em>rationalize</em> observable outcomes</p>
 <ul>
-<li>This is, for any set of observable variables, there some <span class="math inline">\(\Theta\)</span> that can explain the observed behavior under the theoretical and statistical assumptions</li>
+<li>This is, for any set of observable variables, there is some <span class="math inline">\(\Theta\)</span> that can explain the observed behavior under the theoretical and statistical assumptions</li>
 </ul>
 </div>
 </section>
@@ -653,18 +653,18 @@ f(x,\xi)
 <p>With <span class="math inline">\(\Theta\)</span> defined, we construct a statistical object that relates data and the empirical model</p>
 <p>The two most common objects are</p>
 <ol type="1">
-<li>A likelihood function <span class="math inline">\(L(y,x|\Theta)\)</span></li>
-</ol>
+<li>A likelihood function <span class="math inline">\(L(y,x|\Theta)\)</span>
 <ul>
 <li>Use the Maximum Likelihood Estimator to find <span class="math inline">\(\Theta\)</span></li>
-</ul>
-<div class="fragment">
-<ol start="2" type="1">
-<li>Conditional moments <span class="math inline">\(E[y|x, \Theta]\)</span></li>
+</ul></li>
 </ol>
+<div class="fragment">
+<ol type="1">
+<li>Conditional moments <span class="math inline">\(E[y|x, \Theta]\)</span>
 <ul>
 <li>Use Generalized Method of Moments to find <span class="math inline">\(\Theta\)</span></li>
-</ul>
+</ul></li>
+</ol>
 </div>
 <div class="fragment">
 <ul>
@@ -716,7 +716,7 @@ E[\epsilon_t|K_t, L_t] = 0
 </section>
 <section id="structural-estimation-procedures" class="slide level2">
 <h2>Structural estimation procedures</h2>
-<p>In this simple example, the model was simple enough that we could get a <strong>estimating equation</strong> that was linear in the parameters</p>
+<p>In this simple example, the model was simple enough that we could get an <strong>estimating equation</strong> that was linear in the parameters</p>
 <ul>
 <li>In those cases, we can use OLS (if assumptions hold), 2SLS, and other <strong>linear estimation methods</strong></li>
 </ul>
@@ -902,7 +902,7 @@ E[\epsilon_t|K_t, L_t] = 0
 </section>
 <section id="homework" class="slide level2">
 <h2>Homework</h2>
-<p>In this unit, we will work with data</p>
+<p>In this part of the course, we will work with data! Please get ready for that</p>
 <ul>
 <li>In Julia, the <code>DataFrames</code> package offers interface to work with data tables
 <ul>

@@ -36,16 +36,11 @@ editor:
 8.  Simulation-based methods
 
 
-## Agenda {background-color="gold"}
-
-- In this lecture, ...
-
 ## Main references for today {background-color="gold"}
 
 - Reiss & Wolak (2007)
 - Timmins & Schlenker (2009)
 - Course materials by Matt Woerman (UMass) and Simon Quinn (Oxford)
-
 
 
 # So, where have we got to so far?

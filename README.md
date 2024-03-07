@@ -33,4 +33,7 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
   - Lecture 4.2 - [Line search and trust region methods](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_4_2/4_2_unconstrained_optimization_derivative_methods.html)
   - Lecture 4.3 - [Constrained optimization: theory and algorithms](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_4_3/4_3_constrained_optimization_algorithms.html)
   - Lecture 4.4 - [Modeling framework](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_4_4/4_4_constrained_optimization_jump.html)
+ 
+- Unit 5 - Introduction to structural estimation
+  - Lecture 5: [Intro to structural estimation](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_5/5_Intro_Structural_estimation.html)
 

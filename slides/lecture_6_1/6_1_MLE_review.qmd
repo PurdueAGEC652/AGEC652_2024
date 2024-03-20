@@ -173,7 +173,6 @@ We won't cover
 
 - Proofs of asymptotic properties
 - Small sample properties
-- Hypothesis testing and model selection statistics
 - Specialized numerical methods for their estimation
 
 Some good textbooks to learn about these details: Cameron & Trivedi, Greene, Wooldridge (PhD-level), Hayashi, Hansen
@@ -298,7 +297,7 @@ $$
 The variance-covariance matrix of the MLE can be estimated using
 
 $$
-Var(\hat{\theta}_{MLE}) = -\left\{ \left. \frac{\partial^2 l(\theta)}{\partial \theta \partial \theta^{\prime}}\right|_{\theta=\hat{\theta}_{MLE}} \right\}^{-1}
+Var(\hat{\theta}_{MLE}) = \left\{- \left. \frac{\partial^2 l(\theta)}{\partial \theta \partial \theta^{\prime}}\right|_{\theta=\hat{\theta}_{MLE}} \right\}^{-1}
 $$
 
 So we calculate the Hessian of $l$ at the estimated parameter values.
@@ -339,6 +338,81 @@ SE(\hat{\theta}_{MLE}) = \sqrt{diag(Var(\hat{\theta}_{MLE}))}
 $$
 
 
+## Hypothesis and specification tests
+
+After estimating parameters with MLE, we might be interested in making inferences about parameter values
+
+- For example, we may want to infer whether two parameters are statistically different from each other, or if a parameter is statistically different from a fixed value
+
+. . .
+
+We can generically represent a test as a null hypothesis
+
+$$
+H_0: c(\theta) = 0
+$$
+
+. . .
+
+There are three types of tests that are commonly used in MLE
+
+- Likelihood Ratio (LR) test
+- Wald test
+- Lagrange Multiplier (LM) test
+
+Let's quickly review them
+
+
+## Likelihood Ratio test
+
+This test draws its inference from a comparison between an **unrestricted** and a **restricted** model
+
+- For example, the restricted model could force a parameter to a specific value or the equality between two parameters
+- The LR test requires we estimate both models. 
+
+. . .
+
+Let $\hat{\theta}_U$ be the estimated parameters of the unrestricted model and $\hat{\theta}_R$ the restricted ones. The LR statistic is given by
+
+$$
+LR = -2 \ln \left(\frac{l(\hat{\theta}_R)}{l(\hat{\theta}_U)}\right) \sim \chi^2_{[df]}
+$$
+
+where $l$ is the log-likelihood function and $df$ is the number of restrictions imposed.
+
+## Wald test
+
+The nonlinear version of Wald test is based on the notion that, if a restriction of the type $c(\theta) = 0$, then it will also be satisfied at a consistent estimate $c(\hat\theta) \approx 0$
+
+. . .
+
+The Wald statistic is then given by
+
+$$
+W = c(\hat\theta)\left[V(c(\hat\theta))\right]^{-1}c(\hat\theta) \sim \chi^2_{[df]}
+$$
+
+where $df$ is again the number of restrictions imposed and $V(c(\hat\theta))$ is the asymptotic variance of $c$ given by
+
+$$
+V(c(\hat\theta)) = \left[\frac{\partial c(\hat\theta)}{\partial \hat\theta^\prime}\right]\left[I(\hat\theta)\right]^{-1}\left[\frac{\partial c(\hat\theta)}{\partial \hat\theta^\prime}\right]^\prime
+$$
+
+*Note that the Wald test only requires that we estimate the unrestricted model*
+
+## Lagrange Multiplier test
+
+TBA
+
+## Hypothesis and specification tests
+
+This was just a quick recap on the differences between these tests. There are practical considerations based on their underlying assumptions, efficiency, and computational costs
+
+Please check either Greene or Cameron & Trivedi for a detailed discussion
+
+
+
+# MLE in practice
 
 ## MLE in practice: setup
 
@@ -385,9 +459,9 @@ To estimate $\beta_0$, $\beta_1$, and $\sigma^2$, we need to maximize this log-l
 But, firt, let's generate some fake data for our estimation assuming true values $\beta_0 = 2, \beta_1 = 3, \sigma = 1.5$
 
 ```{julia}
-using JuMP, Ipopt, Statistics
-
+using JuMP, Ipopt, Statistics, Random
 # Generate some synthetic data for illustration
+Random.seed!(652) # Set random seed for reproducibility
 n = 1000  # Number of observations
 x = rand(n) * 10  # Independent variable: random uniform [0,10]
 β0_true = 2.0  # True intercept
@@ -440,7 +514,7 @@ println("σ: ", σ_hat)
 We've seen that the asymptotic distribution of MLE gives us the (non-robust) standard errors
 
 $$
-Var(\hat{\theta}_{MLE}) = -\left\{ \left. \frac{\partial^2 l(\theta)}{\partial \theta \partial \theta^{\prime}}\right|_{\theta=\hat{\theta}_{MLE}} \right\}^{-1}
+Var(\hat{\theta}_{MLE}) = \left\{-\left. \frac{\partial^2 l(\theta)}{\partial \theta \partial \theta^{\prime}}\right|_{\theta=\hat{\theta}_{MLE}} \right\}^{-1}
 $$
 
 How do we calculate this?
@@ -459,15 +533,100 @@ Im = ForwardDiff.hessian(log_likelihood, θ_hat)
 ## MLE in practice: standard errors
 
 $$
-Var(\hat{\theta}_{MLE}) = -\left\{ \left. \frac{\partial^2 l(\theta)}{\partial \theta \partial \theta^{\prime}}\right|_{\theta=\hat{\theta}_{MLE}} \right\}^{-1}
+Var(\hat{\theta}_{MLE}) = \left\{- \left. \frac{\partial^2 l(\theta)}{\partial \theta \partial \theta^{\prime}}\right|_{\theta=\hat{\theta}_{MLE}} \right\}^{-1}
 $$
 
 Now, we invert it and take the squared root of its diagonal
 
 ```{julia}
-V = inv(Im)
+V = inv(Im);
 SEs = sqrt.(diag(-V))
 ```
 
+## MLE in practice: estimation results
 
-## MLE in practice: standard errors
+We can organize the results in a table and print them nicely with 95% confidence intervals
+
+```{julia}
+using DataFrames, Distributions
+df = DataFrame(
+  Coefficient = ["beta_0", "beta_1", "sigma"],
+  Estimate = θ_hat,
+  StdError = SEs,
+  CI_lower = θ_hat .+ quantile(Normal(), 0.025) .* SEs,
+  CI_upper = θ_hat .+ quantile(Normal(), 0.975) .* SEs
+)
+
+println(df)
+```
+
+## MLE in practice: testing
+
+- Let's now test the hypothesis that $\beta_0 = \beta_1$. This is, $H_0: \beta_0 - \beta_1 = 0$
+- This will require estimating a **restricted model.** One way to do this is to optimize again but look for only for a value of $\beta_0$ and using it also for $\beta_1$
+
+```{julia}
+# Define the model
+mle_model_restr = Model(Ipopt.Optimizer);
+set_silent(mle_model_restr)
+@variable(mle_model_restr, β0);
+@variable(mle_model_restr, σ >= 0.0001);  # Avoid division by zero in the log-likelihood
+
+# Note β0 being used twice!
+@objective(mle_model_restr, Max, log_likelihood([β0, β0, σ]));
+
+optimize!(mle_model_restr);
+```
+
+
+## MLE in practice: testing
+
+Let's see the results!
+
+```{julia}
+β0_hat_R = value(β0);
+σ_hat_R = value(σ);
+
+println("Estimated parameters:")
+println("β0=β1: ", β0_hat)
+println("σ: ", σ_hat)
+```
+
+
+## MLE in practice: testing
+
+We are now ready to calculate the log-likelihoods and the LR statistic. Recall
+
+$$
+LR = 2 \left(l(\hat{\theta}_U) - l(\hat{\theta}_R) \right) \sim \chi^2_{[df]}
+$$
+
+
+```{julia}
+l_U = log_likelihood([β0_hat, β1_hat, σ_hat]);
+l_R = log_likelihood([β0_hat_R, β0_hat_R, σ_hat_R]);
+```
+
+```{julia}
+LR_stat = 2 * (l_U - l_R)
+```
+
+## MLE in practice: testing
+
+We can calculate the critical value for a two-sided test using the quantiles of the $\chi^2_{1}$ distribution with $\alpha  = 0.05$
+```{julia}
+crit_value_lower = quantile(Chisq(1), 0.025);
+crit_value_upper = quantile(Chisq(1), 0.975);
+println("Test interval: $crit_value_lower -- $crit_value_upper . Test statistic: $LR_stat")
+```
+
+So we can confidently reject this hypothesis.
+
+. . .
+
+We can also calculate the exact probability of the test (p-value) 
+```{julia}
+p_value = 1 - cdf(Chisq(1), LR_stat)
+```
+
+Which is so small it gets rounded to zero.

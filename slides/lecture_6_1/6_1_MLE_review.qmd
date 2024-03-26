@@ -382,7 +382,7 @@ where $l$ is the log-likelihood function and $df$ is the number of restrictions 
 
 ## Wald test
 
-The nonlinear version of Wald test is based on the notion that, if a restriction of the type $c(\theta) = 0$, then it will also be satisfied at a consistent estimate $c(\hat\theta) \approx 0$
+The nonlinear version of Wald test is based on the notion that, if a restriction is of the type $c(\theta) = 0$, then it will also be satisfied at a consistent estimate $c(\hat\theta) \approx 0$
 
 . . .
 
@@ -420,7 +420,7 @@ $$
 
 where $df$ is again the number of restrictions imposed
 
-*Note that Lagrange Multiplier test only requires that we estimate the unrestricted model*
+*Note that Lagrange Multiplier test only requires that we estimate the restricted model*
 
 
 ## Hypothesis and specification tests

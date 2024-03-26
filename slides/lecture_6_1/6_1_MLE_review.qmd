@@ -400,15 +400,34 @@ $$
 
 *Note that the Wald test only requires that we estimate the unrestricted model*
 
-## Lagrange Multiplier test
+## Lagrange Multiplier (LM) test
 
-TBA
+The Lagrange Multiplier test is based on the idea that, if the restriction is correct, the FOC (of maximizing $L$) at restricted estimator should be approximately satisfied. I.e.,
+
+$$
+\left.\frac{\partial l(\theta)}{\partial \theta}\right|_{\theta=\hat\theta_R} \approx 0
+$$
+
+The gradient of $l$, $\frac{\partial l(\theta)}{\partial \theta}$, is called **the score function**. That's why the LM test is also referred to as the Score test.
+
+. . .
+
+The LM statistic is given by
+
+$$
+LM = \left(\frac{\partial l(\hat\theta_R)}{\partial \theta_R}\right)^\prime \left[I(\hat\theta)\right]^{-1} \left(\frac{\partial l(\hat\theta_R)}{\partial \theta_R}\right) \sim \chi^2_{[df]}
+$$
+
+where $df$ is again the number of restrictions imposed
+
+*Note that Lagrange Multiplier test only requires that we estimate the unrestricted model*
+
 
 ## Hypothesis and specification tests
 
 This was just a quick recap on the differences between these tests. There are practical considerations based on their underlying assumptions, efficiency, and computational costs
 
-Please check either Greene or Cameron & Trivedi for a detailed discussion
+Please check Greene or Cameron & Trivedi (or another PhD-level econometrics textbook) for detailed discussions
 
 
 
@@ -629,4 +648,4 @@ We can also calculate the exact probability of the test (p-value)
 p_value = 1 - cdf(Chisq(1), LR_stat)
 ```
 
-Which is so small it gets rounded to zero.
+Which is so small it might get rounded to zero.

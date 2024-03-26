@@ -729,14 +729,26 @@ V(c(\hat\theta)) = \left[\frac{\partial c(\hat\theta)}{\partial \hat\theta^\prim
 <p><em>Note that the Wald test only requires that we estimate the unrestricted model</em></p>
 </div>
 </section>
-<section id="lagrange-multiplier-test" class="slide level2">
-<h2>Lagrange Multiplier test</h2>
-<p>TBA</p>
+<section id="lagrange-multiplier-lm-test" class="slide level2">
+<h2>Lagrange Multiplier (LM) test</h2>
+<p>The Lagrange Multiplier test is based on the idea that, if the restriction is correct, the FOC (of maximizing <span class="math inline">\(L\)</span>) at restricted estimator should be approximately satisfied. I.e.,</p>
+<p><span class="math display">\[
+\left.\frac{\partial l(\theta)}{\partial \theta}\right|_{\theta=\hat\theta_R} \approx 0
+\]</span></p>
+<p>The gradient of <span class="math inline">\(l\)</span>, <span class="math inline">\(\frac{\partial l(\theta)}{\partial \theta}\)</span>, is called <strong>the score function</strong>. That’s why the LM test is also referred to as the Score test.</p>
+<div class="fragment">
+<p>The LM statistic is given by</p>
+<p><span class="math display">\[
+LM = \left(\frac{\partial l(\hat\theta_R)}{\partial \theta_R}\right)^\prime \left[I(\hat\theta)\right]^{-1} \left(\frac{\partial l(\hat\theta_R)}{\partial \theta_R}\right) \sim \chi^2_{[df]}
+\]</span></p>
+<p>where <span class="math inline">\(df\)</span> is again the number of restrictions imposed</p>
+<p><em>Note that Lagrange Multiplier test only requires that we estimate the unrestricted model</em></p>
+</div>
 </section>
 <section id="hypothesis-and-specification-tests-1" class="slide level2">
 <h2>Hypothesis and specification tests</h2>
 <p>This was just a quick recap on the differences between these tests. There are practical considerations based on their underlying assumptions, efficiency, and computational costs</p>
-<p>Please check either Greene or Cameron &amp; Trivedi for a detailed discussion</p>
+<p>Please check Greene or Cameron &amp; Trivedi (or another PhD-level econometrics textbook) for detailed discussions</p>
 </section></section>
 <section>
 <section id="mle-in-practice" class="title-slide slide level1 center">
@@ -1084,7 +1096,7 @@ LR = 2 \left(l(\hat{\theta}_U) - l(\hat{\theta}_R) \right) \sim \chi^2_{[df]}
 <pre><code>5.773159728050814e-15</code></pre>
 </div>
 </div>
-<p>Which is so small it gets rounded to zero.</p>
+<p>Which is so small it might get rounded to zero.</p>
 <div class="footer footer-default">
 
 </div>

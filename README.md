@@ -37,3 +37,7 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
 - Unit 5 - Introduction to structural estimation
   - Lecture 5: [Intro to structural estimation](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_5/5_Intro_Structural_estimation.html)
 
+- Unit 6 - Maximum Likelihood Estimator
+  - Lecture 6.1: [MLE theory](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_1/6_1_MLE_review.html)
+
+

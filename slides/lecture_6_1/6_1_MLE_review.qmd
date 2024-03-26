@@ -159,13 +159,13 @@ $$(\hat{\beta}_{MLE},\hat{\sigma}^2_{MLE}) = \arg \max_{\beta,\sigma^2} L(\beta,
 
 . . .
 
-- As in the optimization tutorial, in practice we take logs to transform that product inside $L$ into a sum
+- In practice, we take logs to transform that product inside $L$ into a sum
   - We maximize the *log-likelihood function* $l(\beta,\sigma^2|X,Y)$
 
 
 ## Up next
 
-We are going to review MLE and GMM with a focus on application: properties of these estimators and how to implement them in practice
+We are going to review MLE with a focus on application: properties of this estimator and how to implement it in practice
 
 . . .
 

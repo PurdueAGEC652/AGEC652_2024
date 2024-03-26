@@ -1,0 +1,131 @@
+---
+title: "AGEC 652 - Lecture 6.2"
+subtitle: "Discrete choice and Random Utility Models"
+author: "Diego S. Cardoso"
+institute: "Purdue University"
+execute:
+  echo: true
+  cache: true
+format:
+  revealjs: 
+    theme: [white, ./../agec_652_style.css]
+    slide-number: c
+    show-slide-number: all
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    code-copy: hover
+    fig-width: 8
+    fig-height: 4
+    chalkboard:
+      theme: whiteboard
+      chalk-effect: 0.1
+editor:
+  render-on-save: false
+---
+
+```{julia}
+#| include: false
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+# Pkg.add("JuMP")
+# Pkg.add("Ipopt")
+# Pkg.add("Statistics")
+# Pkg.add("Plots")
+# Pkg.add("ForwardDiff")
+# Pkg.add("LinearAlgebra")
+```
+
+
+
+## Course Roadmap {background-color="gold"}
+
+
+1.  [Introduction to Scientific Computing]{.gray}
+2.  [Fundamentals of numerical methods]{.gray}
+3.  [Systems of equations]{.gray}
+4.  [Optimization]{.gray}
+5.  [Structural estimation: Intro]{.gray}
+6.  **Maximum Likelihood Estimator**
+7.  Generalized Method of Moments
+8.  Simulation-based methods
+
+
+## Main references for today {background-color="gold"}
+
+- The examples in this lecture are adapted from "Learning Microeconometrics with R", by Christopher P. Adams (2021)
+- Theory: Cameron & Trivedi (2008), Greene (2018)
+
+
+## Agenda {background-color="gold"}
+
+- This unit is a step-by-step exercise in structural modeling
+- We will build an economic model to describe how people make discrete choices
+- We will create synthetic data based on that model
+- Then, based on this data, we will use MLE to estimate the parameters of a discrete demand system
+- Finally, we will use the estimated parameters to perform a counterfactual exercise
+
+# Background: what's the value of BART?
+
+## Background: what's the value of BART?
+
+
+::: {.columns}
+::: {.column}
+- In the 1970s, California started building the Bay Area Rapid Transit (BART) system
+- It would cost \$1.6 B but the benefits were unclear: how many people would actually use it?
+- One idea: a survey. Just ask people in the Bay area what transportation modes they use and whether they would switch
+:::
+::: {.column width="40%"}
+![](figs/BART.jpg)
+:::
+::: 
+
+## Background: what's the value of BART?
+
+::: {.columns}
+::: {.column}
+- But Daniel McFadden, at the time a Prof. of Economics at UC Berkeley, was concerned: 
+  - *Can people predict how they'll use something that doesn't yet exist?*
+- McFadden's idea: observe what people actually do and use theory to predict what they would do
+- To McFadden, using survey data + economic theory would deliver better results than a survey alone
+:::
+::: {.column width="30%"}
+![](figs/mcfadden_1124-full.jpg)
+:::
+::: 
+
+
+. . .
+
+- Predictions:
+  - Surveys: 15% of respondents said they'd use BART
+  - McFadden's estimates: 6%  of respondents said they'd use BART
+
+
+## Background: revealed vs. stated preferences
+
+-  McFadden's idea turned out to be correct in this case: In fact, about 6% of the respondents actually used BART
+
+. . .  
+
+- This idea has been very influencial in economics, marketing, and other social sciences: study **revealed preferences** rather than **stated preferences**
+  - I.e., trust more the data on what people do, not what they say they will do
+- Estimation based on revealed preferences is at the core of demand estimation and consumer behaviour modeling used in academia, industry, policy, and courts
+
+. . .
+
+- But what is revealed preference, anyway?
+
+
+# Revealed preference
+
+In the context of empirical economics, *revealed preference* can be interpreted as an assumption:
+
+> If there are two choices, A and B, and we observe a person choose A, then her utility from A is greater than her utility from B.
+
+Let's create an example!
+
+
+# Revealed preference: example
+

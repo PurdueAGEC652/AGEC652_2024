@@ -34,6 +34,7 @@ Pkg.instantiate()
 # Pkg.add("Plots")
 # Pkg.add("ForwardDiff")
 # Pkg.add("LinearAlgebra")
+# Pkg.add("LaTeXStrings")
 ```
 
 
@@ -120,6 +121,8 @@ Pkg.instantiate()
 
 # Revealed preference
 
+## Revealed preference
+
 In the context of empirical economics, *revealed preference* can be interpreted as an assumption:
 
 > If there are two choices, A and B, and we observe a person choose A, then her utility from A is greater than her utility from B.
@@ -127,5 +130,149 @@ In the context of empirical economics, *revealed preference* can be interpreted 
 Let's create an example!
 
 
-# Revealed preference: example
+## Revealed preference example
 
+**Setting**: we have data on a large number of consumers who made a choice between two products A and B at different prices
+
+Each individual will have an *unobserved* characteristic $u$ (their utility). We will make two assumptions
+
+> **Assumption 1: Additive separability, linearity on money.** The value an individual $i$ gets from purchasing product $k \in \{A,B\}$ is $V_{ki} = u_{ki} - p_k$. This is, the unobserved utility of consuming $k$ minus the price paid to consume it 
+
+## Revealed preference example
+
+> **Assumption 2: Revealed prefernce.** If an individual $i$ purchases product A, then $u_{A,i} - p_A > u_{B,i} - p_B \Rightarrow u_{A,i} - u_{B,i} > p_A - p_B$
+
+. . .
+
+- Utility is measured on an arbitrary scale, so we can normalize it by picking one choice to be the reference one
+- Here, we will normalize to product B and write
+
+$$
+p = p_A - p_B
+$$
+
+and 
+
+$$
+u_i = u_{Ai} - u_{Bi}
+$$
+
+
+## Revealed preference example: data
+
+Let's create some data to illustrate revealed preference
+
+In this illustration, we assume the unobserved normalized utility is normally distributed $u \sim N(1,9)$, and that we have $N=1000$ i.i.d observations
+
+```{julia}
+using Random, Distributions
+Random.seed!(652); # For reproducibility
+N = 1000;
+μ_u = 1;
+σ_u = 3;
+u_is = rand(Normal(μ_u, σ_u), N);
+```
+
+
+## Revealed preference example: data
+
+Next, let's use this distribution to generate the observations of behavior for a (relative) price $p = 2$
+
+We will define $y_i = 1$ if individual $i$ purchases option A, and $y_i = 0$ if $i$ purchases B
+
+```{julia}
+p = 2;
+y_is = (u_is .- p .> 0);
+```
+
+## Revealed preference example: uncovering preferences
+
+Can we use the observed behavior $y_i$ to uncover the unobserved term $u_i$?
+
+. . .
+
+Probably not, because $y_i$ as are binary but $u_i \in \mathbb{R}$ 
+
+```{julia}
+using Plots, LaTeXStrings
+Plots.scatter(u_is, y_is, xlabel=L"$u_i$", ylabel=L"$y_i$", label="")
+```
+
+## Revealed preference example: uncovering preferences
+
+But what about aggregate behavior? Can it at least inform about the mean of the distribution?
+
+```{julia}
+println("We know that $(mean(y_is)*100)% of consumers have u > p")
+```
+
+How can we compare that to the population distribution $N(1, 9)$?
+
+. . .
+
+By using the CDF!
+
+```{julia}
+1 - cdf(Normal(μ_u, σ_u), p)
+```
+
+So the data allowed us to get an estimate of how many individuals have $u_i > 2$
+
+What do we need to be able to say more about this distribution?
+
+
+## Revealed preference example: uncovering preferences
+
+If we want to say something about the CDF of $u$ at more points, we need to observe behavior at more prices!
+
+Instead of having a single price, suppose we could confront each consumer with a range of prices and observe their purchasing behavior
+
+We will organize that information in data matrix Z
+
+```{julia}
+p_grid = collect(-10:10)
+# Rows are individuals i, columns are prices
+Z = [(u - p > 0) for u in u_is, p in p_grid]
+```
+
+## Revealed preference example: uncovering preferences
+
+Now, for each price level $p_j$, we can calculate the proportion of consumers that chose to purchase A ($y_i(p_j) = 1$)
+
+$$
+s(p_j) = \frac{1}{N} \sum^N_{i=1} y_i(p_j)
+$$
+
+
+```{julia}
+s_p = zeros(length(p_grid))
+for j in 1:length(p_grid)
+  s_p[j] = mean(Z[:,j]) # Calculate mean of column j
+end
+```
+
+## Revealed preference example: uncovering preferences
+
+Let's plot $s(p_j)$
+
+
+```{julia}
+plot(s_p, p_grid, xlabel=L"$s$", ylabel=L"$p$", label="Observed")
+plot!(1 .- cdf.(Normal(μ_u, σ_u), p_grid), p_grid, linestyle=:dash, label="True distribution")
+```
+
+Look at the labels... What kind of curve is this?
+
+. . .
+
+Yep, we just estimated a demand function! (Note that $Q = s \times N$)
+
+# Discrete choice models
+
+- Latent variable model
+- Probit
+- Logit
+- Simulation and estimation
+- Multinomial probit and logit
+- Simulation and estimation
+- BART exercise

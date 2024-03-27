@@ -269,10 +269,165 @@ Yep, we just estimated a demand function! (Note that $Q = s \times N$)
 
 # Discrete choice models
 
-- Latent variable model
-- Probit
+## Latent variable model
+
+- In the previous example, we can regard $u_i$ as a **latent** (or hidden) variable
+  - We don't know its true value, but we observe a consequence of that value based on a cut-off point
+
+. . .
+
+- The classic binary discrete choice model can be framed as a latent variable model, with the latent variable
+
+$$
+y_i^* = X_i^\prime \beta + \nu_i
+$$
+
+where $X_i$ is a vector of observed characteristics, $\nu_i$ an unobserved term (assumed uncorrelated with $X_i$), and $\beta$ is a vector that maps characteristics to the value of the latent variable
+
+. . .
+
+- We do not observe $y_i^*$, but only the outcome $y_i$
+
+$$
+y_i = \begin{cases}
+1\mbox{, if } $y_i^* \geq 0\\
+0\mbox{, if } $y_i^* < 0
+\end{cases}
+$$
+
+
+## Latent variable model
+
+- Although we don't observe $y_i^*$ directly, we can reason about the probabilities of seeing specific values of $y_i$
+- For instance
+
+$$
+\begin{align}
+\Pr(y_i = 1 | X_i) & = \Pr(y_i^* > 0) \\
+& = \Pr(X_i^\prime \beta + \nu_i > 0) \\
+& = \Pr(\nu_i > -X_i^\prime \beta) \\
+& = 1 - F(-X_i^\prime \beta) \\
+\end{align}
+$$
+
+where $F$ is the CDF of the distribution of $\nu_i$
+
+. . .
+
+- If we knew $\beta$, we could determine the distribution of $\nu_i$
+  - That's what we did in the previous exercise, where $\beta$ was 1
+
+. . .
+
+- But we rarely know the true $\beta$, so we need to estimate it
+
+
+## Estimating the latent variable model
+
+- The problem in estimating $\beta$ is that we cannot both $\beta$ and $F$ at the same time, so we need to make some restriction in one of them
+
+. . .
+
+- One common approach is to assume that $\nu_i$ is normally distributed following the standard normal, so $F$ is the $\Phi$, or the standard normal CDF
+
+$$
+\Pr(y_i = 1 | X_i) = 1 - \Phi(-X_i^\prime \beta)
+$$
+
+- This is the starting point of the **binomial Probit** model!
+
+. . .
+
+- Note that $\beta$ is a nonlinear term in this equation, so we need a nonlinear estimator. MLE is a great candidate!
+
+
+## Estimating Probit with MLE
+
+- The first step is to assemble the likelihood function
+- But let's start with a single observation. We know that^[The second step uses the symmetry of the Normal distribution.]
+
+$$
+\begin{align}
+\Pr(y_i = 0 | X_i) & = \Phi(-X_i^\prime \beta) \\
+\Pr(y_i = 1 | X_i) & = 1 - \Phi(-X_i^\prime \beta) = \Phi(X_i^\prime \beta)
+\end{align}
+$$
+
+. . .
+
+There's a clever way to combine these expressions depending on the value of $y_i$
+
+$$
+\Pr(y_i| X_i, \beta)  = \left[\Phi(-X_i^\prime \beta)\right]^{1-y_i} \left[\Phi(X_i^\prime \beta)\right]^{y_i}
+$$
+
+- That is: if $y_i = 0$, the exponent of the fist term is $1$ and of second term is $0$, so we select the first one
+  - If $y_i = 1$, the opposite happens
+
+
+## Estimating Probit with MLE
+$$
+\Pr(y_i| X_i, \beta)  = \left[\Phi(-X_i^\prime \beta)\right]^{1-y_i} \left[\Phi(X_i^\prime \beta)\right]^{y_i}
+$$
+
+With the i.i.d. assumption, it's easy to write the likelihood function as the product of these probabilities
+
+$$
+L(y, X | \beta) = \prod_{i=1}^N \left[\Phi(-X_i^\prime \beta)\right]^{1-y_i} \left[\Phi(X_i^\prime \beta)\right]^{y_i}
+$$
+
+. . .
+
+Taking the logs to get the log-likelihood function, the MLE estimator is given by
+
+$$
+\hat\beta_{MLE} = \arg \max_\beta = \sum_{i=1}^N (1-y_i)\left[\Phi(-X_i^\prime \beta)\right]  + y_i \left[1 - \Phi(-X_i^\prime \beta)\right]
+$$
+
+
+## Estimating Probit with MLE
+
+- One thing seems to be missing, though. Where's $\sigma^2$?
+
+. . .
+
+- Turns out, we can't identify it!
+  - This means that there is an infinite number of values of $\sigma^2$ that can be found to be consistent with the data
+
+. . .
+
+- Intuitively, the observed outcome ($y_i$) only gives us information about a location: where the latent variable crosses a threshold
+  - So you could increase $\sigma^2$ and $\beta$ in the same proportion and end up with the same probabilities
+
+## Estimating Probit with MLE
+
+For example, suppose we had two candidates: $\sigma_a$ and $\sigma_b$. The problem is that we can find $\beta_a$ and $\beta_b$ such that
+$$
+\Phi(\frac{X_i^\prime \beta_a}{\sigma_a}) = \Phi(\frac{X_i^\prime \beta_b}{\sigma_b})
+$$
+
+. . .
+
+- So $\beta$ and $\sigma$ are not separately identifiable, only their ratio!
+- The common practice is to assume $\sigma = 1$
+
+## Binomial Logit
+
+- Another common assumption for the distribution of the unobserved terms are distributed following a **logistic distribution**, which gives
+
+$$
+\Pr(y_i = 1 | X_i) = \Lambda(X_i^\prime \beta) = \frac{e^{X_i^\prime \beta}}{1 + e^{X_i^\prime \beta}}
+$$
+
+- This is the foundation of the **Binomial Logit** model
+
+
+## TBA
+
+
 - Logit
 - Simulation and estimation
 - Multinomial probit and logit
 - Simulation and estimation
-- BART exercise
+- Another common assumption for the distribution of the unobserved terms are distributed followin the [Type 1 Extreme Value** distribution](https://en.wikipedia.org/wiki/Gumbel_distribution), a.k.a. Gumbel or log-Weibull distributions
+- This choice is made for analytical convenience: it implies that the difference between unobserved follows a **logistic distribution**

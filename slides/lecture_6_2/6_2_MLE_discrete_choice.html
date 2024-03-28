@@ -478,7 +478,7 @@ Diego S. Cardoso
 <li>Predictions:
 <ul>
 <li>Surveys: 15% of respondents said they’d use BART</li>
-<li>McFadden’s estimates: 6% of respondents said they’d use BART</li>
+<li>McFadden’s estimates: 6% of respondents would use BART</li>
 </ul></li>
 </ul>
 </div>
@@ -521,17 +521,17 @@ Diego S. Cardoso
 <p><strong>Setting</strong>: we have data on a large number of consumers who made a choice between two products A and B at different prices</p>
 <p>Each individual will have an <em>unobserved</em> characteristic <span class="math inline">\(u\)</span> (their utility). We will make two assumptions</p>
 <blockquote>
-<p><strong>Assumption 1: Additive separability, linearity on money.</strong> The value an individual <span class="math inline">\(i\)</span> gets from purchasing product <span class="math inline">\(k \in \{A,B\}\)</span> is <span class="math inline">\(V_{ki} = u_{ki} - p_k\)</span>. This is, the unobserved utility of consuming <span class="math inline">\(k\)</span> minus the price paid to consume it</p>
+<p><strong>Assumption 1: Additive separability, linearity on money.</strong> The value an individual <span class="math inline">\(i\)</span> gets from purchasing product <span class="math inline">\(k \in \{A,B\}\)</span> is <span class="math inline">\(V_{ik} = u_{ik} - p_k\)</span>. This is, the unobserved utility of consuming <span class="math inline">\(k\)</span> minus the price paid to consume it</p>
 </blockquote>
 </section>
 <section id="revealed-preference-example-1" class="slide level2">
 <h2>Revealed preference example</h2>
 <blockquote>
-<p><strong>Assumption 2: Revealed prefernce.</strong> If an individual <span class="math inline">\(i\)</span> purchases product A, then <span class="math inline">\(u_{A,i} - p_A &gt; u_{B,i} - p_B \Rightarrow u_{A,i} - u_{B,i} &gt; p_A - p_B\)</span></p>
+<p><strong>Assumption 2: Revealed prefernce.</strong> If an individual <span class="math inline">\(i\)</span> purchases product A, then <span class="math inline">\(u_{iA} - p_A &gt; u_{iB} - p_B \Rightarrow u_{iA} - u_{iB} &gt; p_A - p_B\)</span></p>
 </blockquote>
 <div class="fragment">
 <ul>
-<li>Utility is measured on an arbitrary scale, so we can normalize it by picking one choice to be the reference one</li>
+<li>Utility is measured on an arbitrary scale, so we can normalize it by picking one choice to be the reference</li>
 <li>Here, we will normalize to product B and write</li>
 </ul>
 <p><span class="math display">\[
@@ -539,7 +539,7 @@ p = p_A - p_B
 \]</span></p>
 <p>and</p>
 <p><span class="math display">\[
-u_i = u_{Ai} - u_{Bi}
+u_i = u_{iA} - u_{iB}
 \]</span></p>
 </div>
 </section>
@@ -1783,8 +1783,8 @@ y_i^* = X_i^\prime \beta + \nu_i
 </ul>
 <p><span class="math display">\[
 y_i = \begin{cases}
-1\mbox{, if } $y_i^* \geq 0\\
-0\mbox{, if } $y_i^* &lt; 0
+1\mbox{, if } y_i^* \geq 0\\
+0\mbox{, if } y_i^* &lt; 0
 \end{cases}
 \]</span></p>
 </div>

@@ -99,7 +99,7 @@ Pkg.instantiate()
 
 - Predictions:
   - Surveys: 15% of respondents said they'd use BART
-  - McFadden's estimates: 6%  of respondents said they'd use BART
+  - McFadden's estimates: 6%  of respondents would use BART
 
 
 ## Background: revealed vs. stated preferences
@@ -134,15 +134,15 @@ Let's create an example!
 
 Each individual will have an *unobserved* characteristic $u$ (their utility). We will make two assumptions
 
-> **Assumption 1: Additive separability, linearity on money.** The value an individual $i$ gets from purchasing product $k \in \{A,B\}$ is $V_{ki} = u_{ki} - p_k$. This is, the unobserved utility of consuming $k$ minus the price paid to consume it 
+> **Assumption 1: Additive separability, linearity on money.** The value an individual $i$ gets from purchasing product $k \in \{A,B\}$ is $V_{ik} = u_{ik} - p_k$. This is, the unobserved utility of consuming $k$ minus the price paid to consume it 
 
 ## Revealed preference example
 
-> **Assumption 2: Revealed prefernce.** If an individual $i$ purchases product A, then $u_{A,i} - p_A > u_{B,i} - p_B \Rightarrow u_{A,i} - u_{B,i} > p_A - p_B$
+> **Assumption 2: Revealed prefernce.** If an individual $i$ purchases product A, then $u_{iA} - p_A > u_{iB} - p_B \Rightarrow u_{iA} - u_{iB} > p_A - p_B$
 
 . . .
 
-- Utility is measured on an arbitrary scale, so we can normalize it by picking one choice to be the reference one
+- Utility is measured on an arbitrary scale, so we can normalize it by picking one choice to be the reference
 - Here, we will normalize to product B and write
 
 $$
@@ -152,7 +152,7 @@ $$
 and 
 
 $$
-u_i = u_{Ai} - u_{Bi}
+u_i = u_{iA} - u_{iB}
 $$
 
 
@@ -288,8 +288,8 @@ where $X_i$ is a vector of observed characteristics, $\nu_i$ an unobserved term 
 
 $$
 y_i = \begin{cases}
-1\mbox{, if } $y_i^* \geq 0\\
-0\mbox{, if } $y_i^* < 0
+1\mbox{, if } y_i^* \geq 0\\
+0\mbox{, if } y_i^* < 0
 \end{cases}
 $$
 
@@ -420,12 +420,3 @@ $$
 - This is the foundation of the **Binomial Logit** model
 
 
-## TBA
-
-
-- Logit
-- Simulation and estimation
-- Multinomial probit and logit
-- Simulation and estimation
-- Another common assumption for the distribution of the unobserved terms are distributed followin the [Type 1 Extreme Value** distribution](https://en.wikipedia.org/wiki/Gumbel_distribution), a.k.a. Gumbel or log-Weibull distributions
-- This choice is made for analytical convenience: it implies that the difference between unobserved follows a **logistic distribution**

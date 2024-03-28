@@ -60,11 +60,9 @@ Pkg.instantiate()
 
 ## Agenda {background-color="gold"}
 
-- This unit is a step-by-step exercise in structural modeling
-- We will build an economic model to describe how people make discrete choices
-- We will create synthetic data based on that model
-- Then, based on this data, we will use MLE to estimate the parameters of a discrete demand system
-- Finally, we will use the estimated parameters to perform a counterfactual exercise
+- In this unit, we will build an economic model to describe how people make discrete choices
+- We will see how the latent variable econometric model maps into a utility framework
+- We will create synthetic data based on that model and, based on this data, we will use MLE to estimate the parameters of that model
 
 # Background: what's the value of BART?
 

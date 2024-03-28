@@ -379,7 +379,7 @@ $$
 Taking the logs to get the log-likelihood function, the MLE estimator is given by
 
 $$
-\hat\beta_{MLE} = \arg \max_\beta = \sum_{i=1}^N (1-y_i)\left[\Phi(-X_i^\prime \beta)\right]  + y_i \left[1 - \Phi(-X_i^\prime \beta)\right]
+\hat\beta_{MLE} = \arg \max_\beta = \sum_{i=1}^N (1-y_i)\log\left(\Phi(-X_i^\prime \beta)\right)  + y_i \log\left(\Phi(X_i^\prime \beta)\right)
 $$
 
 

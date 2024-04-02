@@ -221,10 +221,10 @@ We will assume individuals have 75% probability of being homeowners in all non-r
 homeown_nr = rand(Bernoulli(0.75), N_survey * N_nr_cities);
 ```
 
-We will assume household size is uncorrelated with being a homeowner or any city characteristics. Household size will follow a Poisson distribution with $\lambda = 3.0$ (the mean of this distribution)
+We will assume household size is uncorrelated with being a homeowner or any city characteristics. Household size will be a minimum of 1 plus a random term that follows a Poisson distribution with $\lambda = 2.0$ (the mean of this distribution)
 
 ```{julia}
-hhsize_nr = rand(Poisson(3.0), N_survey * N_nr_cities);
+hhsize_nr = 1 .+ rand(Poisson(2.0), N_survey * N_nr_cities);
 ```
 
 ---
@@ -325,7 +325,7 @@ So, in the data we generated, what proportion of individuals travel by bus?
 sum(data_nr.d_ib)/nrow(data_nr)
 ```
 
-About 9.6%.
+About 8.6%.
 
 
 ## Simulating survey answers
@@ -382,7 +382,7 @@ Operator `&` represents the logical AND operator.
 sum(data_nr.d_it_hyp)/nrow(data_nr)
 ```
 
-Resulting in about 9.7% of the people saying they'd use the train.
+Resulting in about 9.9% of the people saying they'd use the train.
 
 ---
 
@@ -403,7 +403,7 @@ data_nr.d_ib_hyp = (data_nr.V_ib .+ data_nr.ϵ_ib .> 0.0) .& (data_nr.V_ib .+ da
 sum(data_nr.d_ib_hyp)/nrow(data_nr)
 ```
 
-So about 8.9%. This means few people would switch from bus to train, and most of the said new train riders are those switching from cars.
+So about 8.0%. This means few people would switch from bus to train, and most of the hypothetical new train riders are those switching from cars.
 
 ---
 
@@ -479,7 +479,7 @@ homeown_r = rand(Bernoulli(0.50), N_survey * N_r_cities);
 We will change the mean of the household size in rail cities to 2.5
 
 ```{julia}
-hhsize_r = rand(Poisson(2.5), N_survey * N_r_cities);
+hhsize_r = 1 .+ rand(Poisson(1.5), N_survey * N_r_cities);
 ```
 
 ---
@@ -612,7 +612,7 @@ sum(data_r.d_ib)/nrow(data_r)
 sum(data_r.d_it)/nrow(data_r)
 ```
 
-So, about 10% of the residents use the bus and 12% use the train.
+So, about 9.5% of the residents use the bus and 13% use the train.
 
 
 # Exporting the data

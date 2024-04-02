@@ -9,6 +9,7 @@ execute:
 format:
   revealjs: 
     theme: [white, ./../agec_652_style.css]
+    output-file: 6_3a_slides.html
     slide-number: c
     show-slide-number: all
     code-block-bg: true
@@ -33,6 +34,7 @@ Pkg.activate(".")
 Pkg.instantiate()
 # Pkg.add("JuMP")
 # Pkg.add("Ipopt")
+# Pkg.add("Optim")
 # Pkg.add("Statistics")
 # Pkg.add("Plots")
 # Pkg.add("ForwardDiff")
@@ -74,6 +76,7 @@ Pkg.instantiate()
 
 - Inspired by McFadden's study of the BART system, we will simulate a similar setting to estimate the value of expanding the public transit system in a city with limited service
 - We will assume residents have three main transportation modes for commuting: bus (b), car (c), or train (t)
+- We will also assume these choices represent the mode most used, so they are mutually exclusive choices
 - We start by writting down the random utility model to capture the discrete choices individuals make
 
 ## Random Utility Model
@@ -89,6 +92,8 @@ U_{it} = X_{it}^\prime \beta_t + \nu_{it} = V_{it} + \nu_{it}
 $$
 
 Where $X$, $\beta$ and $\nu$ are defined as in the previous lecture. Here, $V_{ik}$ represents the average utility of an individual with the same observed characteristics as $i$ when choosing option $k$.
+
+---
 
 Therefore, if an individual $i$ chooses train, by the revealed preference assumption we have that
 
@@ -564,7 +569,6 @@ histogram(data_r.V_ib .+ data_r.ϵ_ib, xlabel=L"V_{ib} + \epsilon_{ib}", label="
 histogram(data_r.V_it .+ data_r.ϵ_it, xlabel=L"V_{it} + \epsilon_{it}", label="")
 ```
 
-
 ## Simulating choices
 
 Again, we use binary variables $d_{ib}$ and $d_{it}$ to indicate the choice made by each individual. However, we now have to test two conditions for each case. Remember, for train we need
@@ -601,6 +605,24 @@ data_r.d_ib = (data_r.V_ib .+ data_r.ϵ_ib .> 0.0) .& (data_r.V_ib .+ data_r.ϵ_
 
 ---
 
+We can plot them against each other to identify the regions of choice (but note that $V_{ik}$ is different for each $i$, so the cutoff points to car in this diagram are the axes)
+
+```{julia}
+scatter(data_r.V_ib .+ data_r.ϵ_ib, data_r.V_it .+ data_r.ϵ_it, label="",
+        xlabel=L"$V_{ib} + \epsilon_{ib}$", ylabel=L"$V_{it} + \epsilon_{it}$")
+# Add thresholds
+plot!([0.0, 5.0], [0.0, 5.0], label = "", linewidth=4, color="red") # Bus-train threshold (45 degree line)
+plot!([0.0, 0.0], [0.0, -10.0], label = "", linewidth=4, color="red") # Bus-car threshold
+plot!([0.0, -10.0], [0.0, 0.0], label = "", linewidth=4, color="red") # Train-car threshold
+
+# Add anotations
+annotate!(-7.5, 5, text("Train", color="red"))
+annotate!(-7.5, -8, text("Car", color="red"))
+annotate!(3, -8, text("Bus", color="red"))
+```
+
+---
+
 So, in the data we generated, what proportion of individuals travel by bus and train?
 
 ```{julia}
@@ -617,3 +639,66 @@ So, about 9.5% of the residents use the bus and 13% use the train.
 
 # Exporting the data
 
+Finally, we will export the data into a CSV format. In the next part of this tutorial, we will pretend we don't know the true parameters that generated this data and will estimate them.
+
+First, we need to stack the dataframes. We can do that using `vcat`, but we must ensure both dataframes have the same columns.
+
+```{julia}
+stacked_data = vcat(
+  data_nr[:,[:city, :price_bus, :price_train, :stops_bus, :stops_train, :density, :hhsize, :homeown, :d_ib, :d_it]],
+  data_r[:,[:city, :price_bus, :price_train, :stops_bus, :stops_train, :density, :hhsize, :homeown, :d_ib, :d_it]]
+);
+println(stacked_data[1:10,:]) # Print first 10 rows
+```
+
+---
+
+Next, let's enforce some realistic standards for the variable types. First, prices and density can have up to 2 decimal digits
+
+```{julia}
+stacked_data.price_bus = round.(stacked_data.price_bus, digits=2);
+stacked_data.price_train = round.(stacked_data.price_train, digits=2);
+stacked_data.density = round.(stacked_data.density, digits=2);
+```
+
+Second, enforce integer in count variables.
+
+```{julia}
+stacked_data.stops_bus = Int.(stacked_data.stops_bus);
+stacked_data.stops_train = Int.(stacked_data.stops_train);
+stacked_data.hhsize = Int.(stacked_data.hhsize);
+```
+
+Finally, binary variables need to be coded as 0 or 1 (also casting them as integers). 
+
+```{julia}
+stacked_data.homeown = Int.(stacked_data.homeown);
+stacked_data.d_ib = Int.(stacked_data.d_ib);
+stacked_data.d_it = Int.(stacked_data.d_it);
+```
+
+---
+
+Let's check.
+
+```{julia}
+println(stacked_data[1:10,:]) # Print first 10 rows
+```
+
+Good!
+
+---
+
+We can now save it as a CSV file.
+```{julia}
+using CSV
+CSV.write("./transportation_mode_survey.csv", stacked_data) # Save in current folder
+```
+
+
+## Up next
+
+- In part b of this lecture, we will estimate the discrete choice parameters to perform economic analyses.
+- We will use the coefficients estimated in rail cities to predict the percentages of each mode in the cities currently without a rail system.
+- Then, we will estimate the willingness to pay for implementing and expanding systems.
+- Finally, we will calculate the welfare of introducing a system in each city.

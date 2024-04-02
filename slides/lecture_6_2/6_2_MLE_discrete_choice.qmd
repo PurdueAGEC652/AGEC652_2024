@@ -641,7 +641,7 @@ $$
 - With that, we can write the log-likelihood function as
 
 $$
-l(\beta) = \sum_{i=1}^N \sum_{j=1}^J d_{ij} \log Pr[y_i = j | X_i] = \sum_{i=1}^N \sum_{j=1}^J d_{ij} (X_{ij}^\prime \beta) - N \log \left(\sum_{k=1}^J e^{X_{ik}^\prime \beta}\right)
+l(\beta) = \sum_{i=1}^N \sum_{j=1}^J d_{ij} \log Pr[y_i = j | X_i] = \sum_{i=1}^N \sum_{j=1}^J d_{ij} (X_{ij}^\prime \beta) - \sum_{i=1}^N \log \left(\sum_{k=1}^J e^{X_{ik}^\prime \beta}\right)
 $$
 
 - And define the ML estimator as  $\hat\beta_{MLE} = \arg \max_\beta l(\beta)$

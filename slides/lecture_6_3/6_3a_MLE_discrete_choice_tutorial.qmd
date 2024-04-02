@@ -163,7 +163,7 @@ We assume the following observed characteristics affect the utility of each choi
 
 ## Survey assumptions
 
-We are now ready to start generating to simulate this true model. We will first generate data to simulate surveys in 30 cities that currently do not have a rail system.
+We are now ready to start generating the data that simulates this true model. We will first generate data to simulate surveys in 30 cities that currently do not have a rail system.
 
 ```{julia}
 N_survey = 2000 # Individuals surveyed per city
@@ -229,7 +229,7 @@ hhsize_nr = 1 .+ rand(Poisson(2.0), N_survey * N_nr_cities);
 
 ---
 
-We can now assemble the survey data frame for these surveys. First, for individuals and adding their 
+We can now assemble the survey data frame for these surveys. First, for individuals
 
 ```{julia}
 survey_nr = DataFrame(
@@ -330,7 +330,7 @@ About 9.5%.
 
 ## Simulating survey answers
 
-We don't know exactly how people who don't have the would respond to a question about whether they would use the train. Just for illustration, let's assume that individuals reason that the train would cost 10% more than the bus and be as good as increasing the number of bus stops by 40%.
+We don't know exactly how people who don't have the option would respond to a question about whether they would use the train. Just for illustration, let's assume that individuals reason that the train would cost 10% more than the bus and be as good as increasing the number of bus stops by 40%.
 
 We can calculate the proportion of individuals that say they would adopt the train given the option based on a hypothethical $V$
 

@@ -166,7 +166,7 @@ We assume the following observed characteristics affect the utility of each choi
 We are now ready to start generating to simulate this true model. We will first generate data to simulate surveys in 30 cities that currently do not have a rail system.
 
 ```{julia}
-N_survey = 200 # Individuals surveyed per city
+N_survey = 2000 # Individuals surveyed per city
 N_nr_cities = 30 # Non-rail cities surveyed
 ```
 
@@ -325,12 +325,12 @@ So, in the data we generated, what proportion of individuals travel by bus?
 sum(data_nr.d_ib)/nrow(data_nr)
 ```
 
-About 8.6%.
+About 9.5%.
 
 
 ## Simulating survey answers
 
-We don't know exactly how people who don't have the would respond to a question about whether they would use the train. Just for illustration, let's assume that individuals reason that the train would cost 5% more than the bus and be as good as increasing the number of bus stops by 10%.
+We don't know exactly how people who don't have the would respond to a question about whether they would use the train. Just for illustration, let's assume that individuals reason that the train would cost 10% more than the bus and be as good as increasing the number of bus stops by 40%.
 
 We can calculate the proportion of individuals that say they would adopt the train given the option based on a hypothethical $V$
 
@@ -343,8 +343,8 @@ for i in 1:nrow(data_nr)
 # Turn it into a numerical vector (adding the constant 1 in the first element)
   X_i = vcat(1.0, Vector{Float64}(data_row))
 
-  X_i[2] = 1.05 * X_i[2] # Increase in prices
-  X_i[3] = 1.1 * X_i[3] # But with an increase in bus stops
+  X_i[2] = 1.1 * X_i[2] # Increase in prices
+  X_i[3] = 1.4 * X_i[3] # But with an increase in bus stops
 
   # Calculate and store
   data_nr.V_it_hyp[i] = X_i' * β_b;
@@ -382,7 +382,7 @@ Operator `&` represents the logical AND operator.
 sum(data_nr.d_it_hyp)/nrow(data_nr)
 ```
 
-Resulting in about 9.9% of the people saying they'd use the train.
+Resulting in about 22% of the people saying they'd use the train.
 
 ---
 
@@ -403,7 +403,7 @@ data_nr.d_ib_hyp = (data_nr.V_ib .+ data_nr.ϵ_ib .> 0.0) .& (data_nr.V_ib .+ da
 sum(data_nr.d_ib_hyp)/nrow(data_nr)
 ```
 
-So about 8.0%. This means few people would switch from bus to train, and most of the hypothetical new train riders are those switching from cars.
+So about 7.8%. This means few people would switch from bus to train, and most of the hypothetical new train riders are those switching from cars.
 
 ---
 
@@ -629,7 +629,7 @@ sum(data_r.d_ib)/nrow(data_r)
 sum(data_r.d_it)/nrow(data_r)
 ```
 
-So, about 9.5% of the residents use the bus and 13% use the train.
+So, about 10% of the residents use the bus and 14% use the train.
 
 
 # Exporting the data

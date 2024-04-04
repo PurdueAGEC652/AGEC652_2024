@@ -40,6 +40,7 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
 - Unit 6 - Maximum Likelihood Estimator
   - Lecture 6.1: [MLE theory](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_2/6_2_MLE_discrete_choice.html)
   - Lecture 6.2: [Discrete choice and RUM](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_2/6_2_MLE_discrete_choice.html)
-  - Lecture 6.3: [RUM + MLE tutorial, part 1](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_3/6_3a_MLE_discrete_choice_tutorial.html)
+  - Lecture 6.3a: [RUM + MLE tutorial, part 1](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_3/6_3a_MLE_discrete_choice_tutorial.html)
+  - Lecture 6.3b: [RUM + MLE tutorial, part 2](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_3/6_3b_MLE_discrete_choice_tutorial.html)
 
 

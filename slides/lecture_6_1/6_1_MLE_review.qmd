@@ -632,11 +632,10 @@ LR_stat = 2 * (l_U - l_R)
 
 ## MLE in practice: testing
 
-We can calculate the critical value for a two-sided test using the quantiles of the $\chi^2_{1}$ distribution with $\alpha  = 0.05$
+We can calculate the critical value of this test using the quantile of the $\chi^2_{1}$ distribution with $\alpha  = 0.05$
 ```{julia}
-crit_value_lower = quantile(Chisq(1), 0.025);
-crit_value_upper = quantile(Chisq(1), 0.975);
-println("Test interval: $crit_value_lower -- $crit_value_upper . Test statistic: $LR_stat")
+crit_value = quantile(Chisq(1), 0.95);
+println("Critical value: $crit_value . Test statistic: $LR_stat")
 ```
 
 So we can confidently reject this hypothesis.

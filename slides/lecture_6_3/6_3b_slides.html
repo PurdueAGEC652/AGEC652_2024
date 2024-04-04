@@ -461,12 +461,12 @@ Diego S. Cardoso
 <section id="data-load" class="slide level2">
 <h2>Data load</h2>
 <p>We start by loading the data into memory.</p>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"transportation_mode_survey.csv"</span>, DataFrame);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s again inspect the first few rows of this data.</p>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">println</span>(df[<span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="op">:</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>8×10 DataFrame
@@ -487,7 +487,7 @@ Diego S. Cardoso
 <section class="slide level2">
 
 <p>Since we want to perform an estimation only on rail cities, we can filter the rows we need from the data frame as follows</p>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a>df_r <span class="op">=</span> <span class="fu">filter</span>(row <span class="op">-&gt;</span> <span class="fu">startswith</span>(row[<span class="op">:</span>city], <span class="st">"r_"</span>), df);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -535,18 +535,18 @@ Diego S. Cardoso
 <h2>Data preparation</h2>
 <p>We will assemble the <span class="math inline">\(X_b\)</span> and <span class="math inline">\(X_t\)</span> matrices so that its columns correspond to each individual parameter in <span class="math inline">\(\beta_b\)</span> and <span class="math inline">\(\beta_t\)</span>.</p>
 <p>First, assemble a vector of ones with the same size as the number of observations.</p>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>N_r <span class="op">=</span> <span class="fu">nrow</span>(df_r);</span>
 <span id="cb5-2"><a href="#cb5-2"></a>ones_column <span class="op">=</span> <span class="fu">ones</span>(N_r);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, select the columns for bus and turn that into a matrix <span class="math inline">\(X_b\)</span> and add the column of ones for the intercept.</p>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>X_b <span class="op">=</span> df_r[<span class="op">:</span>, [<span class="op">:</span>price_bus, <span class="op">:</span>stops_bus, <span class="op">:</span>density, <span class="op">:</span>hhsize, <span class="op">:</span>homeown]]</span>
 <span id="cb6-2"><a href="#cb6-2"></a>X_b <span class="op">=</span> <span class="fu">Matrix</span>(X_b) <span class="co"># This converts the DataFrame into a matrix</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>X_b <span class="op">=</span> <span class="fu">hcat</span>(ones_column, X_b); <span class="co"># This concatenates the vector of 1s and X_b horizontally</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Take a peek:</p>
-<div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a>X_b[<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">:</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>5×6 Matrix{Float64}:
@@ -561,7 +561,7 @@ Diego S. Cardoso
 <section class="slide level2">
 
 <p>Then, do the same for <span class="math inline">\(X_t\)</span></p>
-<div class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>X_t <span class="op">=</span> df_r[<span class="op">:</span>, [<span class="op">:</span>price_train, <span class="op">:</span>stops_train, <span class="op">:</span>density, <span class="op">:</span>hhsize, <span class="op">:</span>homeown]]</span>
 <span id="cb9-2"><a href="#cb9-2"></a>X_t <span class="op">=</span> <span class="fu">Matrix</span>(X_t)</span>
 <span id="cb9-3"><a href="#cb9-3"></a>X_t <span class="op">=</span> <span class="fu">hcat</span>(ones_column, X_t);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -570,7 +570,7 @@ Diego S. Cardoso
 <section class="slide level2">
 
 <p>Finally, we also want to form our vector of outcomes <span class="math inline">\(d_b\)</span> and <span class="math inline">\(d_t\)</span>.</p>
-<div class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a>d_b <span class="op">=</span> <span class="fu">Matrix</span>(df_r[<span class="op">:</span>, [<span class="op">:</span>d_ib]]);</span>
 <span id="cb10-2"><a href="#cb10-2"></a>d_t <span class="op">=</span> <span class="fu">Matrix</span>(df_r[<span class="op">:</span>, [<span class="op">:</span>d_it]]);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -582,7 +582,7 @@ Diego S. Cardoso
 l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^N \sum_{k=1}^K d_{ik} (X_{ik}^\prime \beta_k) - \sum_{i=1}^N \log \left(\sum_{k=1}^K e^{X_{ik}^\prime \beta_k}\right)
 \]</span></p>
 <p>Since <span class="math inline">\(\beta\)</span> is unconstrained, we can use <code>Optim</code> to solve this optimization problem. Therefore, to can program the negative of the <span class="math inline">\(l\)</span> function (remember that <code>Optim</code> solves only minimization problems).</p>
-<div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">function</span> <span class="fu">neg_log_likelihood</span>(β; X_b <span class="op">=</span> X_b, X_t <span class="op">=</span> X_t, d_b <span class="op">=</span> d_b, d_t <span class="op">=</span> d_t)</span>
 <span id="cb11-2"><a href="#cb11-2"></a>    <span class="co"># Unpack separate vector of parameters</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a>    β_b <span class="op">=</span> β[<span class="fl">1</span><span class="op">:</span><span class="fl">6</span>]</span>
@@ -604,7 +604,7 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 <section class="slide level2">
 
 <p>Let’s try out this function with the vector of true <span class="math inline">\(\beta\)</span></p>
-<div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a>true_β_b <span class="op">=</span> [<span class="op">-</span><span class="fl">1.0</span>, <span class="op">-</span><span class="fl">0.8</span>,  <span class="fl">0.1</span>,  <span class="fl">0.3</span>, <span class="op">-</span><span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.3</span>];</span>
 <span id="cb13-2"><a href="#cb13-2"></a>true_β_t <span class="op">=</span> [<span class="op">-</span><span class="fl">0.6</span>, <span class="op">-</span><span class="fl">0.8</span>,  <span class="fl">0.2</span>,  <span class="fl">0.6</span>, <span class="op">-</span><span class="fl">0.1</span>, <span class="op">-</span><span class="fl">0.2</span>];</span>
 <span id="cb13-3"><a href="#cb13-3"></a>true_β <span class="op">=</span> <span class="fu">vcat</span>(true_β_b, true_β_t);</span>
@@ -614,7 +614,7 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 </div>
 </div>
 <p>What if we give it a <span class="math inline">\(\beta = 0\)</span></p>
-<div class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">-neg_log_likelihood</span>(<span class="fu">zeros</span>(<span class="fl">12</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>-65916.73732008654</code></pre>
@@ -625,7 +625,7 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 <section id="estimating" class="slide level2">
 <h2>Estimating</h2>
 <p>Next, we can use <code>Optim</code> to solve the optimization for us.</p>
-<div class="cell" data-execution_count="13">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="im">using</span> <span class="bu">Optim</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a><span class="co"># Let's give it a vector of zeros for the initial guess</span></span>
 <span id="cb17-3"><a href="#cb17-3"></a>res <span class="op">=</span> <span class="fu">optimize</span>(neg_log_likelihood, <span class="fu">zeros</span>(<span class="fl">12</span>), <span class="fu">BFGS</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -653,7 +653,7 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 </div>
 </div>
 <p>Let’s check the minimum value it attains</p>
-<div class="cell" data-execution_count="14">
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a>res.minimum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>32126.33295639354</code></pre>
@@ -663,14 +663,14 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 <section class="slide level2">
 
 <p>It’s a good practice to check if our optimization is sensitive to the initial guess, so we can be more confident that our estimates are reliable</p>
-<div class="cell" data-execution_count="15">
+<div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1"></a>res_1 <span class="op">=</span> <span class="fu">optimize</span>(neg_log_likelihood, <span class="fu">ones</span>(<span class="fl">12</span>), <span class="fu">BFGS</span>());</span>
 <span id="cb21-2"><a href="#cb21-2"></a>res_1.minimum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>32126.33295639354</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a>res_2 <span class="op">=</span> <span class="fu">optimize</span>(neg_log_likelihood, <span class="fl">2</span><span class="fu">*ones</span>(<span class="fl">12</span>), <span class="fu">BFGS</span>());</span>
 <span id="cb23-2"><a href="#cb23-2"></a>res_2.minimum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
@@ -678,7 +678,7 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 </div>
 </div>
 <p>OK, these are all pretty close. So let’s stick with the first one for our main estimate.</p>
-<div class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a>β_MLE <span class="op">=</span> res.minimizer;</span>
 <span id="cb25-2"><a href="#cb25-2"></a>β_MLE<span class="ch">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
@@ -690,13 +690,13 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 <section id="revising-the-estimation" class="slide level2">
 <h2>Revising the estimation</h2>
 <p>There’s a theoretical problem here, though</p>
-<div class="cell" data-execution_count="18">
+<div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a>β_MLE[<span class="fl">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>-0.9812342431109393</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="19">
+<div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a>β_MLE[<span class="fl">8</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>-0.9591216015843176</code></pre>
@@ -708,7 +708,7 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 <h2>Revising the estimation</h2>
 <p>We can revise our estimation procedure to estimate a restricted model where we will enforce <span class="math inline">\(\beta_{b,1} = \beta_{t,1}\)</span>. To do that, we program an estimator for the restricted model.</p>
 <p>In this case, <span class="math inline">\(\beta\)</span> now has only 11 elements, and we will reuse the price coefficient of <span class="math inline">\(\beta_b\)</span> for <span class="math inline">\(\beta_t\)</span>.</p>
-<div class="cell" data-execution_count="20">
+<div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">function</span> <span class="fu">restr_neg_log_likelihood</span>(β; X_b <span class="op">=</span> X_b, X_t <span class="op">=</span> X_t, d_b <span class="op">=</span> d_b, d_t <span class="op">=</span> d_t)</span>
 <span id="cb31-2"><a href="#cb31-2"></a>    <span class="co"># We just take element 2 in β and insert it again between elements 7 and 8</span></span>
 <span id="cb31-3"><a href="#cb31-3"></a>    β_b <span class="op">=</span> β[<span class="fl">1</span><span class="op">:</span><span class="fl">6</span>] <span class="co"># The usual</span></span>
@@ -727,7 +727,7 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 <section class="slide level2">
 
 <p>Run the optimization/estimation!</p>
-<div class="cell" data-execution_count="21">
+<div class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1"></a>res_restr <span class="op">=</span> <span class="fu">optimize</span>(restr_neg_log_likelihood, <span class="fu">zeros</span>(<span class="fl">11</span>), <span class="fu">BFGS</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code> * Status: success
@@ -752,7 +752,7 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
     ∇f(x) calls:   136</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="22">
+<div class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a>β_MLE_restr <span class="op">=</span> res_restr.minimizer;</span>
 <span id="cb35-2"><a href="#cb35-2"></a>β_MLE_restr<span class="ch">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
@@ -768,11 +768,11 @@ l(\beta) = \sum_{i=1}^N \sum_{k=1}^K d_{ik} \log Pr[y_i = k | X_i] = \sum_{i=1}^
 LR = 2 \left(l(\hat{\beta}_U) - l(\hat{\beta}_R) \right) \sim \chi^2_{1}
 \]</span></p>
 <p>Luckily, we already have the value of the objective function for each of those cases stored for us the optimization results, so this test statistic is easy to calculate!</p>
-<div class="cell" data-execution_count="23">
+<div class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1"></a>l_U <span class="op">=</span> <span class="op">-</span>res.minimum;</span>
 <span id="cb37-2"><a href="#cb37-2"></a>l_R <span class="op">=</span> <span class="op">-</span>res_restr.minimum;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="24">
+<div class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a>LR_stat <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> (l_U <span class="op">-</span> l_R)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>0.15121039505902445</code></pre>
@@ -782,7 +782,7 @@ LR = 2 \left(l(\hat{\beta}_U) - l(\hat{\beta}_R) \right) \sim \chi^2_{1}
 <section class="slide level2">
 
 <p>It’s also easy calculate the critical value for this test using the quantile of the <span class="math inline">\(\chi^2_{1}\)</span> distribution with <span class="math inline">\(\alpha = 0.05\)</span></p>
-<div class="cell" data-execution_count="25">
+<div class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1"></a><span class="im">using</span> <span class="bu">Distributions</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a>crit_value <span class="op">=</span> <span class="fu">quantile</span>(<span class="fu">Chisq</span>(<span class="fl">1</span>), <span class="fl">0.95</span>);</span>
 <span id="cb40-3"><a href="#cb40-3"></a><span class="fu">println</span>(<span class="st">"Critical value: </span><span class="sc">$</span>crit_value<span class="st"> . Test statistic: </span><span class="sc">$</span>LR_stat<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -791,7 +791,7 @@ LR = 2 \left(l(\hat{\beta}_U) - l(\hat{\beta}_R) \right) \sim \chi^2_{1}
 </div>
 </div>
 <p>Thus, we cannot reject the null hypothesis. We will stick with the restricted estimate as our main estimate now.</p>
-<div class="cell" data-execution_count="26">
+<div class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1"></a>β_b_hat <span class="op">=</span> β_MLE_restr[<span class="fl">1</span><span class="op">:</span><span class="fl">6</span>]; <span class="co"># The usual</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a>β_t_hat <span class="op">=</span> <span class="fu">vcat</span>(β_MLE_restr[<span class="fl">7</span>], β_MLE_restr[<span class="fl">2</span>], β_MLE_restr[<span class="fl">8</span><span class="op">:</span><span class="fl">11</span>]); <span class="co"># Repeat the price coefficient</span></span>
 <span id="cb42-3"><a href="#cb42-3"></a>β_hat <span class="op">=</span> <span class="fu">vcat</span>(β_b_hat, β_t_hat);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -800,14 +800,14 @@ LR = 2 \left(l(\hat{\beta}_U) - l(\hat{\beta}_R) \right) \sim \chi^2_{1}
 <section id="bias" class="slide level2">
 <h2>Bias?</h2>
 <p>Let’s now compare our estimates with the true values.</p>
-<div class="cell" data-execution_count="27">
+<div class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb43-1"><a href="#cb43-1"></a>true_β<span class="op">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>1×12 adjoint(::Vector{Float64}) with eltype Float64:
  -1.0  -0.8  0.1  0.3  -0.2  -0.3  -0.6  -0.8  0.2  0.6  -0.1  -0.2</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="28">
+<div class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1"></a>β_hat<span class="ch">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>1×12 adjoint(::Vector{Float64}) with eltype Float64:
@@ -820,14 +820,14 @@ LR = 2 \left(l(\hat{\beta}_U) - l(\hat{\beta}_R) \right) \sim \chi^2_{1}
 
 <p>Nope! Remember, <span class="math inline">\(\beta\)</span> is not identified! We can only estimate <span class="math inline">\(\beta/\sigma\)</span>, but in the MLE estimation, we assumed <span class="math inline">\(\sigma = 1\)</span>.</p>
 <p>We know that the true value of <span class="math inline">\(\sigma\)</span> was <span class="math inline">\(0.8\)</span>. Let’s compare our estimates with the true <span class="math inline">\(\beta/\sigma\)</span>.</p>
-<div class="cell" data-execution_count="29">
+<div class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1"></a>true_β<span class="op">'./</span><span class="fl">0.8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>1×12 Matrix{Float64}:
  -1.25  -1.0  0.125  0.375  -0.25  -0.375  …  -1.0  0.25  0.75  -0.125  -0.25</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="30">
+<div class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb49-1"><a href="#cb49-1"></a>β_hat<span class="ch">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>1×12 adjoint(::Vector{Float64}) with eltype Float64:
@@ -839,7 +839,7 @@ LR = 2 \left(l(\hat{\beta}_U) - l(\hat{\beta}_R) \right) \sim \chi^2_{1}
 <section id="calculating-standard-errors" class="slide level2">
 <h2>Calculating standard errors</h2>
 <p>We know how to calculate asymptotic standard errors for the MLE using numerical differentiation.</p>
-<div class="cell" data-execution_count="31">
+<div class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb51-1"><a href="#cb51-1"></a><span class="im">using</span> <span class="bu">ForwardDiff</span>, <span class="bu">LinearAlgebra</span></span>
 <span id="cb51-2"><a href="#cb51-2"></a>Im <span class="op">=</span> <span class="op">-</span>ForwardDiff.<span class="fu">hessian</span>(restr_neg_log_likelihood, β_MLE_restr) <span class="co"># Flip the signs</span></span>
 <span id="cb51-3"><a href="#cb51-3"></a>V <span class="op">=</span> <span class="fu">inv</span>(Im);</span>
@@ -849,7 +849,7 @@ LR = 2 \left(l(\hat{\beta}_U) - l(\hat{\beta}_R) \right) \sim \chi^2_{1}
 <section class="slide level2">
 
 <p>And we can organize our results in a classic estimates table</p>
-<div class="cell" data-execution_count="32">
+<div class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1"></a>res_df <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
 <span id="cb52-2"><a href="#cb52-2"></a>  Coefficient <span class="op">=</span> [<span class="st">"β_b0"</span>, <span class="st">"β_b1=β_t1"</span>, <span class="st">"β_b2"</span>, <span class="st">"β_b3"</span>, <span class="st">"β_b4"</span>, <span class="st">"β_b5"</span>, <span class="st">"β_t0"</span>, <span class="st">"β_t2"</span>, <span class="st">"β_t3"</span>, <span class="st">"β_t4"</span>, <span class="st">"β_t5"</span>],</span>
 <span id="cb52-3"><a href="#cb52-3"></a>  Estimate <span class="op">=</span> β_MLE_restr,</span>
@@ -894,12 +894,12 @@ LR = 2 \left(l(\hat{\beta}_U) - l(\hat{\beta}_R) \right) \sim \chi^2_{1}
 </section>
 <section id="sanity-check" class="slide level2">
 <h2>Sanity check</h2>
-<p>Before thinking about the non-rail cities, let’s assess how good our model is predicting the mean choices in the same sample we used to estimate the model.</p>
+<p>Before thinking about the non-rail cities, let’s assess how well our model is predicting the mean choices in the same sample we used to estimate the model.</p>
 <p>That’s easy to do: just apply the parameters to the same <span class="math inline">\(X_b\)</span> and <span class="math inline">\(X_t\)</span>. Recall</p>
 <p><span class="math display">\[
 Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\prime \beta_j}} = \frac{e^{V_{ik}}}{\sum_{j=1}^J e^{V_{ij}}}
 \]</span></p>
-<div class="cell" data-execution_count="33">
+<div class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1"></a><span class="co"># Predictions</span></span>
 <span id="cb54-2"><a href="#cb54-2"></a>V_b_hat <span class="op">=</span> X_b <span class="op">*</span> β_hat[<span class="fl">1</span><span class="op">:</span><span class="fl">6</span>];</span>
 <span id="cb54-3"><a href="#cb54-3"></a>V_t_hat <span class="op">=</span> X_t <span class="op">*</span> β_hat[<span class="fl">7</span><span class="op">:</span><span class="fl">12</span>];</span>
@@ -910,13 +910,13 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 <section class="slide level2">
 
 <p>Calculating the probabilities for each observation</p>
-<div class="cell" data-execution_count="34">
+<div class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb55-1"><a href="#cb55-1"></a>prob_b_r <span class="op">=</span> <span class="fu">exp</span>.(V_b_hat) <span class="op">./</span> denom_r;</span>
 <span id="cb55-2"><a href="#cb55-2"></a>prob_t_r <span class="op">=</span> <span class="fu">exp</span>.(V_t_hat) <span class="op">./</span> denom_r;</span>
 <span id="cb55-3"><a href="#cb55-3"></a>prob_c_r <span class="op">=</span> <span class="fl">1.0</span> <span class="op">.-</span> prob_b_r <span class="op">.-</span> prob_t_r;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>So the predicted mean (or expected) probability of chosing the bus is</p>
-<div class="cell" data-execution_count="35">
+<div class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href="#cb56-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
 <span id="cb56-2"><a href="#cb56-2"></a>mean_prob_b_r <span class="op">=</span> <span class="fu">mean</span>(prob_b_r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="36">
@@ -924,7 +924,7 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 </div>
 </div>
 <p>How does this compare to the observed share of bus riders?</p>
-<div class="cell" data-execution_count="36">
+<div class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1"></a><span class="fu">sum</span>(d_b)<span class="op">/</span>N_r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="37">
 <pre><code>0.09985</code></pre>
@@ -935,14 +935,14 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 <section class="slide level2">
 
 <p>How about for the train?</p>
-<div class="cell" data-execution_count="37">
+<div class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1"></a>mean_prob_t_r <span class="op">=</span> <span class="fu">mean</span>(prob_t_r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>0.13886666666597253</code></pre>
 </div>
 </div>
 <p>How does this compare to the observed share of bus riders?</p>
-<div class="cell" data-execution_count="38">
+<div class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href="#cb62-1"></a><span class="fu">sum</span>(d_t)<span class="op">/</span>N_r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>0.13886666666666667</code></pre>
@@ -954,13 +954,13 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 <h2>Predicting for non-rail cities</h2>
 <p>This sanity check helped us see how we can perform the same exercise, but now using the <span class="math inline">\(X\)</span> matrices for non-rail cities.</p>
 <p>We can assemble those matrices the same way we did for rail cities.</p>
-<div class="cell" data-execution_count="39">
+<div class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href="#cb64-1"></a><span class="co"># Filter for nr cities</span></span>
 <span id="cb64-2"><a href="#cb64-2"></a>df_nr <span class="op">=</span> <span class="fu">filter</span>(row <span class="op">-&gt;</span> <span class="fu">startswith</span>(row[<span class="op">:</span>city], <span class="st">"nr_"</span>), df);</span>
 <span id="cb64-3"><a href="#cb64-3"></a>N_nr <span class="op">=</span> <span class="fu">nrow</span>(df_nr);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Assemble <span class="math inline">\(X_b\)</span> for non-rail</p>
-<div class="cell" data-execution_count="40">
+<div class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1"></a><span class="co"># Here we are combining a few steps at once</span></span>
 <span id="cb65-2"><a href="#cb65-2"></a>X_b_nr <span class="op">=</span> <span class="fu">Matrix</span>(df_nr[<span class="op">:</span>, [<span class="op">:</span>price_bus, <span class="op">:</span>stops_bus, <span class="op">:</span>density, <span class="op">:</span>hhsize, <span class="op">:</span>homeown]]);</span>
 <span id="cb65-3"><a href="#cb65-3"></a>X_b_nr <span class="op">=</span> <span class="fu">hcat</span>(<span class="fu">ones</span>(<span class="fu">nrow</span>(df_nr)), X_b_nr);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -974,7 +974,7 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 <li>Has a price that is 10% higher than the currently observed bus prices</li>
 <li>Has exactly 10 train stops (so an initially small network)</li>
 </ul>
-<div class="cell" data-execution_count="41">
+<div class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1"></a>X_t_nr <span class="op">=</span> df_nr[<span class="op">:</span>, [<span class="op">:</span>price_bus, <span class="op">:</span>stops_train, <span class="op">:</span>density, <span class="op">:</span>hhsize, <span class="op">:</span>homeown]];</span>
 <span id="cb66-2"><a href="#cb66-2"></a>X_t_nr.price_bus <span class="op">=</span> <span class="fl">1.1</span> <span class="op">.*</span> X_t_nr.price_bus; <span class="co"># 5% more expensive</span></span>
 <span id="cb66-3"><a href="#cb66-3"></a>X_t_nr.stops_train <span class="op">=</span> <span class="fl">10</span> <span class="op">.*</span> <span class="fu">ones</span>(N_nr); <span class="co"># 10 stops</span></span>
@@ -985,14 +985,14 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 <section class="slide level2">
 
 <p>We can proceed with the calculation of probabilities like in the rail case.</p>
-<div class="cell" data-execution_count="42">
+<div class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href="#cb67-1"></a><span class="co"># Predictions</span></span>
 <span id="cb67-2"><a href="#cb67-2"></a>V_b_hat_nr <span class="op">=</span> X_b_nr <span class="op">*</span> β_hat[<span class="fl">1</span><span class="op">:</span><span class="fl">6</span>];</span>
 <span id="cb67-3"><a href="#cb67-3"></a>V_t_hat_nr <span class="op">=</span> X_t_nr <span class="op">*</span> β_hat[<span class="fl">7</span><span class="op">:</span><span class="fl">12</span>];</span>
 <span id="cb67-4"><a href="#cb67-4"></a><span class="co"># The denominator is the same for all options</span></span>
 <span id="cb67-5"><a href="#cb67-5"></a>denom_nr <span class="op">=</span> <span class="fl">1.0</span> <span class="op">.+</span> <span class="fu">exp</span>.(V_b_hat_nr) <span class="op">.+</span> <span class="fu">exp</span>.(V_t_hat_nr);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="43">
+<div class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href="#cb68-1"></a>prob_b_nr <span class="op">=</span> <span class="fu">exp</span>.(V_b_hat_nr) <span class="op">./</span> denom_nr;</span>
 <span id="cb68-2"><a href="#cb68-2"></a>prob_t_nr <span class="op">=</span> <span class="fu">exp</span>.(V_t_hat_nr) <span class="op">./</span> denom_nr;</span>
 <span id="cb68-3"><a href="#cb68-3"></a>prob_c_nr <span class="op">=</span> <span class="fl">1.0</span> <span class="op">.-</span> prob_b_nr <span class="op">.-</span> prob_t_nr;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1001,19 +1001,19 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 <section class="slide level2">
 
 <p>Finally, we calculate the predicted mean (expected) probabilities of each choice</p>
-<div class="cell" data-execution_count="44">
+<div class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href="#cb69-1"></a>mean_prob_b_nr <span class="op">=</span> <span class="fu">mean</span>(prob_b_nr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="45">
 <pre><code>0.09041621616633082</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="45">
+<div class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb71-1"><a href="#cb71-1"></a>mean_prob_t_nr <span class="op">=</span> <span class="fu">mean</span>(prob_t_nr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="46">
 <pre><code>0.14923985762722458</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="46">
+<div class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb73-1"><a href="#cb73-1"></a>mean_prob_c_nr <span class="op">=</span> <span class="fu">mean</span>(prob_c_nr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="47">
 <pre><code>0.7603439262064445</code></pre>
@@ -1045,7 +1045,7 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 <li>Second, because the <span class="math inline">\(\beta\)</span> themselves are divided by some non-identifiable <span class="math inline">\(\sigma\)</span>, so their absolute value has little meaning.</li>
 <li>Third, because unlike linear regressions, the marginal effect of some variable change in <span class="math inline">\(x_j\)</span> on <span class="math inline">\(Y\)</span> is not just <span class="math inline">\(\beta_j\)</span>.</li>
 </ul>
-<p>For these reasons, we typically opt to interpret the calculate marginal effects implied by our estimates.</p>
+<p>For these reasons, we typically opt to interpret the calculated marginal effects implied by our estimates.</p>
 </section>
 <section id="marginal-effects" class="slide level2">
 <h2>Marginal effects</h2>
@@ -1067,7 +1067,7 @@ E\left[\frac{\partial E[Y|X]}{\partial x_a}\right] = \frac{\partial E[Y|E[X]]}{\
 </ol>
 <p>While there is no single right approach, option 1 is typically preferred because</p>
 <ul>
-<li>It averages out across your sample, so it’s refletive of your observations.</li>
+<li>It averages out across your sample, so it’s reflective of your observations.</li>
 <li>Sometimes an “average individual” (i.e., one with all characteristics at the sample average) is implausible or not an interesting case.</li>
 </ul>
 </section>
@@ -1095,7 +1095,7 @@ E\left[\frac{\partial E[Y|X]}{\partial x_a}\right] = \frac{\partial E[Y|E[X]]}{\
 <section id="calculating-marginal-effects" class="slide level2">
 <h2>Calculating marginal effects</h2>
 <p>Let’s use these formulas to calculate the average marginal effect of train stops.</p>
-<div class="cell" data-execution_count="47">
+<div class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb75-1"><a href="#cb75-1"></a>mg_effect_t_trainstops <span class="op">=</span> prob_t_nr <span class="op">.*</span> (<span class="fl">1.0</span> <span class="op">.-</span> prob_t_nr) <span class="op">.*</span> β_t_hat[<span class="fl">3</span>]; <span class="co"># Index 3 because we start from zero</span></span>
 <span id="cb75-2"><a href="#cb75-2"></a>mg_effect_b_trainstops <span class="op">=</span> <span class="op">-</span>prob_b_nr <span class="op">.*</span> prob_t_nr <span class="op">.*</span> β_t_hat[<span class="fl">3</span>];</span>
 <span id="cb75-3"><a href="#cb75-3"></a><span class="fu">println</span>(<span class="st">"AME of train stops on prob. of train: </span><span class="sc">$</span>(<span class="fu">mean</span>(mg_effect_t_trainstops))<span class="st">.</span><span class="sc">\n</span><span class="st"> And on prob. of bus: </span><span class="sc">$</span>(<span class="fu">mean</span>(mg_effect_b_trainstops))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1112,7 +1112,7 @@ E\left[\frac{\partial E[Y|X]}{\partial x_a}\right] = \frac{\partial E[Y|E[X]]}{\
 <section class="slide level2">
 
 <p>We can do a similar exercise with the marginal effect of train prices.</p>
-<div class="cell" data-execution_count="48">
+<div class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href="#cb77-1"></a>mg_effect_t_trainprice <span class="op">=</span> prob_t_nr <span class="op">.*</span> (<span class="fl">1.0</span> <span class="op">.-</span> prob_t_nr) <span class="op">.*</span> β_t_hat[<span class="fl">2</span>]; <span class="co"># Index 2 because we start from zero</span></span>
 <span id="cb77-2"><a href="#cb77-2"></a>mg_effect_b_trainprice <span class="op">=</span> <span class="op">-</span>prob_b_nr <span class="op">.*</span> prob_t_nr <span class="op">.*</span> β_t_hat[<span class="fl">2</span>];</span>
 <span id="cb77-3"><a href="#cb77-3"></a><span class="fu">println</span>(<span class="st">"AME of train prices on prob. of train: </span><span class="sc">$</span>(<span class="fu">mean</span>(mg_effect_t_trainprice))<span class="st">.</span><span class="sc">\n</span><span class="st"> And on prob. of bus: </span><span class="sc">$</span>(<span class="fu">mean</span>(mg_effect_b_trainprice))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1121,7 +1121,7 @@ E\left[\frac{\partial E[Y|X]}{\partial x_a}\right] = \frac{\partial E[Y|E[X]]}{\
  And on prob. of bus: 0.011835127865185044</code></pre>
 </div>
 </div>
-<p>So, increasing the price of trains by 1 (hundred dollars), would drop it’s ridership by a lot and increase bus ridership by about 1 pp.</p>
+<p>So, increasing the price of trains by 1 (hundred dollars), would drop its ridership by a lot and increase bus ridership by about 1 pp.</p>
 </section>
 <section class="slide level2">
 
@@ -1135,7 +1135,7 @@ E\left[\frac{\partial E[Y|X]}{\partial x_a}\right] = \frac{\partial E[Y|E[X]]}{\
 </ul></li>
 </ul>
 <p>Therefore,</p>
-<div class="cell" data-execution_count="49">
+<div class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb79-1"><a href="#cb79-1"></a>trainprices <span class="op">=</span> X_t_nr[<span class="op">:</span>,<span class="fl">2</span>] <span class="co"># Second column in X_t </span></span>
 <span id="cb79-2"><a href="#cb79-2"></a>elast_t_trainprice <span class="op">=</span>  (<span class="fl">1.0</span> <span class="op">.-</span> prob_t_nr) <span class="op">.*</span> β_t_hat[<span class="fl">2</span>] <span class="op">.*</span> trainprices; <span class="co"># Since we divide by q, own probability drops out</span></span>
 <span id="cb79-3"><a href="#cb79-3"></a>elast_b_trainprice <span class="op">=</span> <span class="op">-</span>prob_t_nr <span class="op">.*</span> β_t_hat[<span class="fl">2</span>] <span class="op">.*</span> trainprices;</span>
@@ -1189,9 +1189,9 @@ dV &amp; = 0 \\
 <p>Therefore, we just reframe the indirect utility as <span class="math inline">\(V_{ik} = -\alpha p_k + X_{ik}\beta_{ik}\)</span> and all else is the same!</p>
 <p>With that, we can easily calculate, for example, the mean WTP for an additional train stop:</p>
 <p><span class="math display">\[
-E\left[WTP_{\mbox{train stop}}\right] = \frac{\beta_{t,2}}{\beta_{t,1}}
+E\left[WTP_{\mbox{train stop}}\right] = \frac{\beta_{t,2}}{-\beta_{t,1}}
 \]</span></p>
-<div class="cell" data-execution_count="50">
+<div class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb81-1"><a href="#cb81-1"></a>α <span class="op">=</span> <span class="op">-</span>β_t_hat[<span class="fl">2</span>]</span>
 <span id="cb81-2"><a href="#cb81-2"></a>WTP_trainstop <span class="op">=</span> β_t_hat[<span class="fl">3</span>]<span class="op">/</span>α;</span>
 <span id="cb81-3"><a href="#cb81-3"></a><span class="fu">println</span>(<span class="st">"The mean WTP for an additional trainstop is </span><span class="sc">$</span>(<span class="fu">round</span>(WTP_trainstop<span class="op">*</span><span class="fl">100</span>, digits<span class="op">=</span><span class="fl">2</span>))<span class="st"> dollars/year per person."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1214,11 +1214,11 @@ E\left[WTP_{\mbox{train stop}}\right] = \frac{\beta_{t,2}}{\beta_{t,1}}
 <section>
 <section id="welfare-consequences" class="title-slide slide level1 center">
 <h1>5. Welfare consequences</h1>
-<p>With WTP estimates, we can calculate, for example, the how much individuals who are riding the train would be willing to pay for expansions of the network. But it’s hard to think about how those chances would affect all individuals, including those that currently don’t choose trains. For instance, some might not be affected at all, while some might switch from cars or buses, thus willing to pay something for those changes.</p>
+<p>With WTP estimates, we can calculate, for example, how much individuals who are riding the train would be willing to pay for expansions of the network. But it’s hard to think about how those chances would affect all individuals, including those that currently don’t choose trains. For instance, some might not be affected at all, while some might switch from cars or buses, thus willing to pay something for those changes.</p>
 <p>Questions like these are addressed by taking a broader perspective based on welfare changes. (Since we don’t consider producer costs here, welfare will be essentially a measure of consumer surplus.)</p>
-<p>To do that, we need to consider how changes in characteristics affects possibly the utility of all choices <span class="math inline">\(U_{ik}\)</span> and the total utility of an individual <span class="math inline">\(U_i\)</span></p>
+<p>To do that, we need to consider how changes in characteristics affect possibly the utility of all choices <span class="math inline">\(U_{ik}\)</span> and the total utility of an individual <span class="math inline">\(U_i\)</span></p>
 <p><span class="math display">\[
-U_i(X_i, \nu_{i}) = \max_{k=0,\dots,K} U_{ik}(X_{ik}, \nu_{ik}) = \max \left\{U_{i0}(X_{i0}, \nu_{i0}), \dots, U_{iK}(X_{iK}, \nu_{i0}) \right\}
+U_i(X_i, \nu_{i}) = \max_{k=0,\dots,K} U_{ik}(X_{ik}, \nu_{ik}) = \max \left\{U_{i0}(X_{i0}, \nu_{i0}), \dots, U_{iK}(X_{iK}, \nu_{iK}) \right\}
 \]</span></p>
 </section>
 <section class="slide level2">
@@ -1243,7 +1243,7 @@ E[CV_i] = \frac{1}{\alpha}\left[\log\left(\sum_{k=1}^K e^{\tilde{X}_{ik}^\prime 
 <p><span class="math display">\[
 E[\Delta CS] = \frac{1}{N} \sum_{i=1}^N \frac{1}{\alpha} \left[\underbrace{\log\left(1 + e^{V_{ib}} + e^{V_{it}} \right)}_{\mbox{With train}} - \underbrace{\log\left(1 + e^{V_{ib}} \right)}_{\mbox{Without train}}\right]
 \]</span></p>
-<div class="cell" data-execution_count="51">
+<div class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb83-1"><a href="#cb83-1"></a>denom_nr_withtrain <span class="op">=</span> <span class="fl">1.0</span> <span class="op">.+</span> <span class="fu">exp</span>.(V_b_hat_nr) <span class="op">.+</span> <span class="fu">exp</span>.(V_t_hat_nr);</span>
 <span id="cb83-2"><a href="#cb83-2"></a>denom_nr_notrain <span class="op">=</span> <span class="fl">1.0</span> <span class="op">.+</span> <span class="fu">exp</span>.(V_b_hat_nr)</span>
 <span id="cb83-3"><a href="#cb83-3"></a></span>
@@ -1259,13 +1259,13 @@ E[\Delta CS] = \frac{1}{N} \sum_{i=1}^N \frac{1}{\alpha} \left[\underbrace{\log\
 <section id="final-words" class="slide level2">
 <h2>Final words</h2>
 <ul>
-<li>This tutorial walked you through all the steps of establishing a structural model and estimating it.</li>
+<li>This tutorial walked you through all the steps of setting up a structural model and estimating it.</li>
 <li>Combined with the first part, we:
 <ul>
-<li>Developed a model</li>
-<li>Simulated agent behaviour consistent with the model</li>
-<li>Applied structural econometric methods to estimate the model</li>
-<li>Used the estimated model to perform economic analysis</li>
+<li>Developed a model.</li>
+<li>Simulated agent behavior consistent with the model.</li>
+<li>Applied structural econometric methods to estimate the model.</li>
+<li>Used the estimated model to perform economic analysis.</li>
 </ul></li>
 </ul>
 </section>
@@ -1273,13 +1273,13 @@ E[\Delta CS] = \frac{1}{N} \sum_{i=1}^N \frac{1}{\alpha} \left[\underbrace{\log\
 
 <ul>
 <li>It is a great practice to follow these steps in any empirical work before you start actually working with the data.</li>
-<li>One benefit is that it helps you think very carefully about what mechanisms your empirical model can capture and what it misses</li>
-<li>The big benefit here is that you can very transparently test whether your estimation procedure is robust to changes in the model underlying your assumptions
+<li>One benefit is that it helps you think very carefully about what mechanisms your empirical model can capture and what it misses.</li>
+<li>The big benefit here is that you can very transparently test whether your estimation procedure is robust to changes in the model underlying your assumptions.
 <ul>
-<li>For example, it’s easy now to add an omitted variable in the data and estimate the model ignoring it to see how bad the bias is</li>
-<li>Or change the distribution of tastes and see how it impacts your estimates</li>
+<li>For example, it’s easy now to add an omitted variable in the data and estimate the model ignoring it to see how bad the bias is.</li>
+<li>Or change the distribution of tastes and see how it impacts your estimates.</li>
 <li>Or whatever robustness check or and senstivity analysis you want to make.</li>
-<li>The effect of these changes is often hard to anticipate, so having control of all the steps allows you to gauge their impacts and more easily establish how robust your empirical strategy is</li>
+<li>The effect of these changes is often hard to anticipate, so having control over all the steps allows you to gauge their impacts and more easily establish how robust your empirical strategy is.</li>
 </ul></li>
 </ul>
 <div class="footer footer-default">

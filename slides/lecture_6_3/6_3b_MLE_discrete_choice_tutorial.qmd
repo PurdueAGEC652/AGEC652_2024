@@ -415,7 +415,7 @@ println(res_df)
 
 ## Sanity check
 
-Before thinking about the non-rail cities, let's assess how good our model is predicting the mean choices in the same sample we used to estimate the model.
+Before thinking about the non-rail cities, let's assess how well our model is predicting the mean choices in the same sample we used to estimate the model.
 
 That's easy to do: just apply the parameters to the same $X_b$ and $X_t$. Recall
 
@@ -574,7 +574,7 @@ The raw $\beta$ coefficients in non-linear discrete choice models are hard to in
 - Second, because the $\beta$ themselves are divided by some non-identifiable $\sigma$, so their absolute value has little meaning.
 - Third, because unlike linear regressions, the marginal effect of some variable change in $x_j$ on $Y$ is not just $\beta_j$.
 
-For these reasons, we typically opt to interpret the calculate marginal effects implied by our estimates.
+For these reasons, we typically opt to interpret the calculated marginal effects implied by our estimates.
 
 ## Marginal effects
 
@@ -600,7 +600,7 @@ Here, we have two options:
 
 While there is no single right approach, option 1 is typically preferred because
 
-- It averages out across your sample, so it's refletive of your observations.
+- It averages out across your sample, so it's reflective of your observations.
 - Sometimes an "average individual" (i.e., one with all characteristics at the sample average) is implausible or not an interesting case.
 
 ## Marginal effects in multinomial logit
@@ -656,7 +656,7 @@ mg_effect_b_trainprice = -prob_b_nr .* prob_t_nr .* β_t_hat[2];
 println("AME of train prices on prob. of train: $(mean(mg_effect_t_trainprice)).\n And on prob. of bus: $(mean(mg_effect_b_trainprice))")
 ```
 
-So, increasing the price of trains by 1 (hundred dollars), would drop it's ridership by a lot and increase bus ridership by about 1 pp.
+So, increasing the price of trains by 1 (hundred dollars), would drop its ridership by a lot and increase bus ridership by about 1 pp.
 
 ---
 
@@ -725,7 +725,7 @@ Therefore, we just reframe the indirect utility as $V_{ik} = -\alpha p_k + X_{ik
 With that, we can easily calculate, for example, the mean WTP for an additional train stop:
 
 $$
-E\left[WTP_{\mbox{train stop}}\right] = \frac{\beta_{t,2}}{\beta_{t,1}}
+E\left[WTP_{\mbox{train stop}}\right] = \frac{\beta_{t,2}}{-\beta_{t,1}}
 $$
 
 ```{julia}
@@ -748,14 +748,14 @@ Of course, you can do that with other product characteristics, too!
 
 # 5. Welfare consequences
 
-With WTP estimates, we can calculate, for example, the how much individuals who are riding the train would be willing to pay for expansions of the network. But it's hard to think about how those chances would affect all individuals, including those that currently don't choose trains. For instance, some might not be affected at all, while some might switch from cars or buses, thus willing to pay something for those changes.
+With WTP estimates, we can calculate, for example, how much individuals who are riding the train would be willing to pay for expansions of the network. But it's hard to think about how those chances would affect all individuals, including those that currently don't choose trains. For instance, some might not be affected at all, while some might switch from cars or buses, thus willing to pay something for those changes.
 
 Questions like these are addressed by taking a broader perspective based on welfare changes. (Since we don't consider producer costs here, welfare will be essentially a measure of consumer surplus.)
 
-To do that, we need to consider how changes in characteristics affects possibly the utility of all choices $U_{ik}$ and the total utility of an individual $U_i$
+To do that, we need to consider how changes in characteristics affect possibly the utility of all choices $U_{ik}$ and the total utility of an individual $U_i$
 
 $$
-U_i(X_i, \nu_{i}) = \max_{k=0,\dots,K} U_{ik}(X_{ik}, \nu_{ik}) = \max \left\{U_{i0}(X_{i0}, \nu_{i0}), \dots, U_{iK}(X_{iK}, \nu_{i0}) \right\}
+U_i(X_i, \nu_{i}) = \max_{k=0,\dots,K} U_{ik}(X_{ik}, \nu_{ik}) = \max \left\{U_{i0}(X_{i0}, \nu_{i0}), \dots, U_{iK}(X_{iK}, \nu_{iK}) \right\}
 $$
 
 
@@ -803,20 +803,20 @@ Then, a benefit-cost analysis could compare the present value of this benefit ov
 
 ## Final words
 
-- This tutorial walked you through all the steps of establishing a structural model and estimating it.
+- This tutorial walked you through all the steps of setting up a structural model and estimating it.
 - Combined with the first part, we:
-  - Developed a model
-  - Simulated agent behaviour consistent with the model
-  - Applied structural econometric methods to estimate the model
-  - Used the estimated model to perform economic analysis
+  - Developed a model.
+  - Simulated agent behavior consistent with the model.
+  - Applied structural econometric methods to estimate the model.
+  - Used the estimated model to perform economic analysis.
 
 ---
 
 - It is a great practice to follow these steps in any empirical work before you start actually working with the data.
-- One benefit is that it helps you think very carefully about what mechanisms your empirical model can capture and what it misses
-- The big benefit here is that you can very transparently test whether your estimation procedure is robust to changes in the model underlying your assumptions
-  - For example, it's easy now to add an omitted variable in the data and estimate the model ignoring it to see how bad the bias is
-  - Or change the distribution of tastes and see how it impacts your estimates
+- One benefit is that it helps you think very carefully about what mechanisms your empirical model can capture and what it misses.
+- The big benefit here is that you can very transparently test whether your estimation procedure is robust to changes in the model underlying your assumptions.
+  - For example, it's easy now to add an omitted variable in the data and estimate the model ignoring it to see how bad the bias is.
+  - Or change the distribution of tastes and see how it impacts your estimates.
   - Or whatever robustness check or and senstivity analysis you want to make. 
-  - The effect of these changes is often hard to anticipate, so having control of all the steps allows you to gauge their impacts and more easily establish how robust your empirical strategy is
+  - The effect of these changes is often hard to anticipate, so having control over all the steps allows you to gauge their impacts and more easily establish how robust your empirical strategy is.
 

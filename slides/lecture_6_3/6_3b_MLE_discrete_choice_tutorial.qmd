@@ -644,6 +644,8 @@ println("AME of train stops on prob. of train: $(mean(mg_effect_t_trainstops)).\
 
 So, raising the number of stops from 10 to 11 would increase the share of train riders by about 2.8 percentage points (pp)! It would also reduce the number of bus riders by about 0.29 pp, so little substitution would happen.
 
+- You could also use a numerical method to calculate these derivatives. In that case, you would need to do that for each observation then average the derivatives.
+
 ---
 
 We can do a similar exercise with the marginal effect of train prices.
@@ -675,7 +677,6 @@ println("The mean elasticity of train demand w.r.t. train prices is: $(mean(elas
 ```
 
 That's a pretty high own price elasticity in absolute terms. (Probably too high to be realistic...)
-
 
 ## Empirical plan {background-color="gold"}
 

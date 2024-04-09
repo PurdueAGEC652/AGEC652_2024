@@ -578,7 +578,7 @@ For these reasons, we typically opt to interpret the calculated marginal effects
 
 ## Marginal effects
 
-In the context of a discrete choice model, the marginal effect of a continuous covariate $x_a$ is given by
+In the context of a discrete choice model, the marginal effect of a continuous covariate^[For discrete variables, we calculate probabilities at different levels and take the difference.] $x_a$ is given by
 
 $$
 \frac{\partial \Pr[Y = k | X]}{\partial x_a}
@@ -642,7 +642,7 @@ mg_effect_b_trainstops = -prob_b_nr .* prob_t_nr .* β_t_hat[3];
 println("AME of train stops on prob. of train: $(mean(mg_effect_t_trainstops)).\n And on prob. of bus: $(mean(mg_effect_b_trainstops))")
 ```
 
-So, raising the number of stops from 10 to 11 would increase the share of train riders by about 2.8 percentage points (pp)! It would also reduce the number of bus riders by about 0.29 pp, so little substitution would happen.
+So, raising the number of stops from 10 to 11 would increase the share of train riders by about 2.8 percentage points (pp)! It would also reduce the number of bus riders by about 0.29 pp, so little substitution would happen between train and bus.
 
 - You could also use a numerical method to calculate these derivatives. In that case, you would need to do that for each observation then average the derivatives.
 
@@ -695,7 +695,7 @@ A big advantage of having a characteristic that is measured in monetary value in
 
 In this framework, the WTP of a choice characteristic is the corresponding change in monetary value to a change in a characteristic *that keeps the (indirect) utility level constant*.
 
-Formally, let's think about a model that has income entering an additive separably term in the indirect utility function
+Formally, let's think about a model that has income entering an additively separable term in the indirect utility function
 
 $$
 V_{ik} = \alpha I_i + X_{ik}\beta_{ik}
@@ -714,7 +714,7 @@ dV & = 0 \\
 \end{align}
 $$
 
-So, in exchange for a marginal increase in $x_{ik,a}$, this individual is willing to trade-off up to $\frac{\beta_{k,a}}{\alpha}$ of their income (i.e., a compensating variation). This is the WTP!
+So, in exchange for a marginal increase in $x_{ik,a}$, this individual is willing to trade-off up to $\frac{\beta_{k,a}}{\alpha}$ monetary units of their income (i.e., a compensating variation). This is the WTP!
 
 ---
 

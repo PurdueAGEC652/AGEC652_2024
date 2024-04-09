@@ -1049,7 +1049,7 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 </section>
 <section id="marginal-effects" class="slide level2">
 <h2>Marginal effects</h2>
-<p>In the context of a discrete choice model, the marginal effect of a continuous covariate <span class="math inline">\(x_a\)</span> is given by</p>
+<p>In the context of a discrete choice model, the marginal effect of a continuous covariate<sup>1</sup> <span class="math inline">\(x_a\)</span> is given by</p>
 <p><span class="math display">\[
 \frac{\partial \Pr[Y = k | X]}{\partial x_a}
 \]</span></p>
@@ -1057,7 +1057,7 @@ Pr[y_i = k | X_i] = \frac{e^{X_{ik}^\prime \beta_k}}{\sum_{j=1}^J e^{X_{ij}^\pri
 E\left[\frac{\partial E[Y|X]}{\partial x_a}\right] = \frac{\partial E[Y|E[X]]}{\partial x_a} = \beta_a
 \]</span></p>
 <p>But in nonlinear models, that equality does not hold!</p>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>For discrete variables, we calculate probabilities at different levels and take the difference.</p></li></ol></aside></section>
 <section class="slide level2">
 
 <p>Here, we have two options:</p>
@@ -1104,7 +1104,7 @@ E\left[\frac{\partial E[Y|X]}{\partial x_a}\right] = \frac{\partial E[Y|E[X]]}{\
  And on prob. of bus: -0.002914283110489992</code></pre>
 </div>
 </div>
-<p>So, raising the number of stops from 10 to 11 would increase the share of train riders by about 2.8 percentage points (pp)! It would also reduce the number of bus riders by about 0.29 pp, so little substitution would happen.</p>
+<p>So, raising the number of stops from 10 to 11 would increase the share of train riders by about 2.8 percentage points (pp)! It would also reduce the number of bus riders by about 0.29 pp, so little substitution would happen between train and bus.</p>
 <ul>
 <li>You could also use a numerical method to calculate these derivatives. In that case, you would need to do that for each observation then average the derivatives.</li>
 </ul>
@@ -1166,7 +1166,7 @@ E\left[\frac{\partial E[Y|X]}{\partial x_a}\right] = \frac{\partial E[Y|E[X]]}{\
 <h2>Defining willingness to pay</h2>
 <p>A big advantage of having a characteristic that is measured in monetary value in the RUM framework is that we can use the model to derive WTP.</p>
 <p>In this framework, the WTP of a choice characteristic is the corresponding change in monetary value to a change in a characteristic <em>that keeps the (indirect) utility level constant</em>.</p>
-<p>Formally, let’s think about a model that has income entering an additive separably term in the indirect utility function</p>
+<p>Formally, let’s think about a model that has income entering an additively separable term in the indirect utility function</p>
 <p><span class="math display">\[
 V_{ik} = \alpha I_i + X_{ik}\beta_{ik}
 \]</span></p>
@@ -1181,7 +1181,7 @@ dV &amp; = 0 \\
 \frac{dI_i}{dx_{ik,a}} &amp; = -\frac{\beta_{k,a}}{\alpha}
 \end{align}
 \]</span></p>
-<p>So, in exchange for a marginal increase in <span class="math inline">\(x_{ik,a}\)</span>, this individual is willing to trade-off up to <span class="math inline">\(\frac{\beta_{k,a}}{\alpha}\)</span> of their income (i.e., a compensating variation). This is the WTP!</p>
+<p>So, in exchange for a marginal increase in <span class="math inline">\(x_{ik,a}\)</span>, this individual is willing to trade-off up to <span class="math inline">\(\frac{\beta_{k,a}}{\alpha}\)</span> monetary units of their income (i.e., a compensating variation). This is the WTP!</p>
 </section>
 <section class="slide level2">
 
@@ -1286,6 +1286,7 @@ E[\Delta CS] = \frac{1}{N} \sum_{i=1}^N \frac{1}{\alpha} \left[\underbrace{\log\
 
 </div>
 </section></section>
+
     </div>
   </div>
 

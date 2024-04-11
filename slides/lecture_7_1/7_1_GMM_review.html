@@ -610,7 +610,9 @@ Diego S. Cardoso
 <section id="computing-hattheta_gmm" class="slide level2">
 <h2>Computing <span class="math inline">\(\hat{\theta}_{GMM}\)</span></h2>
 <p>This is the objective function for GMM</p>
-<p><span class="math display">\[\hat{\theta}_{GMM} = \arg \min_\theta Q_N(\theta), \; Q_N(\theta) = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \theta)\right]^\prime W \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \theta)\right]\]</span></p>
+<p><span class="math display">\[
+\hat{\theta}_{GMM} = \arg \min_\theta Q_N(\theta), \; Q_N(\theta) = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \theta)\right]^\prime W \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \theta)\right]
+\]</span></p>
 <p>Once again, we can use numerical optimization to calculate <span class="math inline">\(\hat{\theta}_{GMM}\)</span></p>
 <div class="fragment">
 <p>But what <span class="math inline">\(W\)</span> do we use?</p>
@@ -722,6 +724,32 @@ LM = N g(\hat\theta_r)^\prime  \hat{S}^{-1} D(\hat\theta_r) \left[D(\hat\theta_r
 <section id="specification-test-overidentifying-restrictions" class="slide level2">
 <h2>Specification test: Overidentifying Restrictions</h2>
 <p>GMM has a general specification test that can be used when there are more moment conditions than parameters (i.e., an overidentified system).</p>
+<p>The key idea of this test is that, if all of our moment conditions are valid, then <span class="math inline">\(\frac{1}{N} \sum_i g(z_i;\hat\theta) \approx 0\)</span>. So, the null hypothesis of this test is</p>
+<p><span class="math display">\[
+H_0: E\left[g(z_i;\theta_0)\right]
+\]</span></p>
+<div class="fragment">
+<p>The <strong>Overidentifying Restrictions (OIR) test</strong> (Hansen, 1982) is given by</p>
+<p><span class="math display">\[
+OIR = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right]^\prime \hat{S}^{-1} \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right] \sim \chi^2_{[M-K]}
+\]</span></p>
+<p>where <span class="math inline">\(M\)</span> is the number of moment conditions and <span class="math inline">\(K\)</span> the number of parameters.</p>
+</div>
+</section>
+<section id="specification-test-overidentifying-restrictions-1" class="slide level2">
+<h2>Specification test: Overidentifying Restrictions</h2>
+<p><span class="math display">\[
+OIR = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right]^\prime \hat{S}^{-1} \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right] \sim \chi^2_{[M-K]}
+\]</span></p>
+<p>Notes:</p>
+<ol type="1">
+<li>The OIR statistic is equal to the value of the minimized objective function.</li>
+<li>If OIR is large, then the population moment conditions are rejected, so the GMM estimator is inconsistent for <span class="math inline">\(\theta\)</span>.
+<ul>
+<li>We know that all moment conditions are collectively invalid, but this test gives no information about which moment conditions are individually invalid.</li>
+</ul></li>
+<li>If <span class="math inline">\(M \leq K\)</span>, then this test cannot be used (we need the model to be overidentified).</li>
+</ol>
 </section></section>
 <section>
 <section id="gmm-in-practice" class="title-slide slide level1 center">
@@ -982,8 +1010,8 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 </div>
 </div>
 </section>
-<section id="mle-in-practice-estimation-results" class="slide level2">
-<h2>MLE in practice: estimation results</h2>
+<section id="gmm-in-practice-estimation-results" class="slide level2">
+<h2>GMM in practice: estimation results</h2>
 <p>Again, we can organize the results in a table and print them nicely with 95% confidence intervals</p>
 <div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">Distributions</span></span>

@@ -274,7 +274,9 @@ $$V_0 = (D_0^\prime S_0^{-1} D_0)^{-1}$$
 
 This is the objective function for GMM 
 
-$$\hat{\theta}_{GMM} = \arg \min_\theta Q_N(\theta), \; Q_N(\theta) = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \theta)\right]^\prime W \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \theta)\right]$$
+$$
+\hat{\theta}_{GMM} = \arg \min_\theta Q_N(\theta), \; Q_N(\theta) = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \theta)\right]^\prime W \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \theta)\right]
+$$
 
 Once again, we can use numerical optimization to calculate $\hat{\theta}_{GMM}$
 
@@ -402,6 +404,36 @@ where $S$, $D$ and $df$ are defined in the previous slides.
 ## Specification test: Overidentifying Restrictions
 
 GMM has a general specification test that can be used when there are more moment conditions than parameters (i.e., an overidentified system).
+
+The key idea of this test is that, if all of our moment conditions are valid, then $\frac{1}{N} \sum_i g(z_i;\hat\theta) \approx 0$. So, the null hypothesis of this test is
+
+$$
+H_0: E\left[g(z_i;\theta_0)\right]
+$$
+
+. . .
+
+The **Overidentifying Restrictions (OIR) test** (Hansen, 1982) is given by
+
+$$
+OIR = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right]^\prime \hat{S}^{-1} \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right] \sim \chi^2_{[M-K]}
+$$
+
+where $M$ is the number of moment conditions and $K$ the number of parameters. 
+
+## Specification test: Overidentifying Restrictions
+
+$$
+OIR = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right]^\prime \hat{S}^{-1} \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right] \sim \chi^2_{[M-K]}
+$$
+
+Notes:
+
+1. The OIR statistic is equal to the value of the minimized objective function.
+2. If OIR is large, then the population moment conditions are rejected, so the GMM estimator is inconsistent for $\theta$.
+   - We know that all moment conditions are collectively invalid, but this test gives no information about which moment conditions are individually invalid.
+3. If $M \leq K$, then this test cannot be used (we need the model to be overidentified).
+
 
 # GMM in practice
 
@@ -611,7 +643,7 @@ SEs = sqrt.(diag(V_hat))
 ```
 
 
-## MLE in practice: estimation results
+## GMM in practice: estimation results
 
 Again, we can organize the results in a table and print them nicely with 95% confidence intervals
 

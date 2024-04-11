@@ -37,10 +37,11 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
 - Unit 5 - Introduction to structural estimation
   - Lecture 5: [Intro to structural estimation](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_5/5_Intro_Structural_estimation.html)
 
-- Unit 6 - Maximum Likelihood Estimator
+- Unit 6 - Maximum Likelihood Estimation
   - Lecture 6.1: [MLE theory](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_2/6_2_MLE_discrete_choice.html)
   - Lecture 6.2: [Discrete choice and RUM](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_2/6_2_MLE_discrete_choice.html)
   - Lecture 6.3a: [RUM + MLE tutorial, part 1](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_3/6_3a_MLE_discrete_choice_tutorial.html)
   - Lecture 6.3b: [RUM + MLE tutorial, part 2](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_6_3/6_3b_MLE_discrete_choice_tutorial.html)
 
-
+- Unit 7 - Generalized Method of Moments
+  - Lecture 7.1: [GMM theory](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_7_1/7_1_GMM_review.html)

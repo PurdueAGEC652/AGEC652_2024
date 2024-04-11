@@ -266,7 +266,7 @@ $$W_0 = S_0^{-1} = \left\{E[g(z_i; \theta_0) g(z_i; \theta_0)^\prime]\right\}^{-
 
 which yields^[This is the "non-robust" VCOV matrix, i.e., assuming homoskedasticity and no clustering/residual correlation structure. Check references to see how to construct robust versions.]
 
-$$V(\hat{\theta}_{GMM}) = (D_0^\prime S_0^{-1} D_0)^{-1}$$
+$$V_0 = (D_0^\prime S_0^{-1} D_0)^{-1}$$
 
 
 
@@ -375,13 +375,13 @@ As in the LR test, we need to estimate both the unrestricted and the restricted 
 As in the MLE case, the Wald statistic is based on how close $c(\hat\theta)$ is to zero
 
 $$
-W = c(\hat\theta_u)^\prime V\left[c(\hat\theta_u\right]c(\hat\theta_u) \sim \chi^2_{[df]}
+W = c(\hat\theta_u)^\prime V\left[c(\hat\theta_u)\right]c(\hat\theta_u) \sim \chi^2_{[df]}
 $$
 
 where $df$ is again the number of restrictions imposed and $V(\hat{c})$ is the asymptotic variance of $c$, which now is given by
 
 $$
-V(c(\hat\theta)) = \left[\frac{\partial c(\hat\theta)}{\partial \hat\theta^\prime}\right]\left[V(\hat\theta)\right]^{-1}\left[\frac{\partial c(\hat\theta)}{\partial \hat\theta^\prime}\right]^\prime
+V[c(\hat\theta)] = \left[\frac{\partial c(\hat\theta)}{\partial \hat\theta^\prime}\right]\left[V(\hat\theta)\right]^{-1}\left[\frac{\partial c(\hat\theta)}{\partial \hat\theta^\prime}\right]^\prime
 $$
 
 and $V(\hat{\theta}) = (\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}$ and $\hat{D} = \frac{\partial g_N(\hat\theta)}{\partial \theta^\prime}$.
@@ -394,7 +394,7 @@ The LM test is again based on how close the gradient of the objective function i
 This gives the LM statistics
 
 $$
-LM = N g(\hat\theta_r)^\prime  S^{-1} D(\hat\theta_r) \left[D(\hat\theta_r)^\prime S^{-1} D(\hat\theta_r)\right] D(\hat\theta_r)^\prime S^{-1} g(\hat\theta_r) \sim \chi^2_{[df]}
+LM = N g(\hat\theta_r)^\prime  \hat{S}^{-1} D(\hat\theta_r) \left[D(\hat\theta_r)^\prime \hat{S}^{-1} D(\hat\theta_r)\right] D(\hat\theta_r)^\prime \hat{S}^{-1} g(\hat\theta_r) \sim \chi^2_{[df]}
 $$
 
 where $S$, $D$ and $df$ are defined in the previous slides.
@@ -403,6 +403,230 @@ where $S$, $D$ and $df$ are defined in the previous slides.
 
 GMM has a general specification test that can be used when there are more moment conditions than parameters (i.e., an overidentified system).
 
+# GMM in practice
+
+## GMM in practice: setup
+
+We will repeat the exercise of estimating simple linear model using GMM. Again, the model is
+
+$$
+y_i = \beta_0 + \beta_1 x_i + \epsilon_i
+$$
+
+- $y_i$ is the dependent variable
+- $x_i$ is the independent variable
+- $\beta_0$ is the intercept
+- $\beta_1$ is the slope coefficient
+- $\epsilon_i$ is the error term, which we assume follows a normal distribution with mean zero and variance $\sigma^2$, i.e., $\epsilon_i \sim N(0, \sigma^2)$
+
+We will refer generically to $\theta = [\beta_0, \beta_1]$ as the parameter vector we are estimating.
+
+## GMM in practice: fake data
+
+Let's generate the same fake data for our estimation assuming true values $\beta_0 = 2, \beta_1 = 3, \sigma = 1.5$
+
+```{julia}
+using Statistics, Random
+# Generate some synthetic data for illustration
+Random.seed!(652) # Set random seed for reproducibility
+N = 1000  # Number of observations
+X = rand(N) * 10  # Independent variable: random uniform [0,10]
+β0_true = 2.0  # True intercept
+β1_true = 3.0  # True slope
+σ_true = 1.5  # True standard deviation of the errors
+ε = randn(N) * σ_true  # Normally distributed errors
+Y = β0_true .+ β1_true .* X .+ ε  # Dependent variable
+```
+
+
+
+## GMM in practice: moment conditions
+
+First, we need to establish the moment conditions. Following the classical linear regression results, we have that
+
+$$
+\begin{align}
+E[\epsilon] = 0 \\
+E[x \epsilon] = 0
+\end{align}
+$$
+
+So we have two moment conditions to estimate two parameters. 
+
+. . .
+
+Recall that $\epsilon_i = y_i - \beta_0 - \beta_1 x_i$. So, we define
+
+$$
+g\left(y_i, x_i; \theta\right) = g\left(\left[\begin{matrix}\beta_0 \\ \beta_1\end{matrix} \right]\right) = \left[\begin{matrix}y_i - \beta_0 - \beta_1 x_i \\ x_i(y_i - \beta_0 - \beta_1 x_i)\end{matrix} \right]
+$$
+
+## GMM in practice: moment conditions
+
+Next, we program function `g_i(θ)` that receives parameter vector $\theta$ and returns those two moment conditions for all observations ($N \times 2$ matrix).
+
+```{julia}
+function g_i(θ; Y = Y, X = X)
+  β_0, β_1 = θ # Unpack parameters
+  ϵ = Y .- β_0 .- β_1 .* X
+  return hcat(ϵ, X.*ϵ) # Concatenate horizontally
+end;
+```
+
+. . .
+
+Testing with some parameter values.
+
+```{julia}
+G = g_i([0.0, 0.0], Y=Y, X=X);
+G[1:6,:] # See the first few lines
+```
+
+## GMM in practice: moment conditions
+
+And recall that we write the sample analogue: $g_N(\theta) = \frac{1}{N} \sum_{i=1}^N g(y_i, x_i;\theta)$
+
+```{julia}
+function g_N(θ; Y = Y, X = X)
+  N = length(Y) # Number of obs
+  # Get moment vectors
+  g_Ns = g_i(θ; Y = Y, X = X)
+  # Take means of each column and return
+  return [sum(g_Ns[:, k]) for k in 1:2] ./ N
+end;
+```
+
+. . .
+
+Testing with some parameter values.
+
+```{julia}
+g_N([0.0, 0.0], Y=Y, X=X)
+```
+
+
+## GMM in practice: objective function
+
+- Since we have 2 moment conditions and two parameters, this is technical an exactly identified GMM, which is equivalent to the standard method of moments and does not need the weighting matrix. 
+  - Regardless we will keep the weighting matrix to demonstrate all the steps.
+
+. . .
+
+The objective function therefore is
+
+$$
+Q_N(\theta) = g_N(z_i;\theta)^\prime W g_N(\theta)
+$$
+
+```{julia}
+function Q_N(θ; W = W, Y = Y, X = X)
+    return g_N(θ; Y=Y, X=X)' * W * g_N(θ; Y=Y, X=X)
+end;
+```
+
+Testing with some an initial guess and the identity matrix as the weighting matrix.
+
+```{julia}
+using LinearAlgebra
+θ_0 = [0.0, 0.0] # Initial guess
+W_0 = I(2) # 2x2 identity matrix
+Q_N([0.0, 0.0], W=W_0, Y=Y, X=X)
+```
+
+
+
+## GMM in practice: step 1
+
+Next, we will do step 1 of the efficient GMM estimation. The GMM estimate is defined as $\hat{\theta} = \arg \min_\theta Q_N(\theta)$
+
+Since our parameters are unconstrained, we can program our optimization using Optim.
+
+```{julia}
+using Optim
+res_step_1 = Optim.optimize(θ -> Q_N(θ; W = W_0), θ_0, Newton())
+θ_1 = res_step_1.minimizer # Step 1 estimate
+```
+
+## GMM in practice: $\hat{W}$
+
+With the estimates of step 1, we can now estimate the optimal weighting matrix $\hat{W}$
+
+$$
+\hat{W} = \hat{S}^{-1} = \left\{E[g(y_i, x_i; \hat{\theta}) g(y_i, x_i; \hat{\theta})^\prime]\right\}^{-1}
+$$
+
+```{julia}
+W_hat = inv(g_i(θ_1)'  * g_i(θ_1) ./N)
+```
+
+## GMM in practice: step 2
+
+We can now obtain the final estimates by repeating the optimization with $\hat{W}$.
+
+```{julia}
+res_step_2 = Optim.optimize(θ -> Q_N(θ; W = W_hat), θ_0, Newton())
+θ_2 = res_step_2.minimizer # Step 2 estimate
+```
+
+. . .
+
+*We get pratically the same estimates in step 2 because the weighting matrix doesn't really matter in the exactly identified case*.
+
+
+## GMM in practice: standard errors
+
+Recall 
+$$
+V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
+$$
+
+where:
+
+- $\hat{D} = E\left[\frac{\partial g(y_i, x_i; \hat{\theta})}{\partial \hat{\theta}^\prime}\right]$
+- $\hat{S} = E\left[g_i(z_i; \hat{\theta}) g_i(z_i;\hat{\theta})^\prime\right]$
+
+To calculate $\hat{D}$, we can use a numerical method!
+
+```{julia}
+using ForwardDiff
+D_hat = ForwardDiff.jacobian(g_N, θ_2)
+```
+
+## GMM in practice: standard errors
+
+Calculating the other components. 
+
+```{julia}
+S_hat = g_i(θ_2)'  * g_i(θ_2) ./N
+```
+
+```{julia}
+V_hat = inv(D_hat' * inv(S_hat) * D_hat) ./N
+```
+
+So, the standard errors are the square root of the diagonal elements.
+
+```{julia}
+SEs = sqrt.(diag(V_hat))
+```
+
+
+## MLE in practice: estimation results
+
+Again, we can organize the results in a table and print them nicely with 95% confidence intervals
+
+```{julia}
+using DataFrames, Distributions
+df = DataFrame(
+  Coefficient = ["beta_0", "beta_1"],
+  Estimate = θ_2,
+  StdError = SEs,
+  CI_lower = θ_2 .+ quantile(Normal(), 0.025) .* SEs,
+  CI_upper = θ_2 .+ quantile(Normal(), 0.975) .* SEs
+)
+
+println(df)
+```
 
 
 # MLE vs GMM

@@ -71,7 +71,7 @@ $$E[g(x;\theta)] \approx \frac{1}{N} \sum_{i=1}^N g(x_i;\theta) \equiv g_N(\thet
 
 . . .
 
-3. The GMM estimate is given by ( $W_N$ is a weighting matrix)
+3. The GMM estimator is given by ( $W_N$ is a weighting matrix)
 $$\hat{\theta}_{GMM} = \arg \min_\theta g_N(\theta)^\prime \; W_N \; g_N(\theta)$$
 
 
@@ -439,7 +439,7 @@ Notes:
 
 ## GMM in practice: setup
 
-We will repeat the exercise of estimating simple linear model using GMM. Again, the model is
+We will repeat the exercise of estimating a simple linear model using GMM. Again, the model is
 
 $$
 y_i = \beta_0 + \beta_1 x_i + \epsilon_i
@@ -539,8 +539,8 @@ g_N([0.0, 0.0], Y=Y, X=X)
 
 ## GMM in practice: objective function
 
-- Since we have 2 moment conditions and two parameters, this is technical an exactly identified GMM, which is equivalent to the standard method of moments and does not need the weighting matrix. 
-  - Regardless we will keep the weighting matrix to demonstrate all the steps.
+- Since we have 2 moment conditions and two parameters, this is technically an exactly identified GMM, which is equivalent to the standard method of moments and does not need the weighting matrix. 
+  - Regardless, we will keep the weighting matrix to demonstrate all the steps.
 
 . . .
 
@@ -569,7 +569,7 @@ Q_N([0.0, 0.0], W=W_0, Y=Y, X=X)
 
 ## GMM in practice: step 1
 
-Next, we will do step 1 of the efficient GMM estimation. The GMM estimate is defined as $\hat{\theta} = \arg \min_\theta Q_N(\theta)$
+Next, we will do step 1 of the efficient GMM estimation. The GMM estimator is defined as $\hat{\theta} = \arg \min_\theta Q_N(\theta)$
 
 Since our parameters are unconstrained, we can program our optimization using Optim.
 
@@ -669,7 +669,7 @@ It's the same old **bias (or robustness) vs. efficiency trade-off**
 
 . . .
 
-- With MLE, we need to make assumption on distributions of unobservables
+- With MLE, we need to make assumptions on distributions of unobservables
   - When our assumptions are correct, MLE is more efficient $\rightarrow$ lower variance
   - Has good small sample properties (less bias, more efficiency with small data)
   - If our assumptions are inadequate, estimates are more biased
@@ -687,16 +687,19 @@ It's the same old **bias (or robustness) vs. efficiency trade-off**
 ## Choosing between MLE and GMM
 
 - *How much data is available?*
-  - Large data sets favor GMM: good large sample properties require fewer assumptions. Smaller data sets might require stronger distributional assumptions $\rightarrow$ MLE
+  - Large data sets favor GMM: good large sample properties require fewer assumptions
+  - Smaller data sets might require stronger distributional assumptions $\rightarrow$ MLE
 
 . . .
 
 - *How complex is the model?*
-  - MLE is better suited for linear and quadratic models, but technically difficult to compute with highly nonlinear models. For the latter case, GMM might be better
+  - MLE is better suited for linear and quadratic models, but technically difficult to compute with highly nonlinear models. 
+  - For the latter case, GMM might be better
 
 . . .
 
 - *How comfortable are you making distributional assumptions?*
-  - MLE requires you to fully specify distributions. If there is good theoretical grounding for these assumptions, MLE is a good idea. Otherwise, GMM is the more attractive option
+  - MLE requires you to fully specify distributions. If there is good theoretical grounding for these assumptions, MLE is a good idea. 
+  - Otherwise, GMM is the more attractive option
 
 

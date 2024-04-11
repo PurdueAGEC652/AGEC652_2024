@@ -444,7 +444,7 @@ Diego S. Cardoso
 </div>
 <div class="fragment">
 <ol start="3" type="1">
-<li>The GMM estimate is given by ( <span class="math inline">\(W_N\)</span> is a weighting matrix) <span class="math display">\[\hat{\theta}_{GMM} = \arg \min_\theta g_N(\theta)^\prime \; W_N \; g_N(\theta)\]</span></li>
+<li>The GMM estimator is given by ( <span class="math inline">\(W_N\)</span> is a weighting matrix) <span class="math display">\[\hat{\theta}_{GMM} = \arg \min_\theta g_N(\theta)^\prime \; W_N \; g_N(\theta)\]</span></li>
 </ol>
 </div>
 </section>
@@ -758,7 +758,7 @@ OIR = \left[\frac{1}{N} \sum_{i=1}^N g(z_i; \hat\theta)\right]^\prime \hat{S}^{-
 </section>
 <section id="gmm-in-practice-setup" class="slide level2">
 <h2>GMM in practice: setup</h2>
-<p>We will repeat the exercise of estimating simple linear model using GMM. Again, the model is</p>
+<p>We will repeat the exercise of estimating a simple linear model using GMM. Again, the model is</p>
 <p><span class="math display">\[
 y_i = \beta_0 + \beta_1 x_i + \epsilon_i
 \]</span></p>
@@ -887,9 +887,9 @@ g\left(y_i, x_i; \theta\right) = g\left(\left[\begin{matrix}\beta_0 \\ \beta_1\e
 <section id="gmm-in-practice-objective-function" class="slide level2">
 <h2>GMM in practice: objective function</h2>
 <ul>
-<li>Since we have 2 moment conditions and two parameters, this is technical an exactly identified GMM, which is equivalent to the standard method of moments and does not need the weighting matrix.
+<li>Since we have 2 moment conditions and two parameters, this is technically an exactly identified GMM, which is equivalent to the standard method of moments and does not need the weighting matrix.
 <ul>
-<li>Regardless we will keep the weighting matrix to demonstrate all the steps.</li>
+<li>Regardless, we will keep the weighting matrix to demonstrate all the steps.</li>
 </ul></li>
 </ul>
 <div class="fragment">
@@ -916,7 +916,7 @@ Q_N(\theta) = g_N(z_i;\theta)^\prime W g_N(\theta)
 </section>
 <section id="gmm-in-practice-step-1" class="slide level2">
 <h2>GMM in practice: step 1</h2>
-<p>Next, we will do step 1 of the efficient GMM estimation. The GMM estimate is defined as <span class="math inline">\(\hat{\theta} = \arg \min_\theta Q_N(\theta)\)</span></p>
+<p>Next, we will do step 1 of the efficient GMM estimation. The GMM estimator is defined as <span class="math inline">\(\hat{\theta} = \arg \min_\theta Q_N(\theta)\)</span></p>
 <p>Since our parameters are unconstrained, we can program our optimization using Optim.</p>
 <div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="im">using</span> <span class="bu">Optim</span></span>
@@ -1044,7 +1044,7 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <p>It’s the same old <strong>bias (or robustness) vs.&nbsp;efficiency trade-off</strong></p>
 <div class="fragment">
 <ul>
-<li>With MLE, we need to make assumption on distributions of unobservables
+<li>With MLE, we need to make assumptions on distributions of unobservables
 <ul>
 <li>When our assumptions are correct, MLE is more efficient <span class="math inline">\(\rightarrow\)</span> lower variance</li>
 <li>Has good small sample properties (less bias, more efficiency with small data)</li>
@@ -1068,14 +1068,16 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <ul>
 <li><em>How much data is available?</em>
 <ul>
-<li>Large data sets favor GMM: good large sample properties require fewer assumptions. Smaller data sets might require stronger distributional assumptions <span class="math inline">\(\rightarrow\)</span> MLE</li>
+<li>Large data sets favor GMM: good large sample properties require fewer assumptions</li>
+<li>Smaller data sets might require stronger distributional assumptions <span class="math inline">\(\rightarrow\)</span> MLE</li>
 </ul></li>
 </ul>
 <div class="fragment">
 <ul>
 <li><em>How complex is the model?</em>
 <ul>
-<li>MLE is better suited for linear and quadratic models, but technically difficult to compute with highly nonlinear models. For the latter case, GMM might be better</li>
+<li>MLE is better suited for linear and quadratic models, but technically difficult to compute with highly nonlinear models.</li>
+<li>For the latter case, GMM might be better</li>
 </ul></li>
 </ul>
 </div>
@@ -1083,7 +1085,8 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <ul>
 <li><em>How comfortable are you making distributional assumptions?</em>
 <ul>
-<li>MLE requires you to fully specify distributions. If there is good theoretical grounding for these assumptions, MLE is a good idea. Otherwise, GMM is the more attractive option</li>
+<li>MLE requires you to fully specify distributions. If there is good theoretical grounding for these assumptions, MLE is a good idea.</li>
+<li>Otherwise, GMM is the more attractive option</li>
 </ul></li>
 </ul>
 <div class="footer footer-default">

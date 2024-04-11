@@ -374,7 +374,7 @@ As in the LR test, we need to estimate both the unrestricted and the restricted 
 
 ## Wald test
 
-As in the MLE case, the Wald statistic is based on how close $c(\hat\theta)$ is to zero
+As in the MLE case, the Wald statistic is based on how close $c(\hat\theta_u)$ is to zero
 
 $$
 W = c(\hat\theta_u)^\prime V\left[c(\hat\theta_u)\right]c(\hat\theta_u) \sim \chi^2_{[df]}
@@ -391,7 +391,7 @@ and $V(\hat{\theta}) = (\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}$ and $\hat{D} 
 
 ## LM test
 
-The LM test is again based on how close the gradient of the objective function is to zero. The idea is that, if the restricted estimate is indeed valid, the gradients should approximately satisty the FOC.
+The LM test is again based on how close the gradient of the objective function is to zero. The idea is that, if the restricted estimate is indeed valid, the gradients of the unconstraiend objective function should approximately satisty the FOC.
 
 This gives the LM statistics
 
@@ -408,7 +408,7 @@ GMM has a general specification test that can be used when there are more moment
 The key idea of this test is that, if all of our moment conditions are valid, then $\frac{1}{N} \sum_i g(z_i;\hat\theta) \approx 0$. So, the null hypothesis of this test is
 
 $$
-H_0: E\left[g(z_i;\theta_0)\right]
+H_0: E\left[g(z_i;\theta_0)\right] = 0
 $$
 
 . . .
@@ -551,7 +551,8 @@ Q_N(\theta) = g_N(z_i;\theta)^\prime W g_N(\theta)
 $$
 
 ```{julia}
-function Q_N(θ; W = W, Y = Y, X = X)
+using LinearAlgebra
+function Q_N(θ; W = I(2), Y = Y, X = X)
     return g_N(θ; Y=Y, X=X)' * W * g_N(θ; Y=Y, X=X)
 end;
 ```
@@ -559,7 +560,6 @@ end;
 Testing with some an initial guess and the identity matrix as the weighting matrix.
 
 ```{julia}
-using LinearAlgebra
 θ_0 = [0.0, 0.0] # Initial guess
 W_0 = I(2) # 2x2 identity matrix
 Q_N([0.0, 0.0], W=W_0, Y=Y, X=X)

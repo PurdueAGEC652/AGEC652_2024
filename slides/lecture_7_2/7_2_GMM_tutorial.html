@@ -205,7 +205,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="setting-a-duopoly-of-car-models">Setting: a duopoly of car models</h2>
 <ul>
 <li>We will study a fictitious duopoly of two firms <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> that make competing car models.</li>
-<li>For simplicity, we will assume these are the only two products available in this market segments.</li>
+<li>For simplicity, we will assume these are the only two products available in this market segment.</li>
 </ul>
 <p>. . .</p>
 <p>Research question: <strong>How much market power do car brands A and B have?</strong></p>
@@ -217,8 +217,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Shares: <span class="math inline">\(s_k\)</span></li>
 <li>Prices: <span class="math inline">\(p_k\)</span></li>
-<li>Local steel prices: <span class="math inline">\(t_k\)</span></li>
-<li>Average local labor costs: <span class="math inline">\(l_i\)</span></li>
+<li>Local steel prices: <span class="math inline">\(t_j\)</span></li>
+<li>Average local labor costs: <span class="math inline">\(l_j\)</span></li>
 </ul>
 <p>To assess market power, we want to estimate the mean Lerner index for each firm <span class="math display">\[
 L_k = \frac{1}{N} \sum_{j=1}^N \frac{p_{k,j} - c_{k,j}}{p_{k,j}}
@@ -317,16 +317,16 @@ c_k = p_k - \frac{1}{\alpha(1-s_k)}
 <h2 class="anchored" data-anchor-id="supply-statistical-model-1">Supply: statistical model</h2>
 <p>We parameterize marginal cost using observable input costs and add an idiosyncratic cost shock <span class="math inline">\(\epsilon^S_{k,j}\)</span> to accomodate for differences from the expectation</p>
 <p><span class="math display">\[
-\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{k,j} + \gamma_3 l_{k,j} + \gamma_4 \xi^S_k +\epsilon^S_{k,j}
+\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{j} + \gamma_3 l_{j} + \gamma_4 \xi^S_k +\epsilon^S_{k,j}
 \]</span></p>
 <p>where</p>
 <ul>
 <li><span class="math inline">\(\gamma\)</span> are parameters to be estimated</li>
-<li><span class="math inline">\(t_{k,j}\)</span> and <span class="math inline">\(l_{k,j}\)</span> are local input costs for steel and labor</li>
+<li><span class="math inline">\(t_{j}\)</span> and <span class="math inline">\(l_{j}\)</span> are local input costs for steel and labor</li>
 <li><span class="math inline">\(B^S_k\)</span> is a vector of <strong>observed</strong> product characteristics that affect costs</li>
 <li><span class="math inline">\(\xi^S_k\)</span> is a vector of <strong>unobserved</strong> product characteristics that affect costs</li>
 </ul>
-<p>We assume <span class="math inline">\(\epsilon^S_{k,j}\)</span> to be uncorrelated with <span class="math inline">\(t_{k,j}\)</span>, <span class="math inline">\(l_{k,j}\)</span>, <span class="math inline">\(B^S_{k,j}\)</span>, and <span class="math inline">\(\xi^S_k\)</span></p>
+<p>We assume <span class="math inline">\(\epsilon^S_{k,j}\)</span> to be uncorrelated with <span class="math inline">\(t_{j}\)</span>, <span class="math inline">\(l_{j}\)</span>, <span class="math inline">\(B^S_{k,j}\)</span>, and <span class="math inline">\(\xi^S_k\)</span></p>
 </section>
 </section>
 <section id="estimation" class="level1">
@@ -344,7 +344,7 @@ c_k = p_k - \frac{1}{\alpha(1-s_k)}
 <p>. . .</p>
 <p><strong>With instruments</strong></p>
 <ul>
-<li>We can use input costs <span class="math inline">\(t_{k,j}, l_{k,j}\)</span> to instrument for price</li>
+<li>We can use input costs <span class="math inline">\(t_{j}, l_{j}\)</span> to instrument for price</li>
 <li>Key idea: with fixed product characteristics, higher costs lead to higher prices without affecting demand<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
 </ul>
 </section>
@@ -365,7 +365,7 @@ c_k = p_k - \frac{1}{\alpha(1-s_k)}
 </section>
 <section id="estimation-demand-moment-conditions-2" class="level2">
 <h2 class="anchored" data-anchor-id="estimation-demand-moment-conditions-2">Estimation: demand moment conditions</h2>
-<p>Denote the instrument vector <span class="math inline">\(Z_{k,j} = [1 \; B^D_{k,j} \; t_{k,j} \; l_{k,j} ]\)</span>. Then, we can form moment conditions <span class="math display">\[
+<p>Denote the instrument vector <span class="math inline">\(Z_{k,j} = [1 \; B^D_{k,j} \; t_{j} \; l_{j} ]\)</span>. Then, we can form moment conditions <span class="math display">\[
 E\left[Z^\prime_{k,j}\epsilon^D_{k,j}\right] = 0
 \]</span></p>
 <p>Q: How many moment conditions do we have here?</p>
@@ -377,32 +377,32 @@ E\left[Z^\prime_{k,j}\epsilon^D_{k,j}\right] = 0
 \begin{align}
 E\left[\epsilon^D_{k,j}\right] &amp; = 0\\
 E\left[B^D_{k,j}\epsilon^D_{k,j}\right] &amp; = 0\\
-E\left[t_{k,j}\epsilon^D_{k,j}\right] &amp; = 0\\
-E\left[l_{k,j}\epsilon^D_{k,j}\right] &amp; = 0
+E\left[t_{j}\epsilon^D_{k,j}\right] &amp; = 0\\
+E\left[l_{j}\epsilon^D_{k,j}\right] &amp; = 0
 \end{align}
 \]</span></p>
 </section>
 <section id="estimation-supply-moment-conditions" class="level2">
 <h2 class="anchored" data-anchor-id="estimation-supply-moment-conditions">Estimation: supply moment conditions</h2>
 <p><span class="math display">\[
-\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{k,j} + \gamma_3 l_{k,j} + \gamma_4 \xi^S_k +\epsilon^S_{k,j}
+\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{j} + \gamma_3 l_{j} + \gamma_4 \xi^S_k +\epsilon^S_{k,j}
 \]</span></p>
 <p>Again, we have unobserved characteristics that affect cost. However, endogeneity is less of a concern here if we consider this sector to be a small part of the economy:</p>
 <ul>
 <li>Prices for steel and labor clear on much bigger markets, thus decisions of product characteristics are unlikely to affect their prices</li>
 </ul>
-<p>For this reason, we can more reasonably assume that <span class="math inline">\(E[t_{k,j}\epsilon^S_{k,j}]=0\)</span>, <span class="math inline">\(E[l_{k,j}\epsilon^S_{k,j}]=0\)</span>, and <span class="math inline">\(E[B^S_{k,j}\epsilon^S_{k,j}]=0\)</span></p>
+<p>For this reason, we can more reasonably assume that <span class="math inline">\(E[t_{j}\epsilon^S_{k,j}]=0\)</span>, <span class="math inline">\(E[l_{j}\epsilon^S_{k,j}]=0\)</span>, and <span class="math inline">\(E[B^S_{k,j}\epsilon^S_{k,j}]=0\)</span></p>
 </section>
 <section id="estimation-supply-moment-conditions-1" class="level2">
 <h2 class="anchored" data-anchor-id="estimation-supply-moment-conditions-1">Estimation: supply moment conditions</h2>
 <p>So we rewrite our supply estimating equation as</p>
 <p><span class="math display">\[
-\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{k,j} + \gamma_3 l_{k,j} + \epsilon^S_{k,j} = \theta^S X^S_{k,j} + \epsilon^S_{k,j}
+\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{j} + \gamma_3 l_{j} + \epsilon^S_{k,j} = \theta^S X^S_{k,j} + \epsilon^S_{k,j}
 \]</span></p>
 <p>where</p>
 <ul>
 <li><span class="math inline">\(\theta^S\)</span> is the parameter column vector <span class="math inline">\([\gamma_0 \; \gamma_1 \; \gamma_2 \; \gamma_3]^\prime\)</span></li>
-<li><span class="math inline">\(X^S\)</span> is the row vector <span class="math inline">\([1 \; B^S_{k,j} \;t_{k,j} \;l_{k,j}]\)</span>, with <span class="math inline">\(B^S_{k,j}\)</span> being a dummy variable receiving 1 for product b (<span class="math inline">\(k=b\)</span>) or 0 otherwise</li>
+<li><span class="math inline">\(X^S\)</span> is the row vector <span class="math inline">\([1 \; B^S_{k,j} \;t_{j} \;l_{j}]\)</span>, with <span class="math inline">\(B^S_{k,j}\)</span> being a dummy variable receiving 1 for product b (<span class="math inline">\(k=b\)</span>) or 0 otherwise</li>
 </ul>
 <p>Since <span class="math inline">\(X^S\)</span> are instruments for themselves (and note that <span class="math inline">\(X^S_{k,j} = Z_{k,j}\)</span>, we can construct supply moment conditions</p>
 <p><span class="math display">\[
@@ -416,8 +416,8 @@ E\left[Z^\prime_{k,j}\epsilon^S_{k,j}\right] = 0
 \begin{align}
 E\left[\epsilon^S_{k,j}\right] &amp; = 0\\
 E\left[B^S_{k,j}\epsilon^S_{k,j}\right] &amp; = 0\\
-E\left[t_{k,j}\epsilon^S_{k,j}\right] &amp; = 0\\
-E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
+E\left[t_{j}\epsilon^S_{k,j}\right] &amp; = 0\\
+E\left[l_{j}\epsilon^S_{k,j}\right] &amp; = 0
 \end{align}
 \]</span></p>
 </section>
@@ -432,7 +432,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 </section>
 <section id="loading-and-preparing-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="loading-and-preparing-the-data">Loading and preparing the data</h2>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">CSV</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"duopoly_shares_data.csv"</span>, DataFrame);</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df[<span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="op">:</span>] <span class="co"># First few rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -515,7 +515,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 <li><span class="math inline">\(log(s_{k,j}) - log(s_{0,j})\)</span></li>
 <li><span class="math inline">\(B_{k,j}\)</span></li>
 </ul>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="fu">nrow</span>(df); <span class="co"># Get number of rows</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.logsk_logs0 <span class="op">=</span> <span class="fu">log</span>.(df.s_k) <span class="op">-</span> <span class="fu">log</span>.(df.s_0); <span class="co"># Calculate LHS of demand equation</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df.is_B <span class="op">=</span> (df.product <span class="op">.==</span> <span class="st">"b"</span>); <span class="co"># Create dummy variable for product B</span></span>
@@ -607,7 +607,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 <section id="loading-and-preparing-the-data-2" class="level2">
 <h2 class="anchored" data-anchor-id="loading-and-preparing-the-data-2">Loading and preparing the data</h2>
 <p>It might also be useful to prepare matrices <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span></p>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> [<span class="fu">ones</span>(N) df.p_k df.is_B];</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> [<span class="fu">ones</span>(N) df.is_B df.steel df.labor];</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -615,7 +615,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 <section id="moment-conditions-function" class="level2">
 <h2 class="anchored" data-anchor-id="moment-conditions-function">Moment conditions function</h2>
 <p>Next, we program function <code>g_i(θ)</code> that receives parameter vector <span class="math inline">\(\theta\)</span> and returns the eight moment conditions for all observations (<span class="math inline">\(N \times 8\)</span> matrix). Here is a way to structure it</p>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">g_i</span>(θ)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># DEMAND SIDE</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    θ_d <span class="op">=</span> θ[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>] <span class="co"># Demand parameters</span></span>
@@ -643,7 +643,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 <section id="moment-conditions-function-1" class="level2">
 <h2 class="anchored" data-anchor-id="moment-conditions-function-1">Moment conditions function</h2>
 <p>Then, we program <code>g_N(θ)</code> to calculate the sample analogue: <span class="math inline">\(g_N(\theta) = \frac{1}{N} \sum_{i=1}^N g(y_i, x_i;\theta)\)</span></p>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">g_N</span>(θ)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get moment vectors</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  g_is <span class="op">=</span> <span class="fu">g_i</span>(θ)</span>
@@ -654,8 +654,8 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 </section>
 <section id="gmm-estimation" class="level2">
 <h2 class="anchored" data-anchor-id="gmm-estimation">GMM estimation</h2>
-<p>With function <code>g_i(theta)</code>, we can use <code>Optim</code> package to minimize objective function <code>Q(theta)</code></p>
-<div class="cell" data-execution_count="7">
+<p>With function <code>g_i(θ)</code>, we can use <code>Optim</code> package to minimize objective function <code>Q(θ)</code></p>
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="fl">8</span> <span class="co"># Eight moment conditions</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>W_0 <span class="op">=</span> <span class="fu">I</span>(M) <span class="co"># Identity Matrix</span></span>
@@ -685,7 +685,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 <li>Let’s use OLS to get an initial guess for <span class="math inline">\(\theta^D\)</span>.</li>
 <li>For <span class="math inline">\(\theta^S\)</span>, let’s guess <span class="math inline">\(\gamma_0\)</span> as the minimum price and set 0.1 for the other parameters (we expect them to be positive)</li>
 </ul>
-<div class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GLM</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># OLS regression to get initial guess</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ols_reg <span class="op">=</span> <span class="fu">lm</span>(<span class="pp">@formula</span>(logsk_logs0 <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> p_k <span class="op">+</span> is_B), df);</span>
@@ -699,7 +699,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 </section>
 <section id="gmm-estimation-first-step" class="level2">
 <h2 class="anchored" data-anchor-id="gmm-estimation-first-step">GMM estimation: first step</h2>
-<div class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Optim</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> Optim.<span class="fu">optimize</span>(Q, θ_0, <span class="fu">Newton</span>(), Optim.<span class="fu">Options</span>(f_abstol<span class="op">=</span><span class="fl">1e-10</span>, g_abstol<span class="op">=</span><span class="fl">0.0</span>, g_reltol<span class="op">=</span><span class="fl">0.0</span>))</span>
@@ -714,7 +714,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 <section id="gmm-estimation-first-step-1" class="level2">
 <h2 class="anchored" data-anchor-id="gmm-estimation-first-step-1">GMM estimation: first step</h2>
 <p>Next, calculate <span class="math inline">\(W = \hat{S}^{-1}\)</span> where <span class="math inline">\(\hat{S} = N^{-1}\sum_i g(\hat{\theta}_1) g(\hat{\theta}_1)^\prime\)</span></p>
-<div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate W_hat (note that g_i transposed gs)</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>W_1 <span class="op">=</span> <span class="fu">inv</span>(<span class="fu">g_i</span>(θ_1)<span class="ch">'  * g_i(θ_1) ./N)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="74">
@@ -732,7 +732,7 @@ E\left[l_{k,j}\epsilon^S_{k,j}\right] &amp; = 0
 </section>
 <section id="gmm-estimation-second-step" class="level2">
 <h2 class="anchored" data-anchor-id="gmm-estimation-second-step">GMM estimation: second step</h2>
-<div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use step 1 estimates as initial guess</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> Optim.<span class="fu">optimize</span>(θ <span class="op">-&gt;</span>  <span class="fu">Q</span>(θ; W <span class="op">=</span> W_1), θ_1, <span class="fu">Newton</span>(), Optim.<span class="fu">Options</span>(f_abstol<span class="op">=</span><span class="fl">1e-10</span>, g_abstol<span class="op">=</span><span class="fl">0.0</span>, g_reltol<span class="op">=</span><span class="fl">0.0</span>))</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>θ_GMM <span class="op">=</span>  res.minimizer;</span>
@@ -760,7 +760,7 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <p><span class="math display">\[
 \hat{D} =  \frac{\partial g_N(\hat{\theta})}{\partial \hat{\theta}^\prime}
 \]</span></p>
-<div class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">ForwardDiff</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>D_hat <span class="op">=</span> ForwardDiff.<span class="fu">jacobian</span>(g_N, θ_GMM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="76">
@@ -782,7 +782,7 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <p><span class="math display">\[
 \hat{S} =  N^{-1}\sum_i g_i(\hat{\theta}) g_i(\hat{\theta})^\prime
 \]</span></p>
-<div class="cell" data-execution_count="13">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Again, note that function g_i transposed gs</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>S_hat <span class="op">=</span> <span class="fu">g_i</span>(θ_GMM)<span class="ch">'  * g_i(θ_GMM) ./N</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="77">
@@ -804,7 +804,7 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <p><span class="math display">\[
 V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 \]</span></p>
-<div class="cell" data-execution_count="14">
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>V_hat <span class="op">=</span> <span class="fu">inv</span>(D_hat<span class="op">'</span> <span class="op">*</span> <span class="fu">inv</span>(S_hat) <span class="op">*</span> D_hat) <span class="op">./</span>N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="78">
 <pre><code>7×7 Matrix{Float64}:
@@ -821,7 +821,7 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <section id="gmm-estimation-standard-errors-4" class="level2">
 <h2 class="anchored" data-anchor-id="gmm-estimation-standard-errors-4">GMM estimation: standard errors</h2>
 <p>So, the standard errors are the square root of the diagonal elements.</p>
-<div class="cell" data-execution_count="15">
+<div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>SEs <span class="op">=</span> <span class="fu">sqrt</span>.(<span class="fu">diag</span>(V_hat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="79">
 <pre><code>7-element Vector{Float64}:
@@ -838,7 +838,7 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <section id="gmm-estimation-standard-errors-5" class="level2">
 <h2 class="anchored" data-anchor-id="gmm-estimation-standard-errors-5">GMM estimation: standard errors</h2>
 <p>Then, we can organize the results in a table with 95% confidence intervals</p>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">Distributions</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  Coefficient <span class="op">=</span> [<span class="st">"β_0"</span>, <span class="st">"-α"</span>, <span class="st">"β_1"</span>, <span class="st">"γ_0"</span>, <span class="st">"γ_1"</span>, <span class="st">"γ_2"</span>, <span class="st">"γ_3"</span>],</span>
@@ -868,9 +868,9 @@ V(\hat{\theta}) = \frac{1}{N}(\hat{D}^\prime \hat{S}^{-1} \hat{D})^{-1}
 <h2 class="anchored" data-anchor-id="marginal-cost-estimation">Marginal cost estimation</h2>
 <p>Now that we have estimated all model parameters, we can pick <span class="math inline">\(\alpha\)</span> to calculate implied marginal costs</p>
 <p><span class="math display">\[
-c_k = p_k - \frac{1}{\alpha(1-s_k)}
+\hat{c}_k = p_k - \frac{1}{\hat\alpha(1-s_k)}
 \]</span></p>
-<div class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>α_hat <span class="op">=</span> <span class="op">-</span>θ_GMM[<span class="fl">2</span>];</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df.c_k <span class="op">=</span> df.p_k <span class="op">-</span> <span class="fl">1</span><span class="op">/</span>α_hat <span class="op">.*</span> <span class="fl">1</span> <span class="op">./</span>(<span class="fl">1</span> <span class="op">.-</span> df.s_k);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -878,7 +878,7 @@ c_k = p_k - \frac{1}{\alpha(1-s_k)}
 <section id="marginal-cost-estimation-1" class="level2">
 <h2 class="anchored" data-anchor-id="marginal-cost-estimation-1">Marginal cost estimation</h2>
 <p>Let’s take a look at the distribution of costs per firm</p>
-<div class="cell" data-execution_count="18">
+<div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span>, <span class="bu">LaTeXStrings</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">histogram</span>(df.c_k[.!df.is_B], label<span class="op">=</span>L<span class="st">"Pred. </span><span class="sc">$</span>c_a<span class="sc">$</span><span class="st">", </span>bins<span class="st">=30), histogram(df.c_k[df.is_B], label=L"</span>Pred. <span class="op">$</span>c_b<span class="op">$</span><span class="st">", bins=30))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="82">
@@ -1107,7 +1107,7 @@ c_k = p_k - \frac{1}{\alpha(1-s_k)}
 <p><span class="math display">\[
 L_k = \frac{1}{N} \sum_{j=1}^N \frac{p_{k,j} - c_{k,j}}{p_{k,j}}
 \]</span></p>
-<div class="cell" data-execution_count="19">
+<div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df.lerner_k <span class="op">=</span> (df.p_k <span class="op">-</span> df.c_k) <span class="op">./</span> df.p_k;</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Firm A</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>mean_lerner_a <span class="op">=</span> <span class="fu">sum</span>(df.lerner_k[.!df.is_B])<span class="op">./</span>(N<span class="op">/</span><span class="fl">2</span>);</span>
@@ -1133,7 +1133,7 @@ L_k = \frac{1}{N} \sum_{j=1}^N \frac{p_{k,j} - c_{k,j}}{p_{k,j}}
 
 <ol>
 <li id="fn1"><p>Unlike in Unit 6, we will not go over the details of data generation. But I uploaded the script for that, so please check it out.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>In the script to generate this data, products have an unobserved quality index that affects both utility and costs.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>In the script to generate this data, products have an omitted quality index that affects both utility and costs.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main>
 <!-- /main column -->

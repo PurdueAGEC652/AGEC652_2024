@@ -73,7 +73,7 @@ Pkg.instantiate()
 ## Setting: a duopoly of car models
 
 - We will study a fictitious duopoly of two firms $A$ and $B$ that make competing car models.
-- For simplicity, we will assume these are the only two products available in this market segments.
+- For simplicity, we will assume these are the only two products available in this market segment.
 
 . . .
 
@@ -87,8 +87,8 @@ We have data from a random sample from $N=300$ local markets (indexed by $j$) fo
 
 - Shares: $s_k$
 - Prices: $p_k$
-- Local steel prices: $t_k$
-- Average local labor costs: $l_i$
+- Local steel prices: $t_j$
+- Average local labor costs: $l_j$
   
 To assess market power, we want to estimate the mean Lerner index for each firm
 $$
@@ -204,17 +204,17 @@ $$
 We parameterize marginal cost using observable input costs and add an idiosyncratic cost shock $\epsilon^S_{k,j}$ to accomodate for differences from the expectation
 
 $$
-\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{k,j} + \gamma_3 l_{k,j} + \gamma_4 \xi^S_k +\epsilon^S_{k,j}
+\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{j} + \gamma_3 l_{j} + \gamma_4 \xi^S_k +\epsilon^S_{k,j}
 $$
 
 where
 
 - $\gamma$ are parameters to be estimated
-- $t_{k,j}$ and $l_{k,j}$ are local input costs for steel and labor
+- $t_{j}$ and $l_{j}$ are local input costs for steel and labor
 - $B^S_k$ is a vector of **observed** product characteristics that affect costs
 - $\xi^S_k$ is a vector of **unobserved** product characteristics that affect costs
 
-We assume $\epsilon^S_{k,j}$ to be uncorrelated with $t_{k,j}$, $l_{k,j}$, $B^S_{k,j}$, and $\xi^S_k$
+We assume $\epsilon^S_{k,j}$ to be uncorrelated with $t_{j}$, $l_{j}$, $B^S_{k,j}$, and $\xi^S_k$
 
 # Estimation
 
@@ -238,8 +238,8 @@ How can we solve this?
 
 **With instruments**
 
-- We can use input costs $t_{k,j}, l_{k,j}$ to instrument for price
-- Key idea: with fixed product characteristics, higher costs lead to higher prices without affecting demand^[In the script to generate this data, products have an unobserved quality index that affects both utility and costs.]
+- We can use input costs $t_{j}, l_{j}$ to instrument for price
+- Key idea: with fixed product characteristics, higher costs lead to higher prices without affecting demand^[In the script to generate this data, products have an omitted quality index that affects both utility and costs.]
 
 ## Estimation: demand moment conditions
 
@@ -258,7 +258,7 @@ where
 
 ## Estimation: demand moment conditions
 
-Denote the instrument vector $Z_{k,j} = [1 \; B^D_{k,j} \; t_{k,j} \; l_{k,j} ]$. Then, we can form moment conditions
+Denote the instrument vector $Z_{k,j} = [1 \; B^D_{k,j} \; t_{j} \; l_{j} ]$. Then, we can form moment conditions
 $$
 E\left[Z^\prime_{k,j}\epsilon^D_{k,j}\right] = 0
 $$
@@ -273,35 +273,35 @@ $$
 \begin{align}
 E\left[\epsilon^D_{k,j}\right] & = 0\\
 E\left[B^D_{k,j}\epsilon^D_{k,j}\right] & = 0\\
-E\left[t_{k,j}\epsilon^D_{k,j}\right] & = 0\\
-E\left[l_{k,j}\epsilon^D_{k,j}\right] & = 0
+E\left[t_{j}\epsilon^D_{k,j}\right] & = 0\\
+E\left[l_{j}\epsilon^D_{k,j}\right] & = 0
 \end{align}
 $$
 
 ## Estimation: supply moment conditions
 
 $$
-\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{k,j} + \gamma_3 l_{k,j} + \gamma_4 \xi^S_k +\epsilon^S_{k,j}
+\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{j} + \gamma_3 l_{j} + \gamma_4 \xi^S_k +\epsilon^S_{k,j}
 $$
 
 Again, we have unobserved characteristics that affect cost. However, endogeneity is less of a concern here if we consider this sector to be a small part of the economy:
 
 - Prices for steel and labor clear on much bigger markets, thus decisions of product characteristics are unlikely to affect their prices
 
-For this reason, we can more reasonably assume that $E[t_{k,j}\epsilon^S_{k,j}]=0$, $E[l_{k,j}\epsilon^S_{k,j}]=0$, and $E[B^S_{k,j}\epsilon^S_{k,j}]=0$
+For this reason, we can more reasonably assume that $E[t_{j}\epsilon^S_{k,j}]=0$, $E[l_{j}\epsilon^S_{k,j}]=0$, and $E[B^S_{k,j}\epsilon^S_{k,j}]=0$
 
 ## Estimation: supply moment conditions
 
 So we rewrite our supply estimating equation as
 
 $$
-\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{k,j} + \gamma_3 l_{k,j} + \epsilon^S_{k,j} = \theta^S X^S_{k,j} + \epsilon^S_{k,j}
+\hat{c}_{k,j} = \gamma_0 + \gamma_1 B^S_{k,j} + \gamma_2 t_{j} + \gamma_3 l_{j} + \epsilon^S_{k,j} = \theta^S X^S_{k,j} + \epsilon^S_{k,j}
 $$
 
 where 
 
 - $\theta^S$ is the parameter column vector $[\gamma_0 \; \gamma_1 \; \gamma_2 \; \gamma_3]^\prime$
-- $X^S$ is the row vector $[1 \; B^S_{k,j} \;t_{k,j} \;l_{k,j}]$, with $B^S_{k,j}$ being a dummy variable receiving 1 for product b ($k=b$) or 0 otherwise
+- $X^S$ is the row vector $[1 \; B^S_{k,j} \;t_{j} \;l_{j}]$, with $B^S_{k,j}$ being a dummy variable receiving 1 for product b ($k=b$) or 0 otherwise
 
 Since $X^S$ are instruments for themselves (and note that $X^S_{k,j} = Z_{k,j}$, we can construct supply moment conditions
 
@@ -318,8 +318,8 @@ $$
 \begin{align}
 E\left[\epsilon^S_{k,j}\right] & = 0\\
 E\left[B^S_{k,j}\epsilon^S_{k,j}\right] & = 0\\
-E\left[t_{k,j}\epsilon^S_{k,j}\right] & = 0\\
-E\left[l_{k,j}\epsilon^S_{k,j}\right] & = 0
+E\left[t_{j}\epsilon^S_{k,j}\right] & = 0\\
+E\left[l_{j}\epsilon^S_{k,j}\right] & = 0
 \end{align}
 $$
 
@@ -412,7 +412,7 @@ end;
 
 ## GMM estimation
 
-With function `g_i(theta)`, we can use `Optim` package to minimize objective function `Q(theta)` 
+With function `g_i(θ)`, we can use `Optim` package to minimize objective function `Q(θ)` 
 
 ```{julia}
 using LinearAlgebra
@@ -565,7 +565,7 @@ println(results_df)
 Now that we have estimated all model parameters, we can pick $\alpha$ to calculate implied marginal costs
 
 $$
-c_k = p_k - \frac{1}{\alpha(1-s_k)}
+\hat{c}_k = p_k - \frac{1}{\hat\alpha(1-s_k)}
 $$
 
 ```{julia}

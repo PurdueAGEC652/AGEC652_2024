@@ -1,0 +1,185 @@
+---
+title: "AGEC 652 - Lecture 8.1"
+subtitle: "A short survey of simulation-based methods"
+author: "Diego S. Cardoso"
+institute: "Purdue University"
+execute:
+  echo: true
+  cache: true
+format:
+  revealjs: 
+    theme: [white, ./../agec_652_style.css]
+    slide-number: c
+    show-slide-number: all
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    code-copy: hover
+    fig-width: 8
+    fig-height: 4
+    chalkboard:
+      theme: whiteboard
+      chalk-effect: 0.1
+editor:
+  render-on-save: false
+---
+
+## Course Roadmap {background-color="gold"}
+
+
+1.  [Introduction to Scientific Computing]{.gray}
+2.  [Fundamentals of numerical methods]{.gray}
+3.  [Systems of equations]{.gray}
+4.  [Optimization]{.gray}
+5.  [Structural estimation: Intro]{.gray}
+6.  [Maximum Likelihood Estimator]{.gray}
+7.  [Generalized Method of Moments]{.gray}
+8.  **Simulation-based methods**
+    1.  Bootstrapping, Simulated Maximum Likelihood, & Method of Simulated Moments
+    2.  Tutorial
+
+
+## Main references for today {background-color="gold"}
+
+- Cameron & Trivedi (2008), Greene (2018)
+- Michael Creel's "Econometrics with Julia" (2023)
+
+
+# Why simulate?
+
+## Why simulate?
+
+- Much of this course has been based on how we can leverage modern computer power to relax modeling assumptions and work with complex mathematical objects
+- Although we have used numerical optimization methods to estimate MLE and GMM, much of the derivations have been based on tractable functional forms
+
+. . .
+
+- Yet again, many of those functional forms are there because they are convenient to work with analytically. But there are instances where such simplifications impose unrealistic restrictions on the model
+  - E.g., the multinomial logit model has a nice and tractable expression for probabilities. But it requires the IIA assumption, which imposes very limiting substitution patterns that largely ignore product characteristics
+
+. . .
+
+- Simulation-based methods allow us to use computer power to work with mathematical objects that would be intractable otherwise. For example
+  - Bootstrapping let us obtain more accurate results with finite sample than what asymptotic theory gives us
+  - Simulated Maximum Likelihood and the Method of Simulated Moments allow us to estimate models where the objective function may not have a closed-form solution
+
+## Agenda
+
+- This lecture will be a short survey of simulation-based methods. We won't have time to see deeper details, so the plan is just to introduce the idea
+- Many popular extensions of the empirical models we saw in the course use these methods, so it's good to have a general understanding
+  - E.g., mixed logit/BLP, latent class choice models, etc
+
+. . .
+ 
+- We will cover the basics of
+  - Bootstrapping
+  - Maximum Simulated Likelihood
+  - Method of Simulated Moments
+
+
+# Bootstrapping
+
+
+## Issues with asymptotic variance estimators
+
+- We might be interested in the standard errors or confidence intervals of some function $f(\hat{\theta})$
+  - One solution is to use the *Delta method*: basically, a first-order Taylor expansion of the asymptotic variance of $\hat{\theta}$
+  - Another solution is to resample $B$ times from the data and estimate $\hat{\theta}_b$ for each resample $\rightarrow$ sample from the distribution of $\hat{\theta}$. This the **bootstrap** method
+  
+. . .
+
+- Consistent estimators might still have large bias in finite samples
+  - Bootstrapping is also useful to adjust for this type of bias (provided that the conditions for its correctness are satisfied)
+
+
+## Bootstrap: basic algorithm
+
+- Observations $(z_1, \dots, z_N)$ are drawn from some measure $P$, so we can form a nonparametric estimate $\hat{P}$ by assuming that each observation has weight $1/N$
+
+. . .
+
+Basic bootstrap algorithm:
+
+1. Simulate a new sample $Z^* = (z^*_1, \dots, z^*_N) \sim \hat{P}$. This is, draw $n$ values **with replacement** from our data
+  
+. . .
+
+2. Compute any statistic of $f(Z^*)$ you would like
+  - Could be something simple, like an OLS coefficient, or complicated, like Nash equilibrium parameters
+  
+. . .
+
+3. Repeat 1 and 2 $B$ times and calculate $Var(f_b)$ or $CI(f_1, \dots, f_B)$
+
+
+
+## Bootstrap: bias correction
+
+
+Key idea: $\hat{\theta}^*_1, \dots, \hat{\theta}^*_B$ approximates the sampling distribution of $\hat{\theta}$
+
+. . .
+
+- We can then calculate 
+
+$$E[\hat{\theta}^*] = \bar{\theta^*} = \frac{1}{B} \sum^B_{b=1}\hat{\theta}^*_b$$
+
+
+
+## Bootstrap: bias correction
+
+- We can use $\bar{\theta^*}$ to bias correct our estimates
+  - Recall $\theta = E[\hat{\theta}] - Bias(\hat{\theta})$
+  - From bootstrap: $Bias_{bs}(\hat{\theta}) = \bar{\theta^*} - \hat{\theta}$
+
+Then, 
+
+$$\hat{\theta} - Bias_{bs}(\hat{\theta}) = \hat{\theta} - (\bar{\theta^*} - \hat{\theta}) = 2\hat{\theta} - \bar{\theta^*}$$
+
+. . .
+
+- Most nonlinear models are *consistent but biased*, especially in small samples
+  - But correcting bias is not for free: there's always the bias-variance trade-off
+
+
+
+## Bootstrap: variance
+
+We can also use the sampled values $\hat{\theta}^*_1, \dots, \hat{\theta}^*_B$ to calculate the **bootstrapped variance** of the estimator
+
+$$Var(\hat{\theta}^*) = \frac{1}{B-1} \sum^B_{b=1}(\hat{\theta}^*_b - \bar{\theta^*})^2$$
+
+
+
+
+## Bootstrap: confidence intervals
+
+We can also calculate **bootstrapped confidence intervals**. There are two basic ways
+
+1. Empirical quantiles (preferred way)
+  - Sort values $\hat{\theta}^*_B$ and take
+
+$$CI: [\hat{\theta}^*_{\alpha/2}, \hat{\theta}^*_{1-\alpha/2}]$$
+
+. . .
+
+2. Asymptotically normal (relies on CLT)
+
+$$CI: \hat{\theta} \pm 1.96 \sqrt{Var(\hat{\theta}^*)}$$
+
+
+
+## Bootstrap isn't magic
+
+Bootstrapped statistics are easy to program
+
+- But for complicated models, it can take a lot of time to resample and estimate multiple times
+  - Good thing though: this is highly parallelizable
+  
+. . .
+
+But bootstrapping isn't magic: it depends on asymptotic theory and will fail if you use it incorrectly
+
+- If you are constructing standard errors for something that isn't asymptotically normal, it won't work
+- It samples with replacement $=$ i.i.d. But if i.i.d. does not hold in your data, it might fail (but it can be fixed in certain cases)
+
+

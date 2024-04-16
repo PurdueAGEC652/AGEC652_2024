@@ -45,3 +45,4 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
 
 - Unit 7 - Generalized Method of Moments
   - Lecture 7.1: [GMM theory](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_7_1/7_1_GMM_review.html)
+  - Lecture 7.2: [GMM tutorial](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_7_2/7_2_GMM_tutorial.html) 

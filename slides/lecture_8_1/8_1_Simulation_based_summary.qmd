@@ -1,6 +1,6 @@
 ---
 title: "AGEC 652 - Lecture 8.1"
-subtitle: "A short survey of simulation-based methods"
+subtitle: "A brief survey of simulation-based methods"
 author: "Diego S. Cardoso"
 institute: "Purdue University"
 execute:
@@ -34,13 +34,13 @@ editor:
 6.  [Maximum Likelihood Estimator]{.gray}
 7.  [Generalized Method of Moments]{.gray}
 8.  **Simulation-based methods**
-    1.  Bootstrapping, Simulated Maximum Likelihood, & Method of Simulated Moments
-    2.  Tutorial
+    1.  Bootstrapping, SML, & MSM
+    2.  MSM tutorial
 
 
 ## Main references for today {background-color="gold"}
 
-- Cameron & Trivedi (2008), Greene (2018)
+- Cameron & Trivedi (2005), Greene (2018)
 - Michael Creel's "Econometrics with Julia" (2023)
 
 
@@ -56,11 +56,14 @@ editor:
 - Yet again, many of those functional forms are there because they are convenient to work with analytically. But there are instances where such simplifications impose unrealistic restrictions on the model
   - E.g., the multinomial logit model has a nice and tractable expression for probabilities. But it requires the IIA assumption, which imposes very limiting substitution patterns that largely ignore product characteristics
 
-. . .
+## Why simulate?
 
-- Simulation-based methods allow us to use computer power to work with mathematical objects that would be intractable otherwise. For example
-  - Bootstrapping let us obtain more accurate results with finite sample than what asymptotic theory gives us
-  - Simulated Maximum Likelihood and the Method of Simulated Moments allow us to estimate models where the objective function may not have a closed-form solution
+Simulation-based methods allow us to use computer power to work with mathematical objects that would be intractable otherwise. 
+For example
+
+- Bootstrapping let us obtain more accurate results with finite sample than what asymptotic theory gives us
+- Simulated Maximum Likelihood and the Method of Simulated Moments allow us to estimate models where the objective function may not have a closed-form solution
+  - In most cases, this refers to a difficult, high-dimensional integral. So, simulation here essentially means Monte Carlo integration!
 
 ## Agenda
 
@@ -82,7 +85,7 @@ editor:
 ## Issues with asymptotic variance estimators
 
 - We might be interested in the standard errors or confidence intervals of some function $f(\hat{\theta})$
-  - One solution is to use the *Delta method*: basically, a first-order Taylor expansion of the asymptotic variance of $\hat{\theta}$
+  - One solution is to use the *[Delta method](https://en.wikipedia.org/wiki/Delta_method)*: basically, a first-order Taylor expansion of the asymptotic variance of $\hat{\theta}$
   - Another solution is to resample $B$ times from the data and estimate $\hat{\theta}_b$ for each resample $\rightarrow$ sample from the distribution of $\hat{\theta}$. This the **bootstrap** method
   
 . . .
@@ -108,7 +111,7 @@ Basic bootstrap algorithm:
   
 . . .
 
-3. Repeat 1 and 2 $B$ times and calculate $Var(f_b)$ or $CI(f_1, \dots, f_B)$
+3. Repeat 1 and 2 $B$ times^[See Cameron & Trivedi for guidance on how to choose $B$.] and calculate $Var(f_b)$ or $CI(f_1, \dots, f_B)$
 
 
 
@@ -155,14 +158,14 @@ $$Var(\hat{\theta}^*) = \frac{1}{B-1} \sum^B_{b=1}(\hat{\theta}^*_b - \bar{\thet
 
 We can also calculate **bootstrapped confidence intervals**. There are two basic ways
 
-1. Empirical quantiles (preferred way)
-  - Sort values $\hat{\theta}^*_B$ and take
+1. Empirical quantiles (preferred with small samples)
+   - Sort values $\hat{\theta}^*_B$ and take
 
 $$CI: [\hat{\theta}^*_{\alpha/2}, \hat{\theta}^*_{1-\alpha/2}]$$
 
 . . .
 
-2. Asymptotically normal (relies on CLT)
+2. Asymptotical refinement (relies on CLT)
 
 $$CI: \hat{\theta} \pm 1.96 \sqrt{Var(\hat{\theta}^*)}$$
 
@@ -180,6 +183,122 @@ Bootstrapped statistics are easy to program
 But bootstrapping isn't magic: it depends on asymptotic theory and will fail if you use it incorrectly
 
 - If you are constructing standard errors for something that isn't asymptotically normal, it won't work
-- It samples with replacement $=$ i.i.d. But if i.i.d. does not hold in your data, it might fail (but it can be fixed in certain cases)
+- It samples with replacement $=$ i.i.d. But if i.i.d. does not hold in your data, it might fail
+  - Common violations of i.i.d: time series, panel data, clusters, etc
+  - But it can be fixed in certain cases! See Cameron & Trivedi for examples of subsampling, block, and nested bootstrapping
 
+
+# Maximum Simulated Likelihood (MSL)
+
+## MSL motivation
+
+MSL is typically used when we don't have closed-form expressions for the likelihood function. Let's start with an example
+
+. . .
+
+- Let's get back to the Random Utility Model, only this time with a twist
+
+$$
+\begin{align}
+u_{ik} = X_{ik}\beta_i + \nu_{ik}, \\
+\mbox{with }\beta_i = \beta + \zeta_i
+\end{align}
+$$
+
+where $\zeta_i$ is a random variable with mean zero and distribution $F_\zeta$. 
+
+- This change yields a **nonlinear random parameter model**
+- It is the base for the mixed logit models and variations, for example
+
+## MSL motivation
+
+$$
+\begin{align}
+u_{ik} = X_{ik}\beta_i + \nu_{ik} \\
+\beta_i = \beta + \zeta_i
+\end{align}
+$$
+
+The challenge here is that, when we calculate the likelihood based on the probability of choosing, say, $k$ over the outside option $0$, we have
+
+$$
+P_{ik}(\beta) = \Pr[\epsilon_{ik} < - V_{i}|X_{ik}] = \Pr[\epsilon_{ik} < - X_{ik}(\beta + \zeta_i)|X_{ik}]
+$$ 
+
+where $\epsilon_{ik} = \nu_{ik} - \nu_{0k}$. But $\zeta_i$ is also a random variable, so this probability is much harder to calculate!
+
+
+## MSL motivation
+
+Essentially, we want to calculate an integral over $\zeta$ 
+
+$$
+\begin{align}
+P_{ik}(\beta) = \Pr[\epsilon_{ik} < -X_{ik}(\beta + \zeta_i)|X_{ik}] & = \int_{\zeta} \Pr[\epsilon_{ik} < -X_{ik}(\beta + z)|X_{ik}] f_\zeta(z)dz \\ 
+  & =  \int_{\zeta} \left[\int_{-\infty}^{-X_{ik}(\beta + z)}f_\epsilon(s)ds\right] f_\zeta(z)dz \\
+  & =  \int_{\zeta} \left[\frac{e^{X_{ik}(\beta + z)}}{1 + e^{X_{ik}(\beta + z)}} \right] f_\zeta(z)dz
+\end{align}
+$$
+
+where $f_\epsilon(s)=\frac{e^{-s}}{(1 + e^{-x})^2}$ is the standard logistic density and $f_\zeta$ is the density of $F_\zeta$.
+
+- Even for simple distributions, this integral will not have close-form expressions, so it's analytically intractable!
+- Instead of working with those difficult (impossible?) integrals, MSL estimation relies on numerical approximations of $P_{ik}(\beta)$
+
+
+
+## MSL general idea
+
+In generic terms, MSL is motivated by the fact that we need to evaluate some density
+
+$$
+f(y_i|x_i, \theta) = \int h(y|x, \theta, \zeta)g(\zeta)d\zeta 
+$$
+
+where $h(\cdot)$ and $g(\cdot)$ are known functions and $\zeta$ is a random variable (possibly a vector). 
+
+However, $f$ does not have a closed-form solution, so we can't program the MLE estimator directly
+
+$$
+\hat\theta_{MLE} \equiv \arg\max_\theta l(\theta) = \sum_{i=1}^N \ln f(y_i|x_i, \theta)
+$$
+
+## MSL general idea
+
+The key idea of MSL is to work with approximations $f(y_i|x_i, \theta)$ instead
+
+- If we are integrating over a few dimensions, then deterministic approximations like trapezoid rule or Gaussian quadrature work fine
+- If the integral is over many dimensions, then Monte Carlo integration (and its variations) is the best feasible option
+
+. . .
+
+In the latter case, in "MSL speak", we have a *Monte Carlo direct simulator*
+
+$$
+\hat{f}(y_i|x_i, \theta; \zeta_i^S) = \frac{1}{S}\sum_{s=1}^S h(y|x, \theta, \zeta_{i,s})
+$$
+
+where $\zeta_i^S$ is a vector of $S$ i.i.d. draws from the the distribution of $\zeta$ (thus, with density $g$)
+
+- This is just the standard Monte Carlo integration we say in unit 2 of this course!
+
+
+
+## MSL general idea
+
+Therefore, the Maximum Simulated Likelihood estimator is given by
+
+$$
+\hat\theta_{MSL} \equiv \arg\max_\theta \hat{l}(\theta) = \sum_{i=1}^N \ln \hat{f}(y_i|x_i, \theta)
+$$
+
+- If $\hat{f}$ is differentiable, we can use the usual gradient-based optimization methods we saw in unit 4
+  - But beware that we need to calculate numerical derivatives of a numerical integral, so we need a lot of draws to have precise approximations $\hat{f}$
+
+. . .
+
+- It can be shown that the MSL is asymptotically equivalent to the MLE if $N,S \rightarrow \infty$ and $\sqrt{N}/S \rightarrow 0$
+- However, even if the MSL is consistent, the variance of the estimator can be inflated due to approximation error in the simulation
+
+# Method of Simulated Moments
 

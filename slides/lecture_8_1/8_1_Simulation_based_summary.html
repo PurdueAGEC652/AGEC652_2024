@@ -354,15 +354,15 @@ Diego S. Cardoso
 <li><span class="gray">Generalized Method of Moments</span></li>
 <li><strong>Simulation-based methods</strong>
 <ol type="1">
-<li>Bootstrapping, Simulated Maximum Likelihood, &amp; Method of Simulated Moments</li>
-<li>Tutorial</li>
+<li>Bootstrapping, SML, &amp; MSM</li>
+<li>MSM tutorial</li>
 </ol></li>
 </ol>
 </section>
 <section id="main-references-for-today" class="slide level2" data-background-color="gold">
 <h2>Main references for today</h2>
 <ul>
-<li>Cameron &amp; Trivedi (2008), Greene (2018)</li>
+<li>Cameron &amp; Trivedi (2005), Greene (2018)</li>
 <li>Michael Creel’s “Econometrics with Julia” (2023)</li>
 </ul>
 </section>
@@ -385,15 +385,17 @@ Diego S. Cardoso
 </ul></li>
 </ul>
 </div>
-<div class="fragment">
-<ul>
-<li>Simulation-based methods allow us to use computer power to work with mathematical objects that would be intractable otherwise. For example
+</section>
+<section id="why-simulate-2" class="slide level2">
+<h2>Why simulate?</h2>
+<p>Simulation-based methods allow us to use computer power to work with mathematical objects that would be intractable otherwise. For example</p>
 <ul>
 <li>Bootstrapping let us obtain more accurate results with finite sample than what asymptotic theory gives us</li>
-<li>Simulated Maximum Likelihood and the Method of Simulated Moments allow us to estimate models where the objective function may not have a closed-form solution</li>
+<li>Simulated Maximum Likelihood and the Method of Simulated Moments allow us to estimate models where the objective function may not have a closed-form solution
+<ul>
+<li>In most cases, this refers to a difficult, high-dimensional integral. So, simulation here essentially means Monte Carlo integration!</li>
 </ul></li>
 </ul>
-</div>
 </section>
 <section id="agenda" class="slide level2">
 <h2>Agenda</h2>
@@ -425,7 +427,7 @@ Diego S. Cardoso
 <ul>
 <li>We might be interested in the standard errors or confidence intervals of some function <span class="math inline">\(f(\hat{\theta})\)</span>
 <ul>
-<li>One solution is to use the <em>Delta method</em>: basically, a first-order Taylor expansion of the asymptotic variance of <span class="math inline">\(\hat{\theta}\)</span></li>
+<li>One solution is to use the <em><a href="https://en.wikipedia.org/wiki/Delta_method">Delta method</a></em>: basically, a first-order Taylor expansion of the asymptotic variance of <span class="math inline">\(\hat{\theta}\)</span></li>
 <li>Another solution is to resample <span class="math inline">\(B\)</span> times from the data and estimate <span class="math inline">\(\hat{\theta}_b\)</span> for each resample <span class="math inline">\(\rightarrow\)</span> sample from the distribution of <span class="math inline">\(\hat{\theta}\)</span>. This the <strong>bootstrap</strong> method</li>
 </ul></li>
 </ul>
@@ -459,10 +461,10 @@ Diego S. Cardoso
 </div>
 <div class="fragment">
 <ol start="3" type="1">
-<li>Repeat 1 and 2 <span class="math inline">\(B\)</span> times and calculate <span class="math inline">\(Var(f_b)\)</span> or <span class="math inline">\(CI(f_1, \dots, f_B)\)</span></li>
+<li>Repeat 1 and 2 <span class="math inline">\(B\)</span> times<sup>1</sup> and calculate <span class="math inline">\(Var(f_b)\)</span> or <span class="math inline">\(CI(f_1, \dots, f_B)\)</span></li>
 </ol>
 </div>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>See Cameron &amp; Trivedi for guidance on how to choose <span class="math inline">\(B\)</span>.</p></li></ol></aside></section>
 <section id="bootstrap-bias-correction" class="slide level2">
 <h2>Bootstrap: bias correction</h2>
 <p>Key idea: <span class="math inline">\(\hat{\theta}^*_1, \dots, \hat{\theta}^*_B\)</span> approximates the sampling distribution of <span class="math inline">\(\hat{\theta}\)</span></p>
@@ -502,15 +504,15 @@ Diego S. Cardoso
 <h2>Bootstrap: confidence intervals</h2>
 <p>We can also calculate <strong>bootstrapped confidence intervals</strong>. There are two basic ways</p>
 <ol type="1">
-<li>Empirical quantiles (preferred way)</li>
-</ol>
+<li>Empirical quantiles (preferred with small samples)
 <ul>
 <li>Sort values <span class="math inline">\(\hat{\theta}^*_B\)</span> and take</li>
-</ul>
+</ul></li>
+</ol>
 <p><span class="math display">\[CI: [\hat{\theta}^*_{\alpha/2}, \hat{\theta}^*_{1-\alpha/2}]\]</span></p>
 <div class="fragment">
 <ol start="2" type="1">
-<li>Asymptotically normal (relies on CLT)</li>
+<li>Asymptotical refinement (relies on CLT)</li>
 </ol>
 <p><span class="math display">\[CI: \hat{\theta} \pm 1.96 \sqrt{Var(\hat{\theta}^*)}\]</span></p>
 </div>
@@ -528,13 +530,122 @@ Diego S. Cardoso
 <p>But bootstrapping isn’t magic: it depends on asymptotic theory and will fail if you use it incorrectly</p>
 <ul>
 <li>If you are constructing standard errors for something that isn’t asymptotically normal, it won’t work</li>
-<li>It samples with replacement <span class="math inline">\(=\)</span> i.i.d. But if i.i.d. does not hold in your data, it might fail (but it can be fixed in certain cases)</li>
+<li>It samples with replacement <span class="math inline">\(=\)</span> i.i.d. But if i.i.d. does not hold in your data, it might fail
+<ul>
+<li>Common violations of i.i.d: time series, panel data, clusters, etc</li>
+<li>But it can be fixed in certain cases! See Cameron &amp; Trivedi for examples of subsampling, block, and nested bootstrapping</li>
+</ul></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="maximum-simulated-likelihood-msl" class="title-slide slide level1 center">
+<h1>Maximum Simulated Likelihood (MSL)</h1>
+
+</section>
+<section id="msl-motivation" class="slide level2">
+<h2>MSL motivation</h2>
+<p>MSL is typically used when we don’t have closed-form expressions for the likelihood function. Let’s start with an example</p>
+<div class="fragment">
+<ul>
+<li>Let’s get back to the Random Utility Model, only this time with a twist</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+u_{ik} = X_{ik}\beta_i + \nu_{ik}, \\
+\mbox{with }\beta_i = \beta + \zeta_i
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(\zeta_i\)</span> is a random variable with mean zero and distribution <span class="math inline">\(F_\zeta\)</span>.</p>
+<ul>
+<li>This change yields a <strong>nonlinear random parameter model</strong></li>
+<li>It is the base for the mixed logit models and variations, for example</li>
+</ul>
+</div>
+</section>
+<section id="msl-motivation-1" class="slide level2">
+<h2>MSL motivation</h2>
+<p><span class="math display">\[
+\begin{align}
+u_{ik} = X_{ik}\beta_i + \nu_{ik} \\
+\beta_i = \beta + \zeta_i
+\end{align}
+\]</span></p>
+<p>The challenge here is that, when we calculate the likelihood based on the probability of choosing, say, <span class="math inline">\(k\)</span> over the outside option <span class="math inline">\(0\)</span>, we have</p>
+<p><span class="math display">\[
+P_{ik}(\beta) = \Pr[\epsilon_{ik} &lt; - V_{i}|X_{ik}] = \Pr[\epsilon_{ik} &lt; - X_{ik}(\beta + \zeta_i)|X_{ik}]
+\]</span></p>
+<p>where <span class="math inline">\(\epsilon_{ik} = \nu_{ik} - \nu_{0k}\)</span>. But <span class="math inline">\(\zeta_i\)</span> is also a random variable, so this probability is much harder to calculate!</p>
+</section>
+<section id="msl-motivation-2" class="slide level2">
+<h2>MSL motivation</h2>
+<p>Essentially, we want to calculate an integral over <span class="math inline">\(\zeta\)</span></p>
+<p><span class="math display">\[
+\begin{align}
+P_{ik}(\beta) = \Pr[\epsilon_{ik} &lt; -X_{ik}(\beta + \zeta_i)|X_{ik}] &amp; = \int_{\zeta} \Pr[\epsilon_{ik} &lt; -X_{ik}(\beta + z)|X_{ik}] f_\zeta(z)dz \\
+  &amp; =  \int_{\zeta} \left[\int_{-\infty}^{-X_{ik}(\beta + z)}f_\epsilon(s)ds\right] f_\zeta(z)dz \\
+  &amp; =  \int_{\zeta} \left[\frac{e^{X_{ik}(\beta + z)}}{1 + e^{X_{ik}(\beta + z)}} \right] f_\zeta(z)dz
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(f_\epsilon(s)=\frac{e^{-s}}{(1 + e^{-x})^2}\)</span> is the standard logistic density and <span class="math inline">\(f_\zeta\)</span> is the density of <span class="math inline">\(F_\zeta\)</span>.</p>
+<ul>
+<li>Even for simple distributions, this integral will not have close-form expressions, so it’s analytically intractable!</li>
+<li>Instead of working with those difficult (impossible?) integrals, MSL estimation relies on numerical approximations of <span class="math inline">\(P_{ik}(\beta)\)</span></li>
+</ul>
+</section>
+<section id="msl-general-idea" class="slide level2">
+<h2>MSL general idea</h2>
+<p>In generic terms, MSL is motivated by the fact that we need to evaluate some density</p>
+<p><span class="math display">\[
+f(y_i|x_i, \theta) = \int h(y|x, \theta, \zeta)g(\zeta)d\zeta
+\]</span></p>
+<p>where <span class="math inline">\(h(\cdot)\)</span> and <span class="math inline">\(g(\cdot)\)</span> are known functions and <span class="math inline">\(\zeta\)</span> is a random variable (possibly a vector).</p>
+<p>However, <span class="math inline">\(f\)</span> does not have a closed-form solution, so we can’t program the MLE estimator directly</p>
+<p><span class="math display">\[
+\hat\theta_{MLE} \equiv \arg\max_\theta l(\theta) = \sum_{i=1}^N \ln f(y_i|x_i, \theta)
+\]</span></p>
+</section>
+<section id="msl-general-idea-1" class="slide level2">
+<h2>MSL general idea</h2>
+<p>The key idea of MSL is to work with approximations <span class="math inline">\(f(y_i|x_i, \theta)\)</span> instead</p>
+<ul>
+<li>If we are integrating over a few dimensions, then deterministic approximations like trapezoid rule or Gaussian quadrature work fine</li>
+<li>If the integral is over many dimensions, then Monte Carlo integration (and its variations) is the best feasible option</li>
+</ul>
+<div class="fragment">
+<p>In the latter case, in “MSL speak”, we have a <em>Monte Carlo direct simulator</em></p>
+<p><span class="math display">\[
+\hat{f}(y_i|x_i, \theta; \zeta_i^S) = \frac{1}{S}\sum_{s=1}^S h(y|x, \theta, \zeta_{i,s})
+\]</span></p>
+<p>where <span class="math inline">\(\zeta_i^S\)</span> is a vector of <span class="math inline">\(S\)</span> i.i.d. draws from the the distribution of <span class="math inline">\(\zeta\)</span> (thus, with density <span class="math inline">\(g\)</span>)</p>
+<ul>
+<li>This is just the standard Monte Carlo integration we say in unit 2 of this course!</li>
+</ul>
+</div>
+</section>
+<section id="msl-general-idea-2" class="slide level2">
+<h2>MSL general idea</h2>
+<p>Therefore, the Maximum Simulated Likelihood estimator is given by</p>
+<p><span class="math display">\[
+\hat\theta_{MSL} \equiv \arg\max_\theta \hat{l}(\theta) = \sum_{i=1}^N \ln \hat{f}(y_i|x_i, \theta)
+\]</span></p>
+<ul>
+<li>If <span class="math inline">\(\hat{f}\)</span> is differentiable, we can use the usual gradient-based optimization methods we saw in unit 4
+<ul>
+<li>But beware that we need to calculate numerical derivatives of a numerical integral, so we need a lot of draws to have precise approximations <span class="math inline">\(\hat{f}\)</span></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>It can be shown that the MSL is asymptotically equivalent to the MLE if <span class="math inline">\(N,S \rightarrow \infty\)</span> and <span class="math inline">\(\sqrt{N}/S \rightarrow 0\)</span></li>
+<li>However, even if the MSL is consistent, the variance of the estimator can be inflated due to approximation error in the simulation</li>
 </ul>
 <div class="footer footer-default">
 
 </div>
 </div>
 </section></section>
+
     </div>
   </div>
 

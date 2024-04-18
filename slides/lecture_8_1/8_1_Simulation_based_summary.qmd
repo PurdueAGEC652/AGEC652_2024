@@ -252,10 +252,10 @@ where $f_\epsilon(s)=\frac{e^{-s}}{(1 + e^{-x})^2}$ is the standard logistic den
 In generic terms, MSL is motivated by the fact that we need to evaluate some density
 
 $$
-f(y_i|x_i, \theta) = \int h(y|x, \theta, \zeta)g(\zeta)d\zeta 
+f(y_i|x_i, \theta) = \int_{Z} h(y|x, \theta, \zeta)f_\zeta(\zeta)d\zeta 
 $$
 
-where $h(\cdot)$ and $g(\cdot)$ are known functions and $\zeta$ is a random variable (possibly a vector). 
+where $h(\cdot)$ and $f_\zeta(\cdot)$ are known functions and $\zeta$ is a random variable (possibly a vector) with support $Z$ and density $f_\zeta$. 
 
 However, $f$ does not have a closed-form solution, so we can't program the MLE estimator directly
 
@@ -278,7 +278,7 @@ $$
 \hat{f}(y_i|x_i, \theta; \zeta_i^S) = \frac{1}{S}\sum_{s=1}^S h(y|x, \theta, \zeta_{i,s})
 $$
 
-where $\zeta_i^S$ is a vector of $S$ i.i.d. draws from the the distribution of $\zeta$ (thus, with density $g$)
+where $\zeta_i^S$ is a vector of $S$ i.i.d. draws from the the distribution of $\zeta$ (thus, weighted by density $f_\zeta$)
 
 - This is just the standard Monte Carlo integration we say in unit 2 of this course!
 
@@ -302,3 +302,95 @@ $$
 
 # Method of Simulated Moments
 
+## MSM motivation
+
+- The key idea of MSM are quite similar to MSL: we have an analytically intractable objective function that we will approximate via simulation
+- Recall that the "standard" Method of Moments relies on moment conditions of the form
+
+$$
+E[g(y_i, x_i, \theta)] = 0
+$$
+
+for which the sample analogue is
+
+$$
+\frac{1}{N}\sum_{i=1}^{N}g(y_i, x_i, \theta) = 0
+$$
+
+## MSM motivation
+
+Suppose, for example, that we are modeling some optimal decision agents make
+
+$$
+y_i^* = f(x_i, \theta)
+$$
+
+So, one of our moment conditions could be
+
+$$
+E[g(y_i, x_i, \theta)] = E[y_i - f(x_i, \theta)] = 0
+$$
+
+where $x_i$ are observed characteristics and $\theta$ is a vector of model parameters.
+
+- I.e., under the true parameter $\theta$, the observed optimal choices on average match the choices predicted by our model
+  - This is analogous to a zero-mean residual condition
+
+
+## MSM motivation
+
+- However, many models might yield moment functions that do not have closed form expressions
+- For example, suppose instead that agents make an optimal decisions 
+
+$$
+y_i^* = f(x_i, \theta, \zeta_i)
+$$
+
+where $\zeta_i$ is an unobserved random variable that affects decision-making and has distribution $F_\zeta$
+
+. . .
+
+In this case, the moment condition becomes
+
+$$
+E[g(y_i, x_i, \theta)] = E\left[E_\zeta[y_i - f(x_i, \theta, \zeta_i)]\right] = E\left[y_i - \int_{\zeta}  f(x_i, \theta, \zeta_i) f_\zeta(z)dz \right]
+$$
+
+So moment function $g$ might not have a closed-form solution except in very fortunate/simplistic cases.
+
+## MSM general idea
+
+- Once again, we will replace this complicated integral by an approximation
+- If we use the Monte Carlo simulator, it yields
+
+$$
+\hat{g}(y_i, x_i, \theta; \zeta_i^S) = \frac{1}{S}\sum_{s=1}^S g(y_i,x_i, \theta, \zeta_{i,s})
+$$
+
+where $\zeta_i^S$ again is a vector of $S$ i.i.d. draws from the the distribution of $\zeta$.
+
+. . .
+
+This gives the MSM estimator
+
+$$
+\hat\theta_{MSM} \equiv \arg\min_\theta \left[\frac{1}{N}\sum_{i=1}^N \hat{g}(y_i, x_i, \theta; \zeta_i^S) \right]^\prime \left[\frac{1}{N}\sum_{i=1}^N \hat{g}(y_i, x_i, \theta; \zeta_i^S) \right]
+$$
+
+
+## MSM general idea
+
+$$
+\hat\theta_{MSM} \equiv \arg\min_\theta \left[\frac{1}{N}\sum_{i=1}^N \hat{g}(y_i, x_i, \theta; \zeta_i^S) \right]^\prime \left[\frac{1}{N}\sum_{i=1}^N \hat{g}(y_i, x_i, \theta; \zeta_i^S) \right]
+$$
+
+- It can be shown that under the same assumptions of the Method of Moments and an unbiased simulator, the MSM estimator is consistent and asymptotically normal **even with a fixed S**
+  - So, technically, MSM will be consistent even with $S=1$
+  - But approximation/simulation errors substantially increase the variance of the estimator, so we still want to have a high number of $S$ draws
+
+## Up next
+
+- This concludes our short survey of simulation methods
+- Of course, there's a lot more to learn about these methods!
+  - Many colleagues in our department use modern methods for decision modeling that rely on these approaches, such as mixed logit, hierarchical models, and latent class models, so you may end up working with them down the road
+- In the next and final part of our course, we will go over MSM estimation with to estimate how income taxes affect labor supply and consumption decisions

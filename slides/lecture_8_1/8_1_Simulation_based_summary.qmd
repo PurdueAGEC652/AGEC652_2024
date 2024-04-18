@@ -328,13 +328,14 @@ $$
 So, one of our moment conditions could be
 
 $$
-E[g(y_i, x_i, \theta)] = E[y_i - f(x_i, \theta)] = 0
+E[g(y_i, x_i, \theta)] = E[x_i \times (y_i - f(x_i, \theta))] = 0
 $$
 
-where $x_i$ are observed characteristics and $\theta$ is a vector of model parameters.
+where $x_i$ is a vector of observed characteristics and $\theta$ is a vector of model parameters.
 
 - I.e., under the true parameter $\theta$, the observed optimal choices on average match the choices predicted by our model
-  - This is analogous to a zero-mean residual condition
+  - For the column of 1s (intercept), this is a zero-mean residual condition
+  - For the other elements in $x_i$, this is an orthogonality condition
 
 
 ## MSM motivation
@@ -346,14 +347,14 @@ $$
 y_i^* = f(x_i, \theta, \zeta_i)
 $$
 
-where $\zeta_i$ is an unobserved random variable that affects decision-making and has distribution $F_\zeta$
+where $\zeta_i$ is an unobserved random variable that affects decision-making and has distribution $F_\zeta$.
 
 . . .
 
 In this case, the moment condition becomes
 
 $$
-E[g(y_i, x_i, \theta)] = E\left[E_\zeta[y_i - f(x_i, \theta, \zeta_i)]\right] = E\left[y_i - \int_{\zeta}  f(x_i, \theta, \zeta_i) f_\zeta(z)dz \right]
+E[g(y_i, x_i, \theta)] = E\left[x_i\times E_\zeta[y_i - f(x_i, \theta, \zeta_i)]\right] = E\left[x_i\times\left(y_i - \int_{\zeta}  f(x_i, \theta, \zeta_i) f_\zeta(z)dz \right)\right]
 $$
 
 So moment function $g$ might not have a closed-form solution except in very fortunate/simplistic cases.

@@ -669,13 +669,14 @@ y_i^* = f(x_i, \theta)
 \]</span></p>
 <p>So, one of our moment conditions could be</p>
 <p><span class="math display">\[
-E[g(y_i, x_i, \theta)] = E[y_i - f(x_i, \theta)] = 0
+E[g(y_i, x_i, \theta)] = E[x_i \times (y_i - f(x_i, \theta))] = 0
 \]</span></p>
-<p>where <span class="math inline">\(x_i\)</span> are observed characteristics and <span class="math inline">\(\theta\)</span> is a vector of model parameters.</p>
+<p>where <span class="math inline">\(x_i\)</span> is a vector of observed characteristics and <span class="math inline">\(\theta\)</span> is a vector of model parameters.</p>
 <ul>
 <li>I.e., under the true parameter <span class="math inline">\(\theta\)</span>, the observed optimal choices on average match the choices predicted by our model
 <ul>
-<li>This is analogous to a zero-mean residual condition</li>
+<li>For the column of 1s (intercept), this is a zero-mean residual condition</li>
+<li>For the other elements in <span class="math inline">\(x_i\)</span>, this is an orthogonality condition</li>
 </ul></li>
 </ul>
 </section>
@@ -688,11 +689,11 @@ E[g(y_i, x_i, \theta)] = E[y_i - f(x_i, \theta)] = 0
 <p><span class="math display">\[
 y_i^* = f(x_i, \theta, \zeta_i)
 \]</span></p>
-<p>where <span class="math inline">\(\zeta_i\)</span> is an unobserved random variable that affects decision-making and has distribution <span class="math inline">\(F_\zeta\)</span></p>
+<p>where <span class="math inline">\(\zeta_i\)</span> is an unobserved random variable that affects decision-making and has distribution <span class="math inline">\(F_\zeta\)</span>.</p>
 <div class="fragment">
 <p>In this case, the moment condition becomes</p>
 <p><span class="math display">\[
-E[g(y_i, x_i, \theta)] = E\left[E_\zeta[y_i - f(x_i, \theta, \zeta_i)]\right] = E\left[y_i - \int_{\zeta}  f(x_i, \theta, \zeta_i) f_\zeta(z)dz \right]
+E[g(y_i, x_i, \theta)] = E\left[x_i\times E_\zeta[y_i - f(x_i, \theta, \zeta_i)]\right] = E\left[x_i\times\left(y_i - \int_{\zeta}  f(x_i, \theta, \zeta_i) f_\zeta(z)dz \right)\right]
 \]</span></p>
 <p>So moment function <span class="math inline">\(g\)</span> might not have a closed-form solution except in very fortunate/simplistic cases.</p>
 </div>

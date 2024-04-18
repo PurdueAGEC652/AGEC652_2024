@@ -575,7 +575,7 @@ u_{ik} = X_{ik}\beta_i + \nu_{ik} \\
 <p><span class="math display">\[
 P_{ik}(\beta) = \Pr[\epsilon_{ik} &lt; - V_{i}|X_{ik}] = \Pr[\epsilon_{ik} &lt; - X_{ik}(\beta + \zeta_i)|X_{ik}]
 \]</span></p>
-<p>where <span class="math inline">\(\epsilon_{ik} = \nu_{ik} - \nu_{0k}\)</span>. But <span class="math inline">\(\zeta_i\)</span> is also a random variable, so this probability is much harder to calculate!</p>
+<p>where <span class="math inline">\(\epsilon_{ik} = \nu_{ik} - \nu_{i0}\)</span>. But <span class="math inline">\(\zeta_i\)</span> is also a random variable, so this probability is much harder to calculate!</p>
 </section>
 <section id="msl-motivation-2" class="slide level2">
 <h2>MSL motivation</h2>
@@ -589,7 +589,7 @@ P_{ik}(\beta) = \Pr[\epsilon_{ik} &lt; -X_{ik}(\beta + \zeta_i)|X_{ik}] &amp; = 
 \]</span></p>
 <p>where <span class="math inline">\(f_\epsilon(s)=\frac{e^{-s}}{(1 + e^{-x})^2}\)</span> is the standard logistic density and <span class="math inline">\(f_\zeta\)</span> is the density of <span class="math inline">\(F_\zeta\)</span>.</p>
 <ul>
-<li>Even for simple distributions, this integral will not have close-form expressions, so it’s analytically intractable!</li>
+<li>Even for simple distributions, this integral will not have closed-form expressions, so it’s analytically intractable!</li>
 <li>Instead of working with those difficult (impossible?) integrals, MSL estimation relies on numerical approximations of <span class="math inline">\(P_{ik}(\beta)\)</span></li>
 </ul>
 </section>
@@ -597,7 +597,7 @@ P_{ik}(\beta) = \Pr[\epsilon_{ik} &lt; -X_{ik}(\beta + \zeta_i)|X_{ik}] &amp; = 
 <h2>MSL general idea</h2>
 <p>In generic terms, MSL is motivated by the fact that we need to evaluate some density</p>
 <p><span class="math display">\[
-f(y_i|x_i, \theta) = \int_{Z} h(y|x, \theta, \zeta)f_\zeta(\zeta)d\zeta
+f(y|x, \theta) = \int_{Z} h(y|x, \theta, \zeta)f_\zeta(\zeta)d\zeta
 \]</span></p>
 <p>where <span class="math inline">\(h(\cdot)\)</span> and <span class="math inline">\(f_\zeta(\cdot)\)</span> are known functions and <span class="math inline">\(\zeta\)</span> is a random variable (possibly a vector) with support <span class="math inline">\(Z\)</span> and density <span class="math inline">\(f_\zeta\)</span>.</p>
 <p>However, <span class="math inline">\(f\)</span> does not have a closed-form solution, so we can’t program the MLE estimator directly</p>
@@ -607,9 +607,9 @@ f(y_i|x_i, \theta) = \int_{Z} h(y|x, \theta, \zeta)f_\zeta(\zeta)d\zeta
 </section>
 <section id="msl-general-idea-1" class="slide level2">
 <h2>MSL general idea</h2>
-<p>The key idea of MSL is to work with approximations <span class="math inline">\(f(y_i|x_i, \theta)\)</span> instead</p>
+<p>The key idea of MSL is to work with approximations of <span class="math inline">\(f(y_i|x_i, \theta)\)</span> instead</p>
 <ul>
-<li>If we are integrating over a few dimensions, then deterministic approximations like trapezoid rule or Gaussian quadrature work fine</li>
+<li>If we are integrating over a few dimensions, then deterministic approximations like the rapezoid rule or Gaussian quadrature work fine</li>
 <li>If the integral is over many dimensions, then Monte Carlo integration (and its variations) is the best feasible option</li>
 </ul>
 <div class="fragment">
@@ -619,7 +619,7 @@ f(y_i|x_i, \theta) = \int_{Z} h(y|x, \theta, \zeta)f_\zeta(\zeta)d\zeta
 \]</span></p>
 <p>where <span class="math inline">\(\zeta_i^S\)</span> is a vector of <span class="math inline">\(S\)</span> i.i.d. draws from the the distribution of <span class="math inline">\(\zeta\)</span> (thus, weighted by density <span class="math inline">\(f_\zeta\)</span>)</p>
 <ul>
-<li>This is just the standard Monte Carlo integration we say in unit 2 of this course!</li>
+<li>This is just the standard Monte Carlo integration we saw in unit 2 of this course!</li>
 </ul>
 </div>
 </section>
@@ -632,7 +632,7 @@ f(y_i|x_i, \theta) = \int_{Z} h(y|x, \theta, \zeta)f_\zeta(\zeta)d\zeta
 <ul>
 <li>If <span class="math inline">\(\hat{f}\)</span> is differentiable, we can use the usual gradient-based optimization methods we saw in unit 4
 <ul>
-<li>But beware that we need to calculate numerical derivatives of a numerical integral, so we need a lot of draws to have precise approximations <span class="math inline">\(\hat{f}\)</span></li>
+<li>But beware that we need to calculate numerical derivatives of a numerical integral, so we need a lot of draws to have accurate approximations <span class="math inline">\(\hat{f}\)</span></li>
 </ul></li>
 </ul>
 <div class="fragment">

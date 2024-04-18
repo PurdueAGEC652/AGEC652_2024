@@ -225,7 +225,7 @@ $$
 P_{ik}(\beta) = \Pr[\epsilon_{ik} < - V_{i}|X_{ik}] = \Pr[\epsilon_{ik} < - X_{ik}(\beta + \zeta_i)|X_{ik}]
 $$ 
 
-where $\epsilon_{ik} = \nu_{ik} - \nu_{0k}$. But $\zeta_i$ is also a random variable, so this probability is much harder to calculate!
+where $\epsilon_{ik} = \nu_{ik} - \nu_{i0}$. But $\zeta_i$ is also a random variable, so this probability is much harder to calculate!
 
 
 ## MSL motivation
@@ -242,7 +242,7 @@ $$
 
 where $f_\epsilon(s)=\frac{e^{-s}}{(1 + e^{-x})^2}$ is the standard logistic density and $f_\zeta$ is the density of $F_\zeta$.
 
-- Even for simple distributions, this integral will not have close-form expressions, so it's analytically intractable!
+- Even for simple distributions, this integral will not have closed-form expressions, so it's analytically intractable!
 - Instead of working with those difficult (impossible?) integrals, MSL estimation relies on numerical approximations of $P_{ik}(\beta)$
 
 
@@ -252,7 +252,7 @@ where $f_\epsilon(s)=\frac{e^{-s}}{(1 + e^{-x})^2}$ is the standard logistic den
 In generic terms, MSL is motivated by the fact that we need to evaluate some density
 
 $$
-f(y_i|x_i, \theta) = \int_{Z} h(y|x, \theta, \zeta)f_\zeta(\zeta)d\zeta 
+f(y|x, \theta) = \int_{Z} h(y|x, \theta, \zeta)f_\zeta(\zeta)d\zeta 
 $$
 
 where $h(\cdot)$ and $f_\zeta(\cdot)$ are known functions and $\zeta$ is a random variable (possibly a vector) with support $Z$ and density $f_\zeta$. 
@@ -265,9 +265,9 @@ $$
 
 ## MSL general idea
 
-The key idea of MSL is to work with approximations $f(y_i|x_i, \theta)$ instead
+The key idea of MSL is to work with approximations of $f(y_i|x_i, \theta)$ instead
 
-- If we are integrating over a few dimensions, then deterministic approximations like trapezoid rule or Gaussian quadrature work fine
+- If we are integrating over a few dimensions, then deterministic approximations like the rapezoid rule or Gaussian quadrature work fine
 - If the integral is over many dimensions, then Monte Carlo integration (and its variations) is the best feasible option
 
 . . .
@@ -280,7 +280,7 @@ $$
 
 where $\zeta_i^S$ is a vector of $S$ i.i.d. draws from the the distribution of $\zeta$ (thus, weighted by density $f_\zeta$)
 
-- This is just the standard Monte Carlo integration we say in unit 2 of this course!
+- This is just the standard Monte Carlo integration we saw in unit 2 of this course!
 
 
 
@@ -293,7 +293,7 @@ $$
 $$
 
 - If $\hat{f}$ is differentiable, we can use the usual gradient-based optimization methods we saw in unit 4
-  - But beware that we need to calculate numerical derivatives of a numerical integral, so we need a lot of draws to have precise approximations $\hat{f}$
+  - But beware that we need to calculate numerical derivatives of a numerical integral, so we need a lot of draws to have accurate approximations $\hat{f}$
 
 . . .
 

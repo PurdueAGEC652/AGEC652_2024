@@ -480,7 +480,7 @@ c_i \le (1-\tau)w_i(1-l_i) + \epsilon_i
 <p>Given <span class="math inline">\((w_i, \epsilon_i, \gamma, \tau)\)</span>, each agent solves <span class="math display">\[
 \begin{align}
 \max_{c_i, l_i} U(c_i, l_i) = c_i^\gamma l_i^{(1-\gamma)} \\
-s.t. c_i \le (1-\tau)w_i(1-l_i)
+s.t. c_i \le (1-\tau)w_i(1-l_i) + \epsilon_i
 \end{align}
 \]</span></p>
 <p><strong>Task 1</strong>:</p>
@@ -533,7 +533,7 @@ This program contains Ipopt, a library for large-scale nonlinear optimization.
 </ul>
 <p>We will also assume that <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0, \sigma^2)\)</span></p>
 <ul>
-<li>To make estimation simpler, assume that we know that <span class="math inline">\(\sigma^2 = 1\)</span></li>
+<li>To make the estimation simpler, assume that we know that <span class="math inline">\(\sigma^2 = 1\)</span></li>
 </ul>
 </section></section>
 <section>
@@ -560,8 +560,8 @@ This program contains Ipopt, a library for large-scale nonlinear optimization.
 \begin{equation}
 m(\gamma, \tau) =
   \begin{bmatrix}
-      \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, e_i, \gamma, \tau) - c_i\right) \\
-      \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, e_i, \gamma, \tau) - l_i\right)
+      \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, \epsilon_i, \gamma, \tau) - c_i\right) \\
+      \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, \epsilon_i, \gamma, \tau) - l_i\right)
   \end{bmatrix} = 0
 \end{equation}
 \]</span></p></li>
@@ -578,8 +578,8 @@ m(\gamma, \tau) =
 \begin{equation}
 \hat{m}(\gamma, \tau) = E_\epsilon
     \begin{bmatrix}
-        \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, e_i, \gamma, \tau) - c_i\right) \\
-        \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, e_i, \gamma, \tau) - l_i\right)
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, \epsilon_i, \gamma, \tau) - c_i\right) \\
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, \epsilon_i, \gamma, \tau) - l_i\right)
     \end{bmatrix} = 0
 \end{equation}
 \]</span></p>
@@ -1331,7 +1331,7 @@ m(\gamma, \tau) =
 </section>
 <section id="estimation-initial-guess" class="slide level2">
 <h2>Estimation: initial guess</h2>
-<p>We also need to be careful to set the initial guess <span class="math inline">\(z_0\)</span> rather then <span class="math inline">\(theta_0\)</span></p>
+<p>We also need to be careful to set the initial guess <span class="math inline">\(z_0\)</span> rather then <span class="math inline">\(\theta_0\)</span></p>
 <div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Setting them close to the true value</span></span>
 <span id="cb20-2"><a href="#cb20-2"></a>z_0 <span class="op">=</span> [<span class="fl">0.01</span>, <span class="fu">log</span>(<span class="fl">0.14</span>)];</span>
@@ -1461,7 +1461,7 @@ L(w_i, \epsilon_i, \gamma, \tau) &amp; = (1-\gamma) + \frac{(1-\gamma)\epsilon_i
 <li>With bootstrapping, it would REALLY, <strong>REALLY</strong> take a lot of time
 <ul>
 <li>It took about 10 minutes to solve with few MC draws, only 100 observations, and huge tolerance. With a large data set, this could easily take hours or days to solve on my laptop!</li>
-<li>Multiply that by a 10,000 bootstrap draws and you quickly realize you’d need to optimize your code and rent an HPC if you want results before graduation.</li>
+<li>Multiply that by 10,000 bootstrap draws and you quickly realize you’d need to optimize your code and rent an HPC if you want results before graduation.</li>
 </ul></li>
 </ul>
 </section></section>

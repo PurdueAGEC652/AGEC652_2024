@@ -112,7 +112,7 @@ Given $(w_i, \epsilon_i, \gamma, \tau)$, each agent solves
 $$
 \begin{align}
 \max_{c_i, l_i} U(c_i, l_i) = c_i^\gamma l_i^{(1-\gamma)} \\
-s.t. c_i \le (1-\tau)w_i(1-l_i)
+s.t. c_i \le (1-\tau)w_i(1-l_i) + \epsilon_i
 \end{align}
 $$
 
@@ -157,7 +157,7 @@ We assume that the unobserved portion of the income $\epsilon_i$ is orthogonal t
 
 We will also assume that $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$
 
-- To make estimation simpler, assume that we know that $\sigma^2 = 1$
+- To make the estimation simpler, assume that we know that $\sigma^2 = 1$
 
 # Estimation
 
@@ -181,8 +181,8 @@ $$
 \begin{equation}
 m(\gamma, \tau) =
     \begin{bmatrix}
-        \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, e_i, \gamma, \tau) - c_i\right) \\
-        \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, e_i, \gamma, \tau) - l_i\right)
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, \epsilon_i, \gamma, \tau) - c_i\right) \\
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, \epsilon_i, \gamma, \tau) - l_i\right)
     \end{bmatrix} = 0
 \end{equation}
 $$
@@ -200,8 +200,8 @@ $$
 \begin{equation}
 \hat{m}(\gamma, \tau) = E_\epsilon
     \begin{bmatrix}
-        \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, e_i, \gamma, \tau) - c_i\right) \\
-        \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, e_i, \gamma, \tau) - l_i\right)
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, \epsilon_i, \gamma, \tau) - c_i\right) \\
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, \epsilon_i, \gamma, \tau) - l_i\right)
     \end{bmatrix} = 0
 \end{equation} 
 $$
@@ -403,7 +403,7 @@ which can take any $z \in (-\infty, \infty)$ and map into $\theta \in (0, 1)$
 
 ## Estimation: initial guess
 
-We also need to be careful to set the initial guess $z_0$ rather then $theta_0$
+We also need to be careful to set the initial guess $z_0$ rather then $\theta_0$
 
 ```{julia}
 # Setting them close to the true value

@@ -49,4 +49,5 @@ _(Tip: If you want to export as PDF, open the slide deck on your browser and pre
 
 - Unit 8 - Simulation-Based Estimation
   - Lecture 8.1: [Theory](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_8_1/8_1_Simulation_based_summary.html)
+  - Lecture 8.2: [MSM tutorial](https://raw.githack.com/PurdueAGEC652/AGEC652_2024/main/slides/lecture_8_2/8_2_MSM_tutorial.html)
 

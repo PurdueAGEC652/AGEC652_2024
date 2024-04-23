@@ -1,0 +1,500 @@
+---
+title: "AGEC 652 - Lecture 8.2"
+subtitle: "MSM tutorial: consumption and taxed labor supply"
+author: "Diego S. Cardoso"
+institute: "Purdue University"
+execute:
+  echo: true
+  cache: true
+format:
+  revealjs: 
+    theme: [white, ./../agec_652_style.css]
+    output-file: 8_2_slides.html
+    slide-number: c
+    show-slide-number: all
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    code-copy: hover
+    fig-width: 8
+    fig-height: 4
+    chalkboard:
+      theme: whiteboard
+      chalk-effect: 0.1
+  html: 
+    toc: true
+    toc-depth: 2
+editor:
+  render-on-save: false
+---
+
+```{julia}
+#| include: false
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+# Pkg.add("Optim")
+# Pkg.add("GLM")
+# Pkg.add("LinearAlgebra")
+# Pkg.add("Plots")
+# Pkg.add("LaTeXStrings")
+# Pkg.add("DataFrames")
+# Pkg.add("CSV")
+```
+
+
+
+## Course Roadmap {background-color="gold"}
+
+
+1.  [Introduction to Scientific Computing]{.gray}
+2.  [Fundamentals of numerical methods]{.gray}
+3.  [Systems of equations]{.gray}
+4.  [Optimization]{.gray}
+5.  [Structural estimation: Intro]{.gray}
+6.  [Maximum Likelihood Estimator]{.gray}
+7.  [Generalized Method of Moments]{.gray}
+8.  **Simulation-based methods**
+    1.  [Bootstrapping, SML, & MSM]{.gray}
+    2.  **MSM tutorial**
+
+
+## Main references for today {background-color="gold"}
+
+- Theory: Cameron & Trivedi (2008), Greene (2018)
+
+
+## Agenda {background-color="gold"}
+
+- We will estimate a model that is analytically simple, but with an econometric challenge that is complex enough to need the **Method of Simulated Moments (MSM)**
+  - First, we will program the solution for the model for any given value of the parameters (inner loop)
+  - Then, we will use optimization methods to search for the MSM estimates
+- The data used in this tutorial is synthetic: I generated it using numerical optimization with parameters that you will estimate. The script to generate this data is available on the course website.
+
+# Theoretical and statistical model
+
+
+## Research problem
+
+Question: **How do changes in income tax affect consumption?**
+
+We have data from a random sample of workers in a specific industry. For each individual, we observe:
+
+- Consumption level: $c_i$
+- Number of hours worked: $b_i$
+- Wage level: $w_i$
+
+Individuals are subject to a tax level $\tau$ we do not observe
+
+We want to estimate $E\left[\frac{\partial c}{\partial \tau}\right]$
+
+## Model: theory
+
+Individuals derive utility from consumption $c_i \ge 0$ and leisure $0 \le l_i \le 1$
+
+- We calculate $l_i$ using data on hours worked and normalize between 0 (no leisure = maximum hours of work allowed) and 1 (no work)
+
+$$
+U(c_i, l_i) = c_i^\gamma l_i^{(1-\gamma)}
+$$
+where $0 \le \gamma \le 1$ is the relative preference for consumption over leasure
+
+The budget constraint is
+$$
+c_i \le (1-\tau)w_i(1-l_i) + \epsilon_i
+$$
+
+where $\epsilon_i$ represents other income not observed in the wage data
+
+
+## Model: theory
+
+Given $(w_i, \epsilon_i, \gamma, \tau)$, each agent solves
+$$
+\begin{align}
+\max_{c_i, l_i} U(c_i, l_i) = c_i^\gamma l_i^{(1-\gamma)} \\
+s.t. c_i \le (1-\tau)w_i(1-l_i) + \epsilon_i
+\end{align}
+$$
+
+**Task 1**: 
+
+Let's program function `solve_c_l(w, e, gamma, tau)` that solves the individual problem given model parameters and returns the solution vector  `[c, l]`
+
+
+## Task 1: single-agent optimization
+
+
+```{julia}
+using JuMP, Ipopt
+function solve_c_l(w, e, gamma, tau)
+    model = Model(Ipopt.Optimizer)
+    # Declare variables
+    @variable(model, c >= 0)
+    @variable(model, 0 <= l <= 1)
+    # Declare objective
+    @objective(model, Max, c^gamma * l^(1-gamma))
+    # Declare budget constraint
+    @constraint(model, c <= (1-tau)*w*(1-l) + e)
+    set_silent(model) # Mute output
+    optimize!(model)
+    # Warn if error
+    if (termination_status(model) != LOCALLY_SOLVED)
+        println("Error: row $i, draw $j $(termination_status(model))")
+    end
+    c = value(c)
+    l = value(l)
+    return (c, l)
+end;
+# Testing this function
+solve_c_l(80.0, 2.0, 0.5, 0.1)
+```
+
+## Model: statistical assumptions
+
+We assume that the unobserved portion of the income $\epsilon_i$ is uncorrelated with wage rate $w_i$: $E[\epsilon_i | w_i] = 0$
+
+- This assumption is generally unrealistic. In practice, we'd expect some correlation here because high-wage agents usually have higher non-labor income. But let's keep it simple for the sake of the exercise
+
+We will also assume that $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$
+
+- To make estimation simpler, assume that we know that $\sigma^2 = 1$
+
+# Estimation
+
+## Estimation problem
+
+We want to
+
+1. Calculate parameters $\gamma$, $\tau$, and $\sigma^2$ from data $(c_i, l_i, w_i)_{i=1}^N$
+2. Use those parameters to calculate policy-relevant parameter $\bar{\psi} \equiv \frac{1}{N} \sum_{i=1}^{N} \psi (w_i)$ where
+
+$$
+\psi(w_i) \equiv E_\epsilon\left[\frac{\partial}{\partial \tau}C(w_i, \epsilon; \gamma, \tau)\right]
+$$
+
+## Moment conditions
+
+We have two parameters to estimate, so we need at least two moment conditions. What could those be?
+
+- Model predictions match observations on average
+$$
+\begin{equation}
+m(\gamma, \tau) =
+    \begin{bmatrix}
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, e_i, \gamma, \tau) - c_i\right) \\
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, e_i, \gamma, \tau) - l_i\right)
+    \end{bmatrix} = 0
+\end{equation}
+$$
+
+- Technically, we are interacting residuals with a vector of ones. Since we assumed $w_i$ is exogenous, we could also form 2 other moment conditions: $\frac{1}{N}\sum_{i=1}^N w_i\left(\hat{C}_i - c_i\right)$ and $\frac{1}{N}\sum_{i=1}^N w_i\left(\hat{L}_i - l_i\right)$
+
+But there's a problem: we don't observe $\epsilon_i$!
+
+- We can use $\epsilon$'s distribution to calculate expected values $\Rightarrow$ simulated moments
+
+## Simulated moment conditions
+
+Instead, we use simulated moment conditions:
+$$
+\begin{equation}
+\hat{m}(\gamma, \tau) = E_\epsilon
+    \begin{bmatrix}
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{C}(w_i, e_i, \gamma, \tau) - c_i\right) \\
+        \frac{1}{N}\sum_{i=1}^N \left(\hat{L}(w_i, e_i, \gamma, \tau) - l_i\right)
+    \end{bmatrix} = 0
+\end{equation} 
+$$
+
+The "simulated" part comes from drawing many values from the distribution of $\epsilon_i$ and taking the mean: it's just Monte Carlo integration
+
+- Turns out this numerical integration method has well-defined asymptotics
+
+**Task 2**: 
+
+Program function `solve_Ec_El(w, gamma, tau, R)` that draws `R` values from the distribution of $\epsilon$, calculates `c` and `l` for each draw, then returns the average value of `c`s and `l`s
+
+## Task 2: Numerical integration
+
+We can do that by modifying the code for `solve_c_l`
+
+1. Declare the model as before, but now declare `e` as a model parameter with `@NLparameter` before you set the objective function
+2. Draw R observations from N(0.0, 1.0) and store in `es`
+3. Create a `for` loop over R observations
+    - Set $\epsilon$: `set_value(e, es[i])`
+    - Solve the model and store solutions in vectors `cs` and `ls`
+4. Return means of `cs` and `ls`
+
+## Task 2: Numerical integration
+
+```{julia}
+using Random, Distributions
+function solve_Ec_El(w, gamma, tau, R)
+    model = Model(Ipopt.Optimizer)
+    # Declare variables
+    @variable(model, c >= 0)
+    @variable(model, 0 <= l <= 1)
+    # Declare objective
+    @objective(model, Max, c^gamma * l^(1-gamma))
+    # Declare epsilon as model parameters
+    @variable(model, e in Parameter(0.0))
+    # Declare budget constraint
+    @constraint(model, c <= (1-tau)*w*(1-l) + e)
+    set_silent(model) # Mute output
+    # Draw R epsilons
+    es = rand(Normal(0.0, 1.0), R)
+    # Vectors to store for individual i
+    cs_i = zeros(R); ls_i = zeros(R)
+    # Loop to simulate
+    for i in 1:R
+        set_parameter_value(e, es[i]) # Set a drawn value for epsilon
+        optimize!(model)
+        # Warn if error
+        if (termination_status(model) != LOCALLY_SOLVED)
+            println("Error in draw $i: $(termination_status(model))")
+        end
+        cs_i[i] = value(c)
+        ls_i[i] = value(l)
+    end
+    # Take average of simulated values
+    Ec = mean(cs_i); El = mean(ls_i)
+    return (Ec, El)
+end
+```
+
+## Task 2: Numerical integration
+
+Testing our function 
+
+```{julia}
+solve_Ec_El(80.0, 0.5, 0.1, 50)
+```
+
+And again (Remember: Monte Carlo integration is a stochastic method!)
+
+```{julia}
+solve_Ec_El(80.0, 0.5, 0.1, 50)
+```
+
+
+## Data: loading
+
+Let's now take a look at our data set
+
+```{julia}
+using DataFrames, CSV
+df = CSV.read("labor_supply.csv", DataFrame)
+df[1:5,:]
+```
+
+
+## Data: preparation
+
+We need to make a few adjustments with the data so that we can use it in the model. First, we want to calculate leisure as a variable between 0 and 1. To do that, we consider that the maximum labor hours per year is 3,600 (twice the US average)
+
+```{julia}
+using Plots
+df.l = 1 .- (df.labor_hours ./ 3600)
+plot(histogram(df.labor_hours, label="Labor hours", bins = 20),
+     histogram(df.l, label="Leisure index (l)", bins = 20))
+```
+
+
+## Data: preparation
+
+Next, we need to convert hourly wage rates to annual wage rates (when $l=0$). So we multiply the wage rate by 3600 hours. But to keep things scaled, we represent that in thousands of dollars
+
+```{julia}
+df.w = df.wage_rate .* 3.6
+plot(histogram(df.wage_rate, label="Wage rate (USD/h)", bins = 20),
+     histogram(df.w, label="w", bins = 20))
+```
+
+## Data: preparation
+
+Finally, we divide total consumption in dollars by 1,000, so we keep units consistent
+
+```{julia}
+df.c = df.consump ./ 1000
+histogram(df.c, label="c", bins = 20)
+```
+
+## Estimation: simulated optimization
+
+Since we will need to compute simulated moments, it is a good idea to start with a function that calculates $E[\hat{C}(w_i, e_i, \gamma, \tau)]$ and $E[\hat{L}(w_i, e_i, \gamma, \tau)]$ for all observations
+
+**Task 3**: 
+
+Program function `solve_all_Ec_El(gamma, tau)`, which loops over all observations in the data set, applies `solve_Ec_El(w, gamma, tau, R)` for each and stores it in a vector. Then, it returns the vectors of `cs` and `ls`
+
+## Task 3: calculating simulated decisions
+
+- Use `R = 50` for this example. This is much smaller than you'd use for an actual problem, but we want to have a solution before the end of the semester!
+
+
+```{julia}
+N = nrow(df)
+function solve_all_Ec_El(gamma, tau; R = 50)
+    # Vectors to store simulated moments    
+    cs = zeros(N)
+    ls = zeros(N)
+    # Loop over individuals
+    for i in 1:N
+        cs[i], ls[i] = solve_Ec_El(df.w[i], gamma, tau, R)
+    end
+    return (cs, ls)
+end;
+@time solve_all_Ec_El(0.4, 0.1);
+```
+
+## Extra: parallel processing
+
+Optimization problems are independent across observations, so we can solve then separately. This is a great case for parallel processing. 
+
+We won't have time to cover the details, which you can read here https://docs.julialang.org/en/v1/manual/multi-threading/
+
+But just for the sake of demonstration, I will define a version of the previous function that runs on multiple cores
+
+- You need to set your Julia environment to run with multiple threads. On my laptop, I set it to use all but one of its cores
+
+```{julia}
+Threads.nthreads()
+```
+
+
+## Extra: parallel processing
+
+```{julia}
+function parallel_solve_all_Ec_El(gamma, tau; R = 50)
+    # Vectors to store simulated moments    
+    cs = zeros(N)
+    ls = zeros(N)
+    # Loop over individuals
+    Threads.@threads for i in 1:N
+        cs[i], ls[i] = solve_Ec_El(df.w[i], gamma, tau, R)
+    end
+    return (cs, ls)
+end
+@time parallel_solve_all_Ec_El(0.4, 0.1);
+```
+
+## Estimation: computing simulated moments
+
+We can now write a function to calculate moments for us. Since we have the same number of moment conditions and parameters to be estimated, we can safely ignore the weighting matrix and minimize the sum of squared moments
+
+- Alternatively, we could estimate parameters by solving the nonlinear system with the simulated moments
+
+## Estimation: computing simulated moments
+
+```{julia}
+function Q(theta)
+    # Unpack theta
+    gamma, tau = theta
+    # Calculate predicted cs and ls
+    cs, ls = parallel_solve_all_Ec_El(gamma, tau)
+    # First moment condition: E[c_hat - c]
+    M1 = mean(cs - df.c)
+    # Second moment condition: E[l_hat - l]
+    M2 = mean(ls - df.l)
+    # Calculate Q
+    M1^2 + M2^2
+end
+```
+
+## Estimation: constrained optimization
+
+The MSM estimator needs to take into account that $\gamma, \tau \in [0, 1]$. This is a typical **box constrained optimization**, where the limits of each variable are constants. Luckily, `Optim.optimize` supports this type of simple constrained optimization with solver `Fminbox`, which uses a modified version of Interior Point BFGS algorithm.
+
+- Note the high tolerance used in this example.
+- Convergence can become problematic when you have too few MC draws because the gradients are stochastic.
+- (I had to run this optimization outside the slides because it takes too long )
+
+
+```{julia}
+using Optim;
+lower_bound = [0.0, 0.0]; # Lower bounds for both parameters
+upper_bound = [1.0, 1.0]; # Upper bounds for both parameters
+theta_0 = [0.5, 0.10]; # Initial guess
+@time res = Optim.optimize(Q, lower_bound, upper_bound, theta_0, Fminbox(),
+                  Optim.Options(x_tol = 1e-4, f_tol = 1e-4));
+```
+
+```{julia}
+gamma_hat, tau_hat = res.minimizer
+```
+
+
+## Estimation: $E[\frac{\partial c}{\partial \tau}]$
+
+With $\gamma$ and $\tau$, we can estimate our parameter of interest:
+$$
+\hat{\bar{\psi}} = \frac{1}{N} \sum_{i=1}^{N} \frac{\partial \hat{C}_i}{\partial \tau}
+$$
+
+Q: Now that we have $\hat\gamma$ and $\hat\tau$, how can we calculate that?
+
+
+## Estimation: $E[\frac{\partial c}{\partial \tau}]$
+
+$$
+\hat{\bar{\psi}} = \frac{1}{N} \sum_{i=1}^{N} \frac{\partial \hat{C}_i}{\partial \tau}
+$$
+
+Q: Now that we have $\hat\gamma$ and $\hat\tau$, how can we calculate that?
+
+A: Finite differencing: $\frac{df(x)}{dx} \approx \frac{f(x + h) - f(x - h)}{2h}$
+
+- Autodifferentiation is also an option, but it might be painful to make it work (we'd have to clearly specify generic types for `ForwardDiff`)
+
+```{julia}
+function dc_dtau(gamma,tau,h)
+    # Calculate c with tau + h
+    cs_p, ls_p = parallel_solve_all_Ec_El(gamma, tau + h)
+    # Calculate c with tau - h
+    cs_m, ls_m = parallel_solve_all_Ec_El(gamma, tau - h)
+    # Take differences and average out
+    (mean(cs_p - cs_m)) ./ (2*h)
+end;
+```
+
+
+## Estimation: $E[\frac{\partial c}{\partial \tau}]$
+
+```{julia}
+dc_dtau(gamma_hat, tau_hat, 0.01)
+```
+
+This is pretty close to the actual analytical value: $\bar{\Psi} = -\gamma \bar{w_i}$
+
+```{julia}
+-0.5 * mean(df.w)
+```
+
+
+## Final words
+
+- We were able to estimate the parameters even without knowing the analytical solution to optimal consumption and labor supply! In fact, we could solve and show that
+
+$$
+\begin{align}
+C(w_i, \epsilon_i, \gamma, \tau) & = \gamma (1-\tau)w_i + \gamma \epsilon_i\\
+L(w_i, \epsilon_i, \gamma, \tau) & = (1-\gamma) + \frac{(1-\gamma)\epsilon_i}{(1-\tau)w_i}
+\end{align}
+$$
+
+- But remember: not all models yield have closed-form expressions! That's why MSM (and MSL) are quite powerful methods when applied correctly
+
+## Final words
+
+We did not estimate the variance of parameters nor the variance of $\bar{\psi}$. But you can already anticipate that it could take a lot of time!
+
+- With the Delta method, we would not have closed-form derivatives, so we'd need to do numerical differentiation
+- With bootstrapping, it would REALLY, **REALLY** take a lot of time
+   - It took about 10 minutes to solve with few MC draws, only 100 observations, and huge tolerance. With a large data set, this could easily take an hour or more to solve on my laptop
+   - Multiply that by a 10,000 bootstrap draws and you quickly realize you'd need to optimize your code and rent an HPC if you want results before graduation!
+
+## Final, final words
+
+- I hope this course has given you a solid start to implement computational methods in your research and beyond!
+
+**Thank you for a great semester!**

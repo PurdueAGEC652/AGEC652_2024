@@ -112,7 +112,7 @@ Given $(w_i, \epsilon_i, \gamma, \tau)$, each agent solves
 $$
 \begin{align}
 \max_{c_i, l_i} U(c_i, l_i) = c_i^\gamma l_i^{(1-\gamma)} \\
-s.t. c_i \le (1-\tau)w_i(1-l_i) + \epsilon_i
+s.t. c_i \le (1-\tau)w_i(1-l_i)
 \end{align}
 $$
 
@@ -128,6 +128,7 @@ Let's program function `solve_c_l(w, e, gamma, tau)` that solves the individual 
 using JuMP, Ipopt
 function solve_c_l(w, e, gamma, tau)
     model = Model(Ipopt.Optimizer)
+    set_silent(model) # Mute output
     # Declare variables
     @variable(model, c >= 0)
     @variable(model, 0 <= l <= 1)
@@ -135,7 +136,6 @@ function solve_c_l(w, e, gamma, tau)
     @objective(model, Max, c^gamma * l^(1-gamma))
     # Declare budget constraint
     @constraint(model, c <= (1-tau)*w*(1-l) + e)
-    set_silent(model) # Mute output
     optimize!(model)
     # Warn if error
     if (termination_status(model) != LOCALLY_SOLVED)
@@ -151,7 +151,7 @@ solve_c_l(80.0, 2.0, 0.5, 0.1)
 
 ## Model: statistical assumptions
 
-We assume that the unobserved portion of the income $\epsilon_i$ is uncorrelated with wage rate $w_i$: $E[\epsilon_i | w_i] = 0$
+We assume that the unobserved portion of the income $\epsilon_i$ is orthogonal to the wage rate $w_i$: $E[\epsilon_i w_i] = 0$
 
 - This assumption is generally unrealistic. In practice, we'd expect some correlation here because high-wage agents usually have higher non-labor income. But let's keep it simple for the sake of the exercise
 
@@ -165,7 +165,7 @@ We will also assume that $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$
 
 We want to
 
-1. Calculate parameters $\gamma$, $\tau$, and $\sigma^2$ from data $(c_i, l_i, w_i)_{i=1}^N$
+1. Calculate parameters $\gamma$ and $\tau$ from data $(c_i, l_i, w_i)_{i=1}^N$
 2. Use those parameters to calculate policy-relevant parameter $\bar{\psi} \equiv \frac{1}{N} \sum_{i=1}^{N} \psi (w_i)$ where
 
 $$
@@ -218,10 +218,10 @@ Program function `solve_Ec_El(w, gamma, tau, R)` that draws `R` values from the 
 
 We can do that by modifying the code for `solve_c_l`
 
-1. Declare the model as before, but now declare `e` as a model parameter with `@NLparameter` before you set the objective function
+1. Declare the model as before, but now declare `e` as a model parameter 
 2. Draw R observations from N(0.0, 1.0) and store in `es`
 3. Create a `for` loop over R observations
-    - Set $\epsilon$: `set_value(e, es[i])`
+    - Set $\epsilon$: `set_parameter_value(e, es[i])`
     - Solve the model and store solutions in vectors `cs` and `ls`
 4. Return means of `cs` and `ls`
 
@@ -231,6 +231,7 @@ We can do that by modifying the code for `solve_c_l`
 using Random, Distributions
 function solve_Ec_El(w, gamma, tau, R)
     model = Model(Ipopt.Optimizer)
+    set_silent(model) # Mute output
     # Declare variables
     @variable(model, c >= 0)
     @variable(model, 0 <= l <= 1)
@@ -240,7 +241,6 @@ function solve_Ec_El(w, gamma, tau, R)
     @variable(model, e in Parameter(0.0))
     # Declare budget constraint
     @constraint(model, c <= (1-tau)*w*(1-l) + e)
-    set_silent(model) # Mute output
     # Draw R epsilons
     es = rand(Normal(0.0, 1.0), R)
     # Vectors to store for individual i
@@ -329,12 +329,12 @@ Program function `solve_all_Ec_El(gamma, tau)`, which loops over all observation
 
 ## Task 3: calculating simulated decisions
 
-- Use `R = 50` for this example. This is much smaller than you'd use for an actual problem, but we want to have a solution before the end of the semester!
+- Use `R = 20` for this example. This is much smaller than you'd use for an actual problem, but we want to have a solution before the end of the semester!
 
 
 ```{julia}
 N = nrow(df)
-function solve_all_Ec_El(gamma, tau; R = 50)
+function solve_all_Ec_El(gamma, tau; R = 20)
     # Vectors to store simulated moments    
     cs = zeros(N)
     ls = zeros(N)
@@ -351,7 +351,7 @@ end;
 
 Optimization problems are independent across observations, so we can solve then separately. This is a great case for parallel processing. 
 
-We won't have time to cover the details, which you can read here https://docs.julialang.org/en/v1/manual/multi-threading/
+We won't have time to cover the details, which you can read [here](https://docs.julialang.org/en/v1/manual/multi-threading/)
 
 But just for the sake of demonstration, I will define a version of the previous function that runs on multiple cores
 
@@ -365,7 +365,7 @@ Threads.nthreads()
 ## Extra: parallel processing
 
 ```{julia}
-function parallel_solve_all_Ec_El(gamma, tau; R = 50)
+function parallel_solve_all_Ec_El(gamma, tau; R = 20)
     # Vectors to store simulated moments    
     cs = zeros(N)
     ls = zeros(N)
@@ -378,53 +378,83 @@ end
 @time parallel_solve_all_Ec_El(0.4, 0.1);
 ```
 
-## Estimation: computing simulated moments
+
+## Estimation: constrained optimization
+
+The MSM estimator needs to take into account that $\gamma, \tau \in [0, 1]$. 
+
+- This is a typical **box constrained optimization**, where the limits of each variable are constants. 
+- `Optim.optimize` supports this with solver [Fminbox](https://julianlsolvers.github.io/Optim.jl/stable/user/minimization/#Box-Constrained-Optimization), which sets up an Interior Point problem for box constraints.
+  - However, this algorithm is not very efficient because Interior Point Optimization requires solving a sequence of problems with different barrier function coefficients...
+  - We will use another trick
+
+## Extra: transforming a constrained optimization
+
+We can still use an unconstrained optimization algorithm if we apply a clever transformation
+
+$$
+\theta = \frac{\exp(z)}{1 + \exp(z)}
+$$
+
+which can take any $z \in (-\infty, \infty)$ and map into $\theta \in (0, 1)$
+
+- Recall that, if $\theta^* = \arg \min_\theta F(\theta)$, then $\theta^*$ is also the minimizer of a positive monitonic transformation $G$ of $F$. This is, $\theta^* = \arg \min_\theta G(F(\theta))$
+
+
+## Estimation: initial guess
+
+We also need to be careful to set the initial guess $z_0$ rather then $theta_0$
+
+```{julia}
+# Setting them close to the true value
+z_0 = [0.01, log(0.14)];
+theta_0 = exp.(z_0) ./ (1.0 .+ exp.(z_0)) 
+```
+
+
+## Estimation: modified objective function
 
 We can now write a function to calculate moments for us. Since we have the same number of moment conditions and parameters to be estimated, we can safely ignore the weighting matrix and minimize the sum of squared moments
 
-- Alternatively, we could estimate parameters by solving the nonlinear system with the simulated moments
-
-## Estimation: computing simulated moments
-
 ```{julia}
-function Q(theta)
+function Q(z)
+    # Undo the transformation to get theta back
+    theta = exp.(z) ./ (1.0 .+ exp.(z))
     # Unpack theta
     gamma, tau = theta
     # Calculate predicted cs and ls
     cs, ls = parallel_solve_all_Ec_El(gamma, tau)
     # First moment condition: E[c_hat - c]
-    M1 = mean(cs - df.c)
+    M1 = mean(cs .- df.c)
     # Second moment condition: E[l_hat - l]
-    M2 = mean(ls - df.l)
-    # Calculate Q
-    M1^2 + M2^2
+    M2 = mean(ls .- df.l)
+    # Calculate Q and return
+    return M1^2 + M2^2
 end
 ```
 
-## Estimation: constrained optimization
 
-The MSM estimator needs to take into account that $\gamma, \tau \in [0, 1]$. This is a typical **box constrained optimization**, where the limits of each variable are constants. Luckily, `Optim.optimize` supports this type of simple constrained optimization with solver `Fminbox`, which uses a modified version of Interior Point BFGS algorithm.
+## Estimation: modified unconstrained optimization
 
-- Note the high tolerance used in this example.
-- Convergence can become problematic when you have too few MC draws because the gradients are stochastic.
-- (I had to run this optimization outside the slides because it takes too long )
-
-
-```{julia}
-using Optim;
-lower_bound = [0.0, 0.0]; # Lower bounds for both parameters
-upper_bound = [1.0, 1.0]; # Upper bounds for both parameters
-theta_0 = [0.5, 0.10]; # Initial guess
-@time res = Optim.optimize(Q, lower_bound, upper_bound, theta_0, Fminbox(),
-                  Optim.Options(x_tol = 1e-4, f_tol = 1e-4));
+```julia
+using Optim
+@time res = Optim.optimize(Q, z_0, Newton(), Optim.Options(x_tol = 1e-2));
 ```
 
+- Note the huge tolerance used in this example, so we have low-quality estimates.
+  - Still, I had to run this optimization outside the slide rendering engine because it takes over 10 minutes...
+  - Convergence can become problematic when you have too few MC draws because the gradients are stochastic.
+
 ```{julia}
-gamma_hat, tau_hat = res.minimizer
+# z_hat = res.minimizer
+z_hat = [-0.0004171676757946849, -1.9668945485159541]
+# Undo the transformation to get theta back
+gamma_hat, tau_hat = exp.(z_hat) ./ (1.0 .+ exp.(z_hat))
 ```
 
+# Post-estimation
 
-## Estimation: $E[\frac{\partial c}{\partial \tau}]$
+## Calculating $E[\frac{\partial c}{\partial \tau}]$
 
 With $\gamma$ and $\tau$, we can estimate our parameter of interest:
 $$
@@ -434,7 +464,7 @@ $$
 Q: Now that we have $\hat\gamma$ and $\hat\tau$, how can we calculate that?
 
 
-## Estimation: $E[\frac{\partial c}{\partial \tau}]$
+## Calculating $E[\frac{\partial c}{\partial \tau}]$
 
 $$
 \hat{\bar{\psi}} = \frac{1}{N} \sum_{i=1}^{N} \frac{\partial \hat{C}_i}{\partial \tau}
@@ -458,13 +488,13 @@ end;
 ```
 
 
-## Estimation: $E[\frac{\partial c}{\partial \tau}]$
+## Calculating $E[\frac{\partial c}{\partial \tau}]$
 
 ```{julia}
 dc_dtau(gamma_hat, tau_hat, 0.01)
 ```
 
-This is pretty close to the actual analytical value: $\bar{\Psi} = -\gamma \bar{w_i}$
+This is pretty close to the true analytical value: $\bar{\Psi} = -\gamma \bar{w_i}$
 
 ```{julia}
 -0.5 * mean(df.w)
@@ -482,19 +512,15 @@ L(w_i, \epsilon_i, \gamma, \tau) & = (1-\gamma) + \frac{(1-\gamma)\epsilon_i}{(1
 \end{align}
 $$
 
-- But remember: not all models yield have closed-form expressions! That's why MSM (and MSL) are quite powerful methods when applied correctly
+- But remember: not all models yield closed-form expressions! That's why MSM (and MSL) are quite powerful methods when applied correctly
 
 ## Final words
 
-We did not estimate the variance of parameters nor the variance of $\bar{\psi}$. But you can already anticipate that it could take a lot of time!
+We did not estimate the standard errors of parameters nor the variance of $\bar{\psi}$. But you can already anticipate that it could take a lot of time!
 
 - With the Delta method, we would not have closed-form derivatives, so we'd need to do numerical differentiation
 - With bootstrapping, it would REALLY, **REALLY** take a lot of time
-   - It took about 10 minutes to solve with few MC draws, only 100 observations, and huge tolerance. With a large data set, this could easily take an hour or more to solve on my laptop
-   - Multiply that by a 10,000 bootstrap draws and you quickly realize you'd need to optimize your code and rent an HPC if you want results before graduation!
+   - It took about 10 minutes to solve with few MC draws, only 100 observations, and huge tolerance. With a large data set, this could easily take hours or days to solve on my laptop!
+   - Multiply that by 10,000 bootstrap draws and you quickly realize you'd need to optimize your code and rent an HPC if you want results before graduation.
 
-## Final, final words
-
-- I hope this course has given you a solid start to implement computational methods in your research and beyond!
-
-**Thank you for a great semester!**
+# Thank you for a great semester!
